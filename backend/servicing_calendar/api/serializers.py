@@ -6,7 +6,7 @@ class CustomerSerializer(ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = '__all__'
+        fields = ['username', 'name', 'surname', 'email', 'course_minutes']
 
 
 class ReservationSerializer(ModelSerializer):
