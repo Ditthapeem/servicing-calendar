@@ -7,7 +7,7 @@ class Customer(AbstractBaseUser):
 
     username = models.CharField(unique=True, null=False, max_length=255)
     name = models.CharField(null=False, max_length=255)
-    surmane = models.CharField(null=False, max_length=255)
+    surname = models.CharField(null=False, max_length=255)
     email = models.EmailField(null=False, unique=True)
     address = models.TextField(max_length=255)
     note = models.TextField(blank=True) 
