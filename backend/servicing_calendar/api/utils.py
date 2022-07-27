@@ -61,6 +61,17 @@ def is_reservation_valid(data):
     Returns:
         True if customer plan doesn't violate reservation rule else return False. 
     """
+    list_of_time = []
+    start = data["start"]
+    date_object = datetime.strptime(start,"%Y-%m-%dT%H:%M:%SZ")
+    list_reservation_object = Reservation.objects.filter(start__date=date_object)
+    for i in list_reservation_object:
+        update_time = i.end + timedelta(minutes=BREAK)
+        list_of_time.append(i.start.time())
+        list_of_time.append(update_time.time())
+    for i in range(0,len(list_of_time)-1,2):
+        if(list_of_time[i] < date_object.time() < list_of_time[i+1]):
+            return False
     return True
 
 def get_available_time(date, course):
@@ -90,3 +101,27 @@ def get_available_time(date, course):
         if minute_interval(list_of_time[i+1], list_of_time[i+2]) >= course+30:
             list_of_available_time.append([list_of_time[i+1], list_of_time[i+2]])   
     return list_of_available_time
+
+def reduce_customer_couse(data):
+    customer = Customer.objects.get(id=data["customer"])
+    course_time = customer.course_minutes
+    duration = data["duration"]
+    if(duration == "01:00:00"):
+        time_to_reduce = 60
+    elif(duration == "01:15:00"):
+        time_to_reduce = 75
+    elif(duration == "01:30:00"):
+        time_to_reduce = 90
+    customer = Customer.objects.filter(id=data["customer"]).update(course_minutes=course_time - time_to_reduce)
+
+def increse_customer_couse(data):
+    customer = Customer.objects.get(id=data["customer"])
+    course_time = customer.course_minutes
+    duration = data["duration"]
+    if(duration == "01:00:00"):
+        time_to_increse = 60
+    elif(duration == "01:15:00"):
+        time_to_increse = 75
+    elif(duration == "01:30:00"):
+        time_to_increse = 90
+    customer = Customer.objects.filter(id=data["customer"]).update(course_minutes=course_time + time_to_increse)
