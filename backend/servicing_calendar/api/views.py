@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer
 from django.http import JsonResponse
 from .models import Customer, Reservation, Store, ManageReservation
-from .utils import is_reservation_valid
+from .utils import is_reservation_valid, get_available_time
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, authenticate
 
@@ -36,6 +36,19 @@ def getRoutes(request):
                         'note': ''
                     },
             'description': 'GET all reserved data and POST new reservation.'
+        },
+        {
+            'Endpoint': '<str:customer_username>/calendar/<int:booking_id>',
+            'method': 'POST',
+            'body': {
+                        'customer': '',
+                        'start': '',
+                        'end': '',
+                        'duration': '',
+                        'note': ''
+                    },
+            'description': 'POST deleted reservated data.'
+
         }
     ]
     return JsonResponse(routes, safe=False)
@@ -47,9 +60,9 @@ def get_my_calendar(request, customer_username):
     Return all reservation data of a particular username. 
 
     Args:
-        request: 
-            GET:     all reservation data of a particular username.
-            customer_username:  The username of customer.
+        request: The request from web page.
+        GET:     all reservation data of a particular username.
+        customer_username:  The username of customer.
 
     Returns:
         GET:    Response all reservation data of a particular username.
@@ -59,25 +72,55 @@ def get_my_calendar(request, customer_username):
     if request.method == 'GET':
         try:
             customer_object = Customer.objects.get(username=customer_username)
-            data = Reservation.objects.all().filter(customer=customer_object)
-            serializer = ReservationSerializer(data, many=True)
+            reservation_object = Reservation.objects.all().filter(customer=customer_object)
+            serializer = ReservationSerializer(reservation_object, many=True)
             return Response(serializer.data)
         except:
             return Response("User doesn't exist.")
 
 @api_view(['POST'])
-def delete_booking(request, customer_username, booking_id):
-    pass
+def delete_booking(request, customer_username):
+    """
+    TODO:   1. Edit '<str:customer_username>/calendar/<int:booking_id>' if we do not need to use customer_username
+            2. Update new customer_min (user course)
+            3. Use duration or not.
+
+    Return response from deletetion. 
+
+    Args:
+        request: The request from web page.
+        POST:     Delete reservation data of a particular username and booking id.
+        customer_username:  The username of customer.
+        booking_id: The id of reservation.
+
+    Returns:
+        POST:    Response of deletetion reservatied data of a particular username and booking id.
+        POST:    Fail to delete reservation.
+    """
+    if request.method == 'POST':
+        data = request.data
+        try:
+            id = data['id']
+            customer_object = Customer.objects.get(username=customer_username)
+            customer_serializer = CustomerSerializer(customer_object, many=False)
+            Reservation.objects.filter(id=id).delete()
+            return Response([customer_serializer.data, data])
+        except:
+            return Response("Fail to delete reservation.")     
 
 @api_view(['GET', 'POST'])
 def booking(request, customer_username):
     """
-    TODO: 1. end = data["end"] should fill by backend create function() 
+    TODO:   1. end = data["end"] should fill by backend create function() 
+            2. Response avilable time only.
+            3. Reduce customer's course_min
+
     Return and get data from booking page 
 
     Args:
-        request: GET:   all data of other reservated and particular customer username.
-                 POST:  data from particular customer for new reservation. 
+        request: The request from web page.
+        GET:   all data of other reservated and particular customer username.
+        POST:  data from particular customer for new reservation. 
 
     Returns:
         GET:    Response all reserved data from all customer and data from particular 
@@ -88,8 +131,8 @@ def booking(request, customer_username):
     if request.method == 'GET':
         customer_object = Customer.objects.get(username=customer_username)
         customer_serializer = CustomerSerializer(customer_object, many=False)
-        already_reserved = Reservation.objects.all()
-        reservation_serializer = ReservationSerializer(already_reserved, many=True)
+        already_reserved_object = Reservation.objects.all()
+        reservation_serializer = ReservationSerializer(already_reserved_object, many=True)
         return Response([customer_serializer.data, reservation_serializer.data])
     elif request.method == 'POST':
         data = request.data
@@ -107,6 +150,8 @@ def booking(request, customer_username):
             return Response("Fail to reserved.")
 
 @api_view(['GET'])
-def get_booking(request, customer_username, date, course):
-    pass
+def get_time_booking(request, customer_username, date, course):
+    if request.method == 'GET':
+        list_of_available_time = get_available_time(date, course)
+        return Response(list_of_available_time)
 
