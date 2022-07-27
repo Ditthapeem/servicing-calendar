@@ -103,6 +103,12 @@ def get_available_time(date, course):
     return list_of_available_time
 
 def reduce_customer_couse(data):
+    """
+    Reduce couse time of customer.
+
+    Args:
+        data: a data of reservation. 
+    """
     customer = Customer.objects.get(id=data["customer"])
     course_time = customer.course_minutes
     duration = data["duration"]
@@ -115,6 +121,12 @@ def reduce_customer_couse(data):
     customer = Customer.objects.filter(id=data["customer"]).update(course_minutes=course_time - time_to_reduce)
 
 def increse_customer_couse(data):
+    """
+    Increse couse time of customer.
+
+    Args:
+        data: a data of reservation. 
+    """
     customer = Customer.objects.get(id=data["customer"])
     course_time = customer.course_minutes
     duration = data["duration"]
