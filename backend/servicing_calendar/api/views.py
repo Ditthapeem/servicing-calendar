@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer
 from django.http import JsonResponse
 from .models import Customer, Reservation, Store, ManageReservation
-from .utils import is_reservation_valid, get_available_time
+from .utils import is_reservation_valid, get_available_time, reduce_customer_couse, increse_customer_couse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, authenticate
 
@@ -38,7 +38,7 @@ def getRoutes(request):
             'description': 'GET all reserved data and POST new reservation.'
         },
         {
-            'Endpoint': '<str:customer_username>/calendar/<int:booking_id>',
+            'Endpoint': '<str:customer_username>/calendar/cancel',
             'method': 'POST',
             'body': {
                         'customer': '',
@@ -49,6 +49,12 @@ def getRoutes(request):
                     },
             'description': 'POST deleted reservated data.'
 
+        },
+        {
+            'Endpoint': '<str:customer_username>/booking/date=<str:date>/course=<int:course>',
+            'method': 'GET',
+            'body': None,
+            'description': 'GET a list of available time to reserve.'
         }
     ]
     return JsonResponse(routes, safe=False)
@@ -81,7 +87,7 @@ def get_my_calendar(request, customer_username):
 @api_view(['POST'])
 def delete_booking(request, customer_username):
     """
-    TODO:   1. Edit '<str:customer_username>/calendar/<int:booking_id>' if we do not need to use customer_username
+    TODO:   1. Edit '<str:customer_username>/calendar/cancel>' if we do not need to use customer_username
             2. Update new customer_min (user course)
             3. Use duration or not.
 
@@ -100,6 +106,7 @@ def delete_booking(request, customer_username):
     if request.method == 'POST':
         data = request.data
         try:
+            increse_customer_couse(data)
             id = data['id']
             customer_object = Customer.objects.get(username=customer_username)
             customer_serializer = CustomerSerializer(customer_object, many=False)
@@ -111,9 +118,7 @@ def delete_booking(request, customer_username):
 @api_view(['GET', 'POST'])
 def booking(request, customer_username):
     """
-    TODO:   1. end = data["end"] should fill by backend create function() 
-            2. Response avilable time only.
-            3. Reduce customer's course_min
+    TODO:   1. Full and close date.
 
     Return and get data from booking page 
 
@@ -137,6 +142,7 @@ def booking(request, customer_username):
     elif request.method == 'POST':
         data = request.data
         if is_reservation_valid(data):
+            reduce_customer_couse(data)
             reserve = Reservation.objects.create(
                 customer = Customer.objects.get(id=data["customer"]),
                 start = data["start"],
@@ -151,6 +157,19 @@ def booking(request, customer_username):
 
 @api_view(['GET'])
 def get_time_booking(request, customer_username, date, course):
+    """
+    Return a list of available time to reserve. 
+
+    Args:
+        request: The request from web page.
+        GET:     A list of available time to reserve.
+        customer_username:  The username of customer.
+        date:   Date that customer want to reserve.
+        course: The dutation of time that user want to reserve.
+
+    Returns:
+        GET:    A list of available time to reserve.
+    """
     if request.method == 'GET':
         list_of_available_time = get_available_time(date, course)
         return Response(list_of_available_time)
