@@ -2,10 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractBaseUser
 import datetime
 
-class Customer(AbstractBaseUser):
+class Customer(models.Model):
     """Customer model."""
 
-    username = models.CharField(unique=True, null=False, max_length=255)
+    username = models.OneToOneField(User, null=False, max_length=255, on_delete=models.CASCADE)
     name = models.CharField(null=False, max_length=255)
     surname = models.CharField(null=False, max_length=255)
     email = models.EmailField(null=False, unique=True)
@@ -13,7 +13,8 @@ class Customer(AbstractBaseUser):
     note = models.TextField(blank=True) 
     course_minutes = models.IntegerField(null=False)
 
-    USERNAME_FIELD = "username"
+    def __str__(self) -> str:
+        return str(f"{self.username}: {self.name} {self.surname}")
 
 class Reservation(models.Model):
     """User reservation model."""

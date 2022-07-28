@@ -1,11 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer
+from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer, UserSerializer
 from django.http import JsonResponse
 from .models import Customer, Reservation, Store, ManageReservation
 from .utils import is_reservation_valid, get_available_time, reduce_customer_couse, increse_customer_couse
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
+from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -20,7 +21,7 @@ def getRoutes(request):
     """
     routes = [
         {
-            'Endpoint': '/<str:customer_username>/calendar/',
+            'Endpoint': 'my/calendar/',
             'method': 'GET',
             'body': None,
             'description': 'GET all reservation data of a particular username.'
@@ -38,7 +39,7 @@ def getRoutes(request):
             'description': 'GET all reserved data and POST new reservation.'
         },
         {
-            'Endpoint': '<str:customer_username>/calendar/cancel',
+            'Endpoint': 'my/calendar/cancel',
             'method': 'POST',
             'body': {
                         'customer': '',
@@ -51,7 +52,7 @@ def getRoutes(request):
 
         },
         {
-            'Endpoint': '<str:customer_username>/booking/date=<str:date>/course=<int:course>',
+            'Endpoint': 'my/booking/date=<str:date>/course=<int:course>',
             'method': 'GET',
             'body': None,
             'description': 'GET a list of available time to reserve.'
@@ -60,15 +61,14 @@ def getRoutes(request):
     return JsonResponse(routes, safe=False)
 
 @api_view(['GET'])
-# Has to log in
-def get_my_calendar(request, customer_username):
+@login_required(login_url='login')
+def get_my_calendar(request):
     """
     Return all reservation data of a particular username. 
 
     Args:
         request: The request from web page.
         GET:     all reservation data of a particular username.
-        customer_username:  The username of customer.
 
     Returns:
         GET:    Response all reservation data of a particular username.
@@ -77,26 +77,25 @@ def get_my_calendar(request, customer_username):
     """
     if request.method == 'GET':
         try:
-            customer_object = Customer.objects.get(username=customer_username)
+            customer_username = request.user
+            customer_object = Customer.objects.get(username= customer_username)
             reservation_object = Reservation.objects.all().filter(customer=customer_object)
-            serializer = ReservationSerializer(reservation_object, many=True)
-            return Response(serializer.data)
+            reservation_serializer = ReservationSerializer(reservation_object, many=True)
+            close_date_object = ManageReservation.objects.all()
+            close_date_serializer = ManageReservationSerializer(close_date_object, many=True)
+            return Response([reservation_serializer.data, close_date_serializer.data])
         except:
             return Response("User doesn't exist.")
 
 @api_view(['POST'])
-def delete_booking(request, customer_username):
+@login_required(login_url='login')
+def delete_booking(request):
     """
-    TODO:   1. Edit '<str:customer_username>/calendar/cancel>' if we do not need to use customer_username
-            2. Update new customer_min (user course)
-            3. Use duration or not.
-
     Return response from deletetion. 
 
     Args:
         request: The request from web page.
         POST:     Delete reservation data of a particular username and booking id.
-        customer_username:  The username of customer.
         booking_id: The id of reservation.
 
     Returns:
@@ -106,6 +105,7 @@ def delete_booking(request, customer_username):
     if request.method == 'POST':
         data = request.data
         try:
+            customer_username = request.user
             increse_customer_couse(data)
             id = data['id']
             customer_object = Customer.objects.get(username=customer_username)
@@ -116,7 +116,8 @@ def delete_booking(request, customer_username):
             return Response("Fail to delete reservation.")     
 
 @api_view(['GET', 'POST'])
-def booking(request, customer_username):
+@login_required(login_url='login')
+def booking(request):
     """
     TODO:   1. Full and close date.
 
@@ -134,6 +135,7 @@ def booking(request, customer_username):
         POST:   Fail response if customer reserve on invalid either date or time. 
     """
     if request.method == 'GET':
+        customer_username = request.user
         customer_object = Customer.objects.get(username=customer_username)
         customer_serializer = CustomerSerializer(customer_object, many=False)
         already_reserved_object = Reservation.objects.all()
@@ -156,14 +158,14 @@ def booking(request, customer_username):
             return Response("Fail to reserved.")
 
 @api_view(['GET'])
-def get_time_booking(request, customer_username, date, course):
+@login_required(login_url='login')
+def get_time_booking(request, date, course):
     """
     Return a list of available time to reserve. 
 
     Args:
         request: The request from web page.
         GET:     A list of available time to reserve.
-        customer_username:  The username of customer.
         date:   Date that customer want to reserve.
         course: The dutation of time that user want to reserve.
 
@@ -174,3 +176,22 @@ def get_time_booking(request, customer_username, date, course):
         list_of_available_time = get_available_time(date, course)
         return Response(list_of_available_time)
 
+@api_view(['POST'])
+def customer_login(request):
+    data = request.data
+    if request.method == 'POST':    
+        username = data['username']
+        password = data['password']
+        user = authenticate(username = username, password=password)
+        if user:
+            login(request,user)
+            serializer = UserSerializer(user, many=False)
+            return Response(serializer.data)
+        return Http404("User does not exist")
+
+@api_view(['POST'])
+def customer_logout(request):
+    customer_username = request.user
+    if request.method == 'POST':   
+        logout(request)
+        return Response(f"Successfully logout")
