@@ -1,0 +1,27 @@
+.about {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.about div {
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.about-location div {
+  background: #e6e6e6;
+}
+
+.about-info div {
+  background: #e6e6e6;
+  text-align: left;
+  width: 700px;
+}
+
+.about-faq div {
+  background: #e6e6e6;
+  width: 400px;
+  text-align: left;
+  line-height: 10px;
+  margin-bottom: 20px;
+}

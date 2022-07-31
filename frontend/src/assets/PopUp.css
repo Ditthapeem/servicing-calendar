@@ -1,0 +1,37 @@
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 5;
+}
+
+.popup button {
+  background: #03A96B;
+  color: white;
+}
+
+.popup-div {
+  background-color: white;
+  color: black;
+  position: absolute;
+  padding: 20px;
+  min-width: 16%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 18px;
+  margin-bottom: 20px;
+}
+
+.popup-div p {
+  padding-top: 4px;
+  line-height: 12px;
+}
+
+.popup-button {
+  background: #03A96B;
+  color: white;
+}

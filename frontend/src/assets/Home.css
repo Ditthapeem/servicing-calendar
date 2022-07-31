@@ -1,0 +1,85 @@
+.home-sidebar {
+  background-color: #2F3337;
+  padding: 70px 2% 0 2%;
+  color: white;
+  text-align: center;
+  width: 20%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  overflow-y: scroll;
+  display: block;
+}
+
+.home-sidebar p {
+  font-size: 20px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.home-sidebar-table {
+  display: block;
+  overflow-y: scroll;
+  max-height: 78%;
+}
+
+.home-sidebar-table table {
+  color: black;
+  font-size: 20px;
+  height: 74%;
+  width: 100%;
+}
+
+.home-sidebar table td {
+  width: 100%;
+  border: none;
+
+}
+
+.home-sidebar table div {
+  font-weight: 550;
+  padding: 1px;
+  margin: 10px 0 10px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  line-height: 12px;
+  word-break: break-word;
+}
+
+.reservation-div {
+  background-color: #e6e6e6d2;
+}
+
+.reservation-select {
+  background-color: #FFC831;
+}
+
+.home-sidebar tr:hover {
+  opacity: 80%;
+}
+
+.home-sidebar button {
+  text-align: center;
+  border: none;
+  background: #03A96B;
+  text-decoration: none;
+  padding: 10px 20px 10px 20px;
+  margin-top: 22px;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.home-sidebar button:hover {
+  opacity: 80%;
+}
+
+.fc {
+  margin: 70px 4% 4% 28%;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}

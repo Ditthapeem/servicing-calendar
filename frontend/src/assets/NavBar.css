@@ -1,0 +1,35 @@
+.nav-bar {
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  display: flex;
+  background-color: #03A96B;
+  width: 100vw;
+  z-index: 4;
+}
+
+.nav-bar button {
+  cursor: pointer;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  border: none;
+  padding: 10px;
+  background: none;
+  height: 50px;
+}
+
+.nav-bar button:hover {
+  color: black;
+}
+
+.nav-select {
+  border: none;
+  opacity: 60%;
+}
+
+/* .nav-not-select {
+} */
+
+/* .nav-logout {
+} */
