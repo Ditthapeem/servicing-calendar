@@ -61,7 +61,7 @@ const Booking = () => {
 					<tbody>
 						<tr>
 							<td>Select Date</td>
-							<td className="booking-date"><div style={{display: "flex", justifyContent: "center"}}>
+							<td className="booking-date"><div style={{justifyContent: "space-between", display: "flex"}}>
 								<button onClick={() => handleSelect("date", new Date().toDateString())}
 									style={{background: (new Date()).toDateString() === select.date && selectColor}}>
 									<div style={{fontSize: "14px"}}>{weekday[(new Date()).getDay()]}</div>
@@ -84,7 +84,7 @@ const Booking = () => {
 						</tr>
 						<tr>
 							<td>Select Course</td>
-							<td className="booking-course"><div>
+							<td className="booking-course"><div style={{justifyContent: "space-between", display: "flex"}}>
 								{course.map((course, index) => {
 									return (
 										<button key={index} onClick={() => handleSelect("course", course)}
@@ -93,7 +93,7 @@ const Booking = () => {
 										</button>
 									);
 								})}
-								Hour
+								<div style={{width: "250px"}}>  out of 100 Hour</div>
 							</div></td>
 						</tr>
 						<tr>
@@ -103,7 +103,7 @@ const Booking = () => {
 									return (
 										<button key={index} onClick={() => handleSelect("time", time.toTimeString())}
 											style={{background: time.toTimeString() === select.time && selectColor}}>
-											{time.toLocaleTimeString([], timeOption)}
+											{time.toLocaleTimeString([], timeOption)} - {time.toLocaleTimeString([], timeOption)}
 										</button>
 									);
 								})}

@@ -19,17 +19,17 @@ const Home = () => {
 
 	let [user, setUser] = useState(null)
 	let [userData, setUserData] = useState('')
-	let [reservation, setReservation] = useState([
-		{ title: 'event 1', start: '2022-07-28T12:30:00', end: '2022-07-28T15:30:00'},
-		{ title: 'event 2', start: '2022-07-29T12:30:00', end: '2022-07-29T15:30:00'},
-		{ title: 'event 2', start: '2022-07-29T12:30:00', end: '2022-07-29T15:30:00'},
-		{ title: 'event 2', start: '2022-07-29T12:30:00', end: '2022-07-29T15:30:00'},
-		{ title: 'event 2', start: '2022-07-29T12:30:00', end: '2022-07-29T15:30:00'},
-		{ title: 'event 2', start: '2022-07-29T12:30:00', end: '2022-07-29T15:30:00'},
-		{ title: 'event 2', start: '2022-07-29T12:30:00', end: '2022-07-29T15:30:00'},
-		{ title: 'event 2', start: '2022-07-29T12:30:00', end: '2022-07-29T15:30:00'}
+	let [reserve, setReserve] = useState([
+		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
+		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
+		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: ""},
+		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
+		{ title: 'customer name', start: addDays(new Date(), 1), end: addMinutes(addDays(new Date(), 1), 30), note: ""},
+		{ title: 'customer name', start: addDays(new Date(), 2), end: addMinutes(addDays(new Date(), 2), 30), note: "this is a note"},
+		{ title: 'customer name', start: addDays(new Date(), 3), end: addMinutes(addDays(new Date(), 3), 30), note: "this is a note"}
 	])
-	let [select, setSelect] = useState(null)
+	let [selectReserve, setSelectReserve] = useState(null)
+	let [selectReserveDate, setSelectReserveDate] = useState(reserve)
 
 	const [value, onChange] = useState(new Date());
 
@@ -53,21 +53,28 @@ const Home = () => {
       })
   }
 
-	function handleSelect(reservation) {
-		console.log(reservation);
-		if (reservation !== select) {
-			setSelect(reservation)
+	function handleSelectReserve(reserve) {
+		if (reserve !== selectReserve) {
+			setSelectReserve(reserve)
 		} else {
-			setSelect({})
+			setSelectReserve(null)
+		}
+	}
+
+	function handleDateSelect(info) {
+		let tempReserve = reserve.filter(x => 
+			x.start.toISOString().substr(0, 10) >= info.startStr &&
+			x.start.toISOString().substr(0, 10) < info.endStr)
+		if (tempReserve.length > 0) {
+			setSelectReserveDate(tempReserve)
+		} else {
+			setSelectReserveDate(reserve)
 		}
 	}
 
 	function renderEventContent(eventInfo) {
 		return (
-			<>
-				<b>{eventInfo.timeText}</b>
-				<i>{eventInfo.event.title}</i>
-			</>
+			<div style={{textAlign: "center", fontWeight: "bolder"}}>{eventInfo.timeText}</div>
 		)
 	}
 
@@ -83,53 +90,52 @@ const Home = () => {
 				<hr />
 				<div className="home-sidebar-table">
 					<table>
-						<tbody>{reservation.map((reservation, index) => {
+						<tbody>{selectReserveDate.map((reserve, index) => {
 							return (
 								<tr key={index}>
-									<td><div onClick={() => handleSelect(reservation)}
-										className={reservation === select ? "reservation-select" : "reservation-div"}>
-										<p>{new Date(reservation.start).toLocaleDateString("en-GB", dateOption)}</p>
-										<p>{new Date(reservation.start).toLocaleTimeString([], timeOption) + " - " +
-											new Date(reservation.end).toLocaleTimeString([], timeOption)}</p>
+									<td><div onClick={() => handleSelectReserve(reserve)}
+										className={reserve === selectReserve ? "reserve-select" : "reserve-div"}>
+										<div style={{fontSize: "20px", fontWeight: "500"}}>
+											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
+											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
+												new Date(reserve.end).toLocaleTimeString([], timeOption)}
+										</div>
 									</div></td>
 								</tr>
 							);
 						})}</tbody>
 					</table>
 				</div>
-				<PopUp msg={{title: "Cancel Reservation", detail: select}}/>
+				<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}}/>
 			</div>
 			<FullCalendar
 				plugins={[ dayGridPlugin, InteractionPlugin ]}
 				initialView="dayGridMonth"
-				events={reservation}
+				events={reserve}
 				headerToolbar={{
 					start: "prev",
 					center: "title",
 					right: "next",
 				}}
-				// height="900px"
-				contentHeight="auto"
-				aspectRatio={1.2}
-				eventColor="#6DCBCA"
+				eventColor={configData.COLOR.GREEN}
 				eventDisplay="block"
 				displayEventEnd
 				businessHours={{
-					daysOfWeek: [ 1, 2, 3, 4, 5], // Monday - Friday
-					startTime: '10:00',
-					endTime: '18:00',
+					daysOfWeek: configData.BUSINESS_HOURS,
 				}}
 				eventTimeFormat={{
 					hour: 'numeric',
 					minute: '2-digit',
-					meridiem: false
+					meridiem: "lowercase"
 				}}
-				dayMaxEventRows={5}
+				dayMaxEventRows={3}
 				validRange={{
 					start: new Date().toISOString().substr(0, 8) + "01",
 					end: addDays(new Date(), 42).toISOString().substr(0, 10)
 				}}
-				// eventContent={renderEventContent}
+				selectable
+				select={handleDateSelect}
+				eventContent={renderEventContent}
 			/>
 		</div>
 	);

@@ -11,3 +11,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  --black: #2F3337;
+  --gray: #e6e6e6;
+  --gray-light: #e6e6e6;
+  --green: #03A96B;
+  --yellow: #FFC831;
+  --yellow-light: #fcf8e3;
+}
+
+button {
+  text-align: center;
+  border: none;
+  text-decoration: none;
+  padding: 10px 20px 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 80%;
+}

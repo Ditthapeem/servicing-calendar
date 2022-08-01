@@ -1,5 +1,5 @@
 .home-sidebar {
-  background-color: #2F3337;
+  background-color: var(--black);
   padding: 70px 2% 0 2%;
   color: white;
   text-align: center;
@@ -10,17 +10,14 @@
   left: 0;
   z-index: 2;
   overflow-y: scroll;
-  display: block;
 }
 
 .home-sidebar p {
   font-size: 20px;
-  text-align: center;
-  opacity: 0.8;
+  opacity: 80%;
 }
 
 .home-sidebar-table {
-  display: block;
   overflow-y: scroll;
   max-height: 78%;
 }
@@ -35,25 +32,22 @@
 .home-sidebar table td {
   width: 100%;
   border: none;
-
 }
 
 .home-sidebar table div {
-  font-weight: 550;
-  padding: 1px;
+  padding: 1px 10px 1px 10px;
   margin: 10px 0 10px 0;
   border-radius: 8px;
   cursor: pointer;
-  line-height: 12px;
   word-break: break-word;
 }
 
-.reservation-div {
-  background-color: #e6e6e6d2;
+.reserve-div {
+  background-color: #ffffffbb;
 }
 
-.reservation-select {
-  background-color: #FFC831;
+.reserve-select {
+  background-color: var(--yellow);
 }
 
 .home-sidebar tr:hover {
@@ -63,7 +57,7 @@
 .home-sidebar button {
   text-align: center;
   border: none;
-  background: #03A96B;
+  background: var(--green);
   text-decoration: none;
   padding: 10px 20px 10px 20px;
   margin-top: 22px;
@@ -77,7 +71,13 @@
 }
 
 .fc {
-  margin: 70px 4% 4% 28%;
+  margin: 70px 4% 0 28%;
+  height: 84vh;
+}
+
+.fc-daygrid-day div{
+  min-height: 100%;
+  max-height: 60px;
 }
 
 ::-webkit-scrollbar {

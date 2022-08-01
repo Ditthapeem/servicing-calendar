@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from 'axios';
 
-import '../assets/Login.css';
+import '../assets/Auth.css';
 
 const Login = () => {
 	const [inputs, setInputs] = useState({});
@@ -33,11 +33,11 @@ const Login = () => {
 
 	return (
 		<div style={{display: "flex", height: "100vh"}}>
-			<div className="login-sidebar">
-				<h1 style={{textAlign: "left", fontSize: "40px"}}>login</h1>
+			<div className="auth-sidebar">
+				<h1 style={{textAlign: "left", fontSize: "40px"}}>Login</h1>
 				<form onSubmit={handleLogin} style={{width: "100%"}}>
 					<input
-						className='login-input'
+						className='auth-input'
 						type="text"
 						name="username"
 						placeholder="Username"
@@ -46,7 +46,7 @@ const Login = () => {
 						onChange={handleChange}
 					/>
 					<input
-						className='login-input'
+						className='auth-input'
 						type="password"
 						name="password"
 						placeholder="Password"
@@ -54,14 +54,14 @@ const Login = () => {
 						required
 						onChange={handleChange}
 					/>
-					<div className='login-sign'>
+					<div className='auth-sign'>
 						New account can be registered at the front desk.
 					</div>
 					<button type="submit">Login</button>
 				</form>
 			</div>
-			<div className="login-poster">poster</div>
-			{/* <img className="login-poster"></img> */}
+			<div className="auth-poster">poster</div>
+			{/* <img className="auth-poster"></img> */}
 		</div>
 	);
 }

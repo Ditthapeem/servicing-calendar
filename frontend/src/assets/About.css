@@ -9,17 +9,17 @@
 }
 
 .about-location div {
-  background: #e6e6e6;
+  background: var(--gray-light);
 }
 
 .about-info div {
-  background: #e6e6e6;
+  background: var(--gray-light);
   text-align: left;
   width: 700px;
 }
 
 .about-faq div {
-  background: #e6e6e6;
+  background: var(--gray-light);
   width: 400px;
   text-align: left;
   line-height: 10px;

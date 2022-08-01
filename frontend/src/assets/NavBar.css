@@ -3,28 +3,24 @@
   position: fixed;
   top: 0;
   display: flex;
-  background-color: #03A96B;
+  background-color: var(--green);
   width: 100vw;
   z-index: 4;
 }
 
 .nav-bar button {
-  cursor: pointer;
   color: white;
-  text-align: center;
   font-size: 20px;
-  border: none;
   padding: 10px;
   background: none;
   height: 50px;
 }
 
 .nav-bar button:hover {
-  color: black;
+  color: var(--black);
 }
 
 .nav-select {
-  border: none;
   opacity: 60%;
 }
 

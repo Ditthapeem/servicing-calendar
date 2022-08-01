@@ -1,0 +1,38 @@
+.auth-sidebar {
+  background-color: var(--green);
+  padding: 1% 2% 0 2%;
+  flex-grow: 1;
+  color: white;
+  text-align: center;
+  display: block;
+  overflow-y: scroll;
+  max-height: 110%;
+}
+
+.auth-poster {
+  background-color: var(--yellow-light);
+  width: 75%;
+}
+
+.auth-input {
+  border: none;
+  background-color: var(--gray-light);
+  padding: 10px;
+  margin: 20px 0 20px 0;
+  border-radius: 5px;
+  display: block;
+  width: 94%;
+  font-size: 18px;
+}
+
+.auth-sidebar button {
+  background: var(--black);
+  color: white;
+}
+
+.auth-sign {
+  width: 100%;
+  margin: 10% 0 5%;
+  text-align: center;
+  font-size: 17px;
+}

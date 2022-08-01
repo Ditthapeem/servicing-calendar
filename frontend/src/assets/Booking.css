@@ -1,20 +1,7 @@
 .booking {
   text-align: center;
-  margin-top: 10%;
+  margin-top: 8%;
   padding-bottom: 5%;
-}
-
-.booking button {
-  text-align: center;
-  border: none;
-  text-decoration: none;
-  padding: 10px 20px 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.booking button:hover {
-  opacity: 80%;
 }
 
 .booking table {
@@ -22,33 +9,34 @@
   color: black;
   font-size: 20px;
   height: 74%;
-  width: 1000px;
-  margin: auto;
+  width: 70%;
+  margin: 0 auto 2% auto ;
   font-weight: bold;
 }
 
 .booking table td {
   height: 150px;
+  min-width: 160px;
 }
 
 .booking-date button {
   color: black;
-  background: #e6e6e6;
+  background: var(--gray-light);
   margin: 0 12px 0 12px;
-  width: 60px;
+  width: 70px;
 }
 
 .booking-course button {
-  background: #e6e6e6;
+  background: var(--gray-light);
   margin: 0 50px 0 10px;
-  width: 200px;
+  width: 30%;
   font-weight: bold;
   font-size: 20px;
 }
 
 .booking-time button {
-  background: #e6e6e6;
+  background: var(--gray-light);
   margin: 10px;
-  width: 80px;
+  min-width: 80px;
   font-size: 18px;
 }
