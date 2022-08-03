@@ -90,7 +90,15 @@ def getRoutes(request):
                         'note': ''
                     },
             'description': 'Delete reservation data of a particular username and booking id.'
-        }
+        },
+        {
+            'Endpoint': 'manager/calendar/close',
+            'method': 'POST',
+            'body': {
+                        'close_date': ''
+                    },
+            'description': 'Close date of reservation.'
+        },
     ]
     return Response(routes)
 
@@ -250,6 +258,7 @@ def customer_logout(request):
         return Response(f"Successfully logout")
 
 @api_view(['GET'])
+@login_required(login_url='login')
 def get_manager_calendar(request):
     """
     Returns all customer reservation and close date.
@@ -272,6 +281,7 @@ def get_manager_calendar(request):
             return Response("You shall not PASS!!!")
 
 @api_view(['POST'])
+@login_required(login_url='login')
 def manager_delete_booking(request):
     """
     Delete reservation data of a particular username and booking id.
@@ -287,3 +297,30 @@ def manager_delete_booking(request):
     if request.method == 'POST':
         if admin.is_superuser:
             delete_booking(request)  
+        else:
+            return Response("You shall not PASS!!!")
+
+@api_view(['POST'])
+@login_required(login_url='login')
+def manager_close_date(request):
+    """
+    Close date of reservation.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        POST: Response of close date of manage redervation.
+    """
+    admin = request.user
+    data = request.data
+    if request.method == 'POST':
+        if admin.is_superuser:
+            close_date_object = ManageReservation.objects.create(
+                owner = admin,
+                close_date = data["close_date"]
+            )
+            serializer = ManageReservationSerializer(close_date_object, many=False)
+            return Response(serializer.data)
+        else:
+            return Response("You shall not PASS!!!")

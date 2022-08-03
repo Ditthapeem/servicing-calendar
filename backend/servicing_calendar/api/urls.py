@@ -11,5 +11,6 @@ urlpatterns = [
     path('logout/', views.customer_logout, name="logout"),
 
     path('manager/calendar/', views.get_manager_calendar, name="manager_calendar"),
-    path('manager/calendar/cancel', views.manager_delete_booking, name='manager_cancel'),
+    path('manager/calendar/cancel', views.manager_delete_booking, name="manager_cancel"),
+    path('manager/calendar/close', views.manager_close_date, name="manager_close")
 ]
