@@ -1,12 +1,14 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer, UserSerializer
-from django.http import JsonResponse
 from .models import Customer, Reservation, Store, ManageReservation
 from .utils import is_reservation_valid, get_available_time, reduce_customer_couse, increse_customer_couse
 from django.contrib.auth import login, authenticate, logout
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, timedelta
+
+WEEK = 6
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -24,10 +26,10 @@ def getRoutes(request):
             'Endpoint': 'my/calendar/',
             'method': 'GET',
             'body': None,
-            'description': 'GET all reservation data of a particular username.'
+            'description': 'Give all reservation data of a particular username.'
         },
         {
-            'Endpoint': '/booking/',
+            'Endpoint': 'my/booking/',
             'method': 'GET, POST',
             'body': {
                         'customer': '',
@@ -36,7 +38,7 @@ def getRoutes(request):
                         'duration': '',
                         'note': ''
                     },
-            'description': 'GET all reserved data and POST new reservation.'
+            'description': 'Give a full, close and available date for booking. And booking reservation for customer.'
         },
         {
             'Endpoint': 'my/calendar/cancel',
@@ -48,27 +50,40 @@ def getRoutes(request):
                         'duration': '',
                         'note': ''
                     },
-            'description': 'POST deleted reservated data.'
-
+            'description': 'Delete reservation data of a particular username and booking id.'
         },
         {
             'Endpoint': 'my/booking/date=<str:date>/course=<int:course>',
             'method': 'GET',
             'body': None,
             'description': 'GET a list of available time to reserve.'
+        },
+        {
+            'Endpoint': 'login/',
+            'method': 'POST',
+            'body': {
+                    'username':'',
+                    'password':''
+                    },
+            'description': 'Login customer.'
+        },
+        {
+            'Endpoint': 'logout/',
+            'method': 'POST',
+            'body': None,
+            'description': 'Logout customer.'
         }
     ]
-    return JsonResponse(routes, safe=False)
+    return Response(routes)
 
 @api_view(['GET'])
 @login_required(login_url='login')
 def get_my_calendar(request):
     """
-    Return all reservation data of a particular username. 
+    Give all reservation data of a particular username. 
 
     Args:
         request: The request from web page.
-        GET:     all reservation data of a particular username.
 
     Returns:
         GET:    Response all reservation data of a particular username.
@@ -79,9 +94,9 @@ def get_my_calendar(request):
         try:
             customer_username = request.user
             customer_object = Customer.objects.get(username= customer_username)
-            reservation_object = Reservation.objects.all().filter(customer=customer_object)
+            reservation_object = Reservation.objects.filter(customer=customer_object, start__gte=datetime.today())
             reservation_serializer = ReservationSerializer(reservation_object, many=True)
-            close_date_object = ManageReservation.objects.all()
+            close_date_object = ManageReservation.objects.filter(close_date__gte=datetime.today())
             close_date_serializer = ManageReservationSerializer(close_date_object, many=True)
             return Response([reservation_serializer.data, close_date_serializer.data])
         except:
@@ -91,11 +106,10 @@ def get_my_calendar(request):
 @login_required(login_url='login')
 def delete_booking(request):
     """
-    Return response from deletetion. 
+    Delete reservation data of a particular username and booking id.
 
     Args:
         request: The request from web page.
-        POST:     Delete reservation data of a particular username and booking id.
         booking_id: The id of reservation.
 
     Returns:
@@ -119,28 +133,33 @@ def delete_booking(request):
 @login_required(login_url='login')
 def booking(request):
     """
-    TODO:   1. Full and close date.
-
-    Return and get data from booking page 
+    Give a full, close and available date for booking. And booking reservation for customer.
 
     Args:
         request: The request from web page.
-        GET:   all data of other reservated and particular customer username.
-        POST:  data from particular customer for new reservation. 
 
     Returns:
-        GET:    Response all reserved data from all customer and data from particular 
-                customer username.
+        GET:    A single list of full, close and available date
         POST:   Response sepecific data from customer for new reservation.
         POST:   Fail response if customer reserve on invalid either date or time. 
     """
     if request.method == 'GET':
-        customer_username = request.user
-        customer_object = Customer.objects.get(username=customer_username)
-        customer_serializer = CustomerSerializer(customer_object, many=False)
-        already_reserved_object = Reservation.objects.all()
-        reservation_serializer = ReservationSerializer(already_reserved_object, many=True)
-        return Response([customer_serializer.data, reservation_serializer.data])
+        list_of_available_date = []
+        list_of_full_date = []
+        list_of_close_date = []
+        close_date_object = ManageReservation.objects.filter(   close_date__gte=datetime.today(),
+                                                                close_date__lte=(datetime.today() + timedelta(days=WEEK*7)))
+        for date in close_date_object:
+            list_of_close_date.append(date.close_date)
+        for i in range(WEEK*7):
+            date = datetime.today() + timedelta(days=i)
+            if len(get_available_time(date.strftime('%Y-%m-%d'),60)) == 0:
+                list_of_full_date.append(date.strftime('%Y-%m-%d'))
+            else:
+                list_of_available_date.append(date.strftime('%Y-%m-%d'))
+        return Response([   {"close":   list_of_close_date},
+                            {"full":    list_of_full_date},
+                            {"available": list_of_available_date}])
     elif request.method == 'POST':
         data = request.data
         if is_reservation_valid(data):
@@ -165,7 +184,6 @@ def get_time_booking(request, date, course):
 
     Args:
         request: The request from web page.
-        GET:     A list of available time to reserve.
         date:   Date that customer want to reserve.
         course: The dutation of time that user want to reserve.
 
@@ -178,6 +196,15 @@ def get_time_booking(request, date, course):
 
 @api_view(['POST'])
 def customer_login(request):
+    """
+    Login customer.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        POST:    A response login User data.
+    """
     data = request.data
     if request.method == 'POST':    
         username = data['username']
@@ -191,6 +218,15 @@ def customer_login(request):
 
 @api_view(['POST'])
 def customer_logout(request):
+    """
+    Logout customer.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        POST:    A response status.
+    """
     customer_username = request.user
     if request.method == 'POST':   
         logout(request)

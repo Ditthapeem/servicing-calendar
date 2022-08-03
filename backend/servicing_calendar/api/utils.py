@@ -81,14 +81,14 @@ def get_available_time(date, course):
     Args:
         customer_username: username of customer.
         data: The data of reservation. 
-                '22-07-30'
+                '2022-07-30'
         course: The duration of time.
 
     Returns:
         A single list of pair of available time.
     """
     list_of_time = []
-    date_object = datetime.strptime(date, '%y-%m-%d')
+    date_object = datetime.strptime(date, '%Y-%m-%d')
     list_reservation_object = Reservation.objects.filter(start__date=date_object)
     insert_break_time(list_of_time)
     for i in list_reservation_object:
@@ -99,7 +99,7 @@ def get_available_time(date, course):
     list_of_available_time = []
     for i in range(0,len(list_of_time)-2,2):
         if minute_interval(list_of_time[i+1], list_of_time[i+2]) >= course+30:
-            list_of_available_time.append([list_of_time[i+1], list_of_time[i+2]])   
+            list_of_available_time.append({"start":list_of_time[i+1], "end":list_of_time[i+2]})   
     return list_of_available_time
 
 def reduce_customer_couse(data):
