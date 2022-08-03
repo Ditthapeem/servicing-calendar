@@ -72,6 +72,24 @@ def getRoutes(request):
             'method': 'POST',
             'body': None,
             'description': 'Logout customer.'
+        },
+        {
+            'Endpoint': 'manager/calendar/',
+            'method': 'POST',
+            'body': None,
+            'description': 'Get all customer reservation and close date.'
+        },
+        {
+            'Endpoint': 'manager/calendar/cancel',
+            'method': 'POST',
+            'body': {
+                        'customer': '',
+                        'start': '',
+                        'end': '',
+                        'duration': '',
+                        'note': ''
+                    },
+            'description': 'Delete reservation data of a particular username and booking id.'
         }
     ]
     return Response(routes)
@@ -110,7 +128,6 @@ def delete_booking(request):
 
     Args:
         request: The request from web page.
-        booking_id: The id of reservation.
 
     Returns:
         POST:    Response of deletetion reservatied data of a particular username and booking id.
@@ -254,3 +271,19 @@ def get_manager_calendar(request):
         else:
             return Response("You shall not PASS!!!")
 
+@api_view(['POST'])
+def manager_delete_booking(request):
+    """
+    Delete reservation data of a particular username and booking id.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        POST:    Response of deletetion reservatied data of a particular username and booking id.
+        POST:    Fail to delete reservation.
+    """
+    admin = request.user
+    if request.method == 'POST':
+        if admin.is_superuser:
+            delete_booking(request)  
