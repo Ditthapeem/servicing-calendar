@@ -231,3 +231,26 @@ def customer_logout(request):
     if request.method == 'POST':   
         logout(request)
         return Response(f"Successfully logout")
+
+@api_view(['GET'])
+def get_manager_calendar(request):
+    """
+    Returns all customer reservation and close date.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        GET: All customer reservation and close date.
+    """
+    admin = request.user
+    if request.method == 'GET':
+        if admin.is_superuser:
+            reservation_object = Reservation.objects.filter(start__gte=datetime.today())
+            reservation_serializer = ReservationSerializer(reservation_object, many=True)
+            close_date_object = ManageReservation.objects.filter(close_date__gte=datetime.today())
+            close_date_serializer = ManageReservationSerializer(close_date_object, many=True)
+            return Response([reservation_serializer.data, close_date_serializer.data])
+        else:
+            return Response("You shall not PASS!!!")
+
