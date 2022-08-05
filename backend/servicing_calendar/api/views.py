@@ -101,7 +101,7 @@ def getRoutes(request):
         },
         {
             'Endpoint': 'manager/customer/customer=<str:customer>',
-            'method': 'GET', 'POST'
+            'method': 'GET, POST',
             'body': {
                         'name' : '',
                         'surname' : '',
@@ -110,7 +110,16 @@ def getRoutes(request):
                         'note' : ''
                     },
             'description': 'Manage customer data.'           
+        },
+        {
+            'Endpoint': 'manage/history/customer=<str:customer>',
+            'method': 'GET, POST',
+            'body': {
+                        'note' : ''
+                    },
+            'description': 'Manage customer history.'           
         }
+
     ]
     return Response(routes)
 
@@ -370,10 +379,40 @@ def manage_customer(request, customer):
                                                                                         surname = data["surname"],
                                                                                         email = data["email"],
                                                                                         address = data["address"],
-                                                                                        note = data["note"]),
-                customer_serializer = CustomerSerializer(customer_object, many=False)                                              
-                return Response(customer_serializer.data)
+                                                                                        note = data["note"]),                                         
+                return Response("Update Customer data successfully.")
             except:
                 return Response("Customer doesn't exist.")
+        else:
+            return Response("You shall not PASS!!!")
+
+@api_view(['GET', 'POST'])
+@login_required(login_url='login')
+def manage_history(request, customer):
+    """
+    Manage customer history.
+
+    Args:
+        request: The request from web page.
+        customer: customer name for query.
+
+    Returns:
+        GET: Customer history from a particular username.
+        POST: New customer history from a particular username.
+    """
+    admin = request.user
+    data = request.data
+    if request.method == 'GET':
+        if admin.is_superuser:
+            reservation_object = Reservation.objects.filter(customer=customer)
+            reservation_serializer = ReservationSerializer(reservation_object, many=True)
+            return Response(reservation_serializer.data)
+        else:
+            return Response("You shall not PASS!!!")
+    elif request.method == 'POST':
+        if admin.is_superuser:
+            update_reservation_object = Reservation.objects.filter(customer=customer).update(  id=data["id"],
+                                                                                        note=data["note"])
+            return Response("Update Customer history successfully.")
         else:
             return Response("You shall not PASS!!!")

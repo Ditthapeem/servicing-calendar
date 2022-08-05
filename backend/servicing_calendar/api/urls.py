@@ -13,5 +13,6 @@ urlpatterns = [
     path('manager/calendar/', views.get_manager_calendar, name="manager_calendar"),
     path('manager/calendar/cancel', views.manager_delete_booking, name="manager_cancel"),
     path('manager/calendar/close', views.manager_close_date, name="manager_close"),
-    path('manager/customer/customer=<str:customer>', views.manage_customer, name="manage_customer")
+    path('manager/customer/customer=<str:customer>', views.manage_customer, name="manage_customer"),
+    path('manage/history/customer=<str:customer>', views.manage_history, name="manage_history")
 ]
