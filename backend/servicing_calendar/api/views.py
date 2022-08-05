@@ -429,3 +429,28 @@ def manage_history(request, customer):
                 return Response("Customer doesn't exist.")
         else:
             return Response("You shall not PASS!!!")
+
+@api_view(['POST'])
+@login_required(login_url='login')
+def register(request):
+    admin = request.user
+    data = request.data
+    if request.method == 'POST':
+        if admin.is_superuser:
+            user = User.objects.create( username = data['username'],
+                                        email = data['email'],
+                                        first_name = data['name'],
+                                        last_name = data['surname'])
+            user.set_password(data['password'])
+            user.save()
+            customer = Customer.objects.create( username = user,
+                                                name = data['name'],
+                                                surname = data['surname'],
+                                                email =data['email'],
+                                                address = data['address'],
+                                                note = data['note'],
+                                                course_minutes = data['course_minutes'])
+            customer_reservation = CustomerSerializer(customer, many=False)
+            return Response(customer_reservation.data)
+        else:
+            return Response("You shall not PASS!!!")
