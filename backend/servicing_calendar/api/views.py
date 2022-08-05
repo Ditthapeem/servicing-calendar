@@ -120,8 +120,22 @@ def getRoutes(request):
                         'note' : ''
                     },
             'description': 'Manage customer history.'           
+        },
+        {
+            'Endpoint': 'register/',
+            'method': 'POST',
+            'body': {
+                        "username" :"",
+                        "name" : "",
+                        "surname" : "",
+                        "email" :"",
+                        "address" : "",
+                        "note" : "",
+                        "password" : "",
+                        "course_minutes" : ""
+                    },
+            'description': 'Register new customer.'           
         }
-
     ]
     return Response(routes)
 
@@ -433,6 +447,15 @@ def manage_history(request, customer):
 @api_view(['POST'])
 @login_required(login_url='login')
 def register(request):
+    """
+    Register new customer.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        POST: New customer.
+    """
     admin = request.user
     data = request.data
     if request.method == 'POST':
