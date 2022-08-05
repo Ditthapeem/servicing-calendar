@@ -324,3 +324,37 @@ def manager_close_date(request):
             return Response(serializer.data)
         else:
             return Response("You shall not PASS!!!")
+
+@api_view(['GET', 'POST'])
+@login_required(login_url='login')
+def manage_customer(request, customer):
+    """
+    Manage customer data.
+
+    Args:
+        request: The request from web page.
+        customer: customer name for query.
+
+    Returns:
+        GET: Customer data from a particular username.
+        POST: New customer data from a particular username.
+    """
+    admin = request.user
+    if request.method == 'GET':
+        if admin.is_superuser:
+            try:
+                customer_object = Customer.objects.filter(customer=customer)
+                customer_serializer = CustomerSerializer(customer_object, many=False)
+                reservation_object = Reservation.objects.filter(    customer=customer,
+                                                                    start__lte=datetime.today() + timedelta(days=1))
+                reservation_serializer = ReservationSerializer(reservation_object, many=True)                                                   
+                return Response([customer_serializer.data, reservation_serializer.data])
+            except:
+                return Response("Customer doesn't exist.")
+        else:
+            return Response("You shall not PASS!!!")
+    elif request.method == 'POST':
+        if admin.is_superuser:
+            pass
+        else:
+            return Response("You shall not PASS!!!")
