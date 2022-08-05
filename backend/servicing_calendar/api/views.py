@@ -4,6 +4,7 @@ from .serializers import CustomerSerializer, ReservationSerializer, StoreSeriali
 from .models import Customer, Reservation, Store, ManageReservation
 from .utils import is_reservation_valid, get_available_time, reduce_customer_couse, increse_customer_couse
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.models import User
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
@@ -115,6 +116,7 @@ def getRoutes(request):
             'Endpoint': 'manage/history/customer=<str:customer>',
             'method': 'GET, POST',
             'body': {
+                        'id' : '',
                         'note' : ''
                     },
             'description': 'Manage customer history.'           
@@ -365,8 +367,9 @@ def manage_customer(request, customer):
     if request.method == 'GET':
         if admin.is_superuser:
             try:
-                customer_object = Customer.objects.filter(customer=customer)
-                customer_serializer = CustomerSerializer(customer_object, many=False)                                                 
+                user_object = User.objects.get(username=customer)
+                customer_object = Customer.objects.get(username=user_object)
+                customer_serializer = CustomerSerializer(customer_object, many=False)                                              
                 return Response(customer_serializer.data)
             except:
                 return Response("Customer doesn't exist.")
@@ -375,7 +378,8 @@ def manage_customer(request, customer):
     elif request.method == 'POST':
         if admin.is_superuser:
             try:
-                customer_object = Customer.objects.filter(customer=customer).update(    name = data["name"],
+                user_object = User.objects.get(username=customer)
+                customer_object = Customer.objects.filter(username=user_object).update( name = data["name"],
                                                                                         surname = data["surname"],
                                                                                         email = data["email"],
                                                                                         address = data["address"],
@@ -404,15 +408,24 @@ def manage_history(request, customer):
     data = request.data
     if request.method == 'GET':
         if admin.is_superuser:
-            reservation_object = Reservation.objects.filter(customer=customer)
-            reservation_serializer = ReservationSerializer(reservation_object, many=True)
-            return Response(reservation_serializer.data)
+            try:
+                user_object = User.objects.get(username=customer)
+                customer_object = Customer.objects.get(username=user_object)
+                reservation_object = Reservation.objects.filter(customer=customer_object)
+                reservation_serializer = ReservationSerializer(reservation_object, many=True)
+                return Response(reservation_serializer.data)
+            except:
+                return Response("Customer doesn't exist.")
         else:
             return Response("You shall not PASS!!!")
     elif request.method == 'POST':
         if admin.is_superuser:
-            update_reservation_object = Reservation.objects.filter(customer=customer).update(  id=data["id"],
-                                                                                        note=data["note"])
-            return Response("Update Customer history successfully.")
+            try:
+                user_object = User.objects.get(username=customer)
+                customer_object = Customer.objects.get(username=user_object)
+                update_reservation_object = Reservation.objects.filter(customer=customer_object, id=data["id"]).update(note=data["note"])
+                return Response("Update Customer history successfully.")
+            except:
+                return Response("Customer doesn't exist.")
         else:
             return Response("You shall not PASS!!!")
