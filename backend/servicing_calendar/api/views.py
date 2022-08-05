@@ -99,6 +99,18 @@ def getRoutes(request):
                     },
             'description': 'Close date of reservation.'
         },
+        {
+            'Endpoint': 'manager/customer/customer=<str:customer>',
+            'method': 'GET', 'POST'
+            'body': {
+                        'name' : '',
+                        'surname' : '',
+                        'email' : '',
+                        'address' : '',
+                        'note' : ''
+                    },
+            'description': 'Manage customer data.'           
+        }
     ]
     return Response(routes)
 
@@ -340,21 +352,28 @@ def manage_customer(request, customer):
         POST: New customer data from a particular username.
     """
     admin = request.user
+    data = request.data
     if request.method == 'GET':
         if admin.is_superuser:
             try:
                 customer_object = Customer.objects.filter(customer=customer)
-                customer_serializer = CustomerSerializer(customer_object, many=False)
-                reservation_object = Reservation.objects.filter(    customer=customer,
-                                                                    start__lte=datetime.today() + timedelta(days=1))
-                reservation_serializer = ReservationSerializer(reservation_object, many=True)                                                   
-                return Response([customer_serializer.data, reservation_serializer.data])
+                customer_serializer = CustomerSerializer(customer_object, many=False)                                                 
+                return Response(customer_serializer.data)
             except:
                 return Response("Customer doesn't exist.")
         else:
             return Response("You shall not PASS!!!")
     elif request.method == 'POST':
         if admin.is_superuser:
-            pass
+            try:
+                customer_object = Customer.objects.filter(customer=customer).update(    name = data["name"],
+                                                                                        surname = data["surname"],
+                                                                                        email = data["email"],
+                                                                                        address = data["address"],
+                                                                                        note = data["note"]),
+                customer_serializer = CustomerSerializer(customer_object, many=False)                                              
+                return Response(customer_serializer.data)
+            except:
+                return Response("Customer doesn't exist.")
         else:
             return Response("You shall not PASS!!!")
