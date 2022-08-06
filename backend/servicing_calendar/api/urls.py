@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.getRoutes, name="routes"),
+    path('my/about', views.get_store, name="about"),
     path('my/calendar/', views.get_my_calendar, name='calendar'), # get customer data
     path('my/calendar/cancel', views.delete_booking, name='cancel'), # post delet reservation
     path('my/booking/', views.booking, name="booking"), # get aviable date and customor hours. & post new reservation.

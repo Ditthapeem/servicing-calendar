@@ -135,6 +135,12 @@ def getRoutes(request):
                         "course_minutes" : ""
                     },
             'description': 'Register new customer.'           
+        },
+        {
+            'Endpoint': 'my/about',
+            'method': 'GET',
+            'body': None,
+            'description': 'A specific data from store.' 
         }
     ]
     return Response(routes)
@@ -477,3 +483,20 @@ def register(request):
             return Response(customer_reservation.data)
         else:
             return Response("You shall not PASS!!!")
+
+@api_view(['GET'])
+@login_required(login_url='login')
+def get_store(request):
+    """
+    Get store data.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        GET: A specific data from store.
+    """
+    if request.method == 'GET':
+        store_object = Store.objects.all()
+        store_serializer = StoreSerializer(store_object, many=True)
+        return Response(store_serializer.data)
