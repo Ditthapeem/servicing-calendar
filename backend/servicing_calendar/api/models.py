@@ -52,3 +52,6 @@ class ManageReservation(models.Model):
     owner = models.ForeignKey(User,related_name="Manage_Reservation", on_delete=models.CASCADE)
     close_date = models.DateField(null=False, unique=True)
 
+    def __str__(self) -> str:
+        return str(f"Close on {self.close_date}")
+
