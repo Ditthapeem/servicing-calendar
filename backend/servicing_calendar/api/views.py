@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer, UserSerializer
 from .models import Customer, Reservation, Store, ManageReservation
-from .utils import is_reservation_valid, get_available_time, reduce_customer_couse, increse_customer_couse
+from .utils import is_reservation_valid, get_available_time
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.http import Http404
@@ -131,8 +131,7 @@ def getRoutes(request):
                         "email" :"",
                         "address" : "",
                         "note" : "",
-                        "password" : "",
-                        "course_minutes" : ""
+                        "password" : ""
                     },
             'description': 'Register new customer.'           
         },
@@ -141,6 +140,14 @@ def getRoutes(request):
             'method': 'GET',
             'body': None,
             'description': 'A specific data from store.' 
+        },
+        {
+            'Endpoint': 'manager/confirm',
+            'method': 'GET, POST',
+            'body': {
+                        'id' : ''
+                    },
+            'description': 'Confirmation for each reservation.'           
         }
     ]
     return Response(routes)
@@ -188,7 +195,6 @@ def delete_booking(request):
         data = request.data
         try:
             customer_username = request.user
-            increse_customer_couse(data)
             id = data['id']
             customer_object = Customer.objects.get(username=customer_username)
             customer_serializer = CustomerSerializer(customer_object, many=False)
@@ -231,7 +237,6 @@ def booking(request):
     elif request.method == 'POST':
         data = request.data
         if is_reservation_valid(data):
-            reduce_customer_couse(data)
             reserve = Reservation.objects.create(
                 customer = Customer.objects.get(id=data["customer"]),
                 start = data["start"],
@@ -477,8 +482,7 @@ def register(request):
                                                 surname = data['surname'],
                                                 email =data['email'],
                                                 address = data['address'],
-                                                note = data['note'],
-                                                course_minutes = data['course_minutes'])
+                                                note = data['note'])
             customer_reservation = CustomerSerializer(customer, many=False)
             return Response(customer_reservation.data)
         else:
@@ -500,3 +504,38 @@ def get_store(request):
         store_object = Store.objects.all()
         store_serializer = StoreSerializer(store_object, many=True)
         return Response(store_serializer.data)
+
+@api_view(['GET', 'POST'])
+@login_required(login_url='login')
+def manager_confirmation(request):
+    """
+    Confirmation for each reservation.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        GET: All reservation that haven't been confirm yet.
+        POST: Confirm a reservation.
+    """
+    admin = request.user
+    data = request.data
+    if request.method == 'GET':
+        if admin.is_superuser:
+            try:
+                reservation_object = Reservation.objects.filter(confirmation=False, start__gte=datetime.today())
+                reservation_serializer = ReservationSerializer(reservation_object, many=True)
+                return Response(reservation_serializer.data)
+            except:
+                return Response("All reservation are confirmed.")
+        else:
+            return Response("You shall not PASS!!!")
+    elif request.method == 'POST':
+        if admin.is_superuser:
+            try:
+                reservation_object = Reservation.objects.filter(id=data["id"]).update(confirmation=True)
+                return Response("Reservation confirmed.")
+            except:
+                return Response("Reservation doesn't exist.")
+        else:
+            return Response("You shall not PASS!!!")

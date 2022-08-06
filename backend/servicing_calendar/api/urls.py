@@ -16,5 +16,6 @@ urlpatterns = [
     path('manager/calendar/close', views.manager_close_date, name="manager_close"),
     path('manager/customer/customer=<str:customer>', views.manage_customer, name="manage_customer"),
     path('manager/history/customer=<str:customer>', views.manage_history, name="manage_history"),
+    path('manager/confirm', views.manager_confirmation, name="manager_confirmation"),
     path('register/', views.register, name="register")
 ]

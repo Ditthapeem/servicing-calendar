@@ -11,7 +11,6 @@ class Customer(models.Model):
     email = models.EmailField(null=False, unique=True)
     address = models.TextField(max_length=255)
     note = models.TextField(blank=True) 
-    course_minutes = models.IntegerField(null=False)
 
     def __str__(self) -> str:
         return str(f"{self.username}: {self.name} {self.surname}")
@@ -31,6 +30,7 @@ class Reservation(models.Model):
     end = models.DateTimeField(null=False)
     duration = models.TimeField(choices=Time.choices)
     note = models.TextField(blank=True)
+    confirmation = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return str(f"{self.customer} has been reservated from {self.start} to {self.end} for {self.duration} min.")

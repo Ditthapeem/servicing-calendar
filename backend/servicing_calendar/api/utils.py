@@ -101,39 +101,3 @@ def get_available_time(date, course):
         if minute_interval(list_of_time[i+1], list_of_time[i+2]) >= course+30:
             list_of_available_time.append({"start":list_of_time[i+1], "end":list_of_time[i+2]})   
     return list_of_available_time
-
-def reduce_customer_couse(data):
-    """
-    Reduce couse time of customer.
-
-    Args:
-        data: a data of reservation. 
-    """
-    customer = Customer.objects.get(id=data["customer"])
-    course_time = customer.course_minutes
-    duration = data["duration"]
-    if(duration == "01:00:00"):
-        time_to_reduce = 60
-    elif(duration == "01:15:00"):
-        time_to_reduce = 75
-    elif(duration == "01:30:00"):
-        time_to_reduce = 90
-    customer = Customer.objects.filter(id=data["customer"]).update(course_minutes=course_time - time_to_reduce)
-
-def increse_customer_couse(data):
-    """
-    Increse couse time of customer.
-
-    Args:
-        data: a data of reservation. 
-    """
-    customer = Customer.objects.get(id=data["customer"])
-    course_time = customer.course_minutes
-    duration = data["duration"]
-    if(duration == "01:00:00"):
-        time_to_increse = 60
-    elif(duration == "01:15:00"):
-        time_to_increse = 75
-    elif(duration == "01:30:00"):
-        time_to_increse = 90
-    customer = Customer.objects.filter(id=data["customer"]).update(course_minutes=course_time + time_to_increse)
