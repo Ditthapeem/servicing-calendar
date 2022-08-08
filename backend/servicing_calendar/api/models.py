@@ -9,7 +9,7 @@ class Customer(models.Model):
     name = models.CharField(null=False, max_length=255)
     surname = models.CharField(null=False, max_length=255)
     email = models.EmailField(null=False, unique=True)
-    address = models.TextField(max_length=255)
+    address = models.CharField(max_length=255)
     note = models.TextField(blank=True) 
 
     def __str__(self) -> str:
@@ -38,13 +38,13 @@ class Reservation(models.Model):
 class Store(models.Model):
     """Store model."""
 
-    info = models.TextField(max_length=255)
-    address = models.TextField(max_length=255)
+    info = models.TextField()
+    address = models.TextField()
     address_url = models.URLField()
     open = models.TimeField()
     close = models.TimeField()
     email = models.EmailField()
-    phone = models.IntegerField()
+    phone = models.CharField(max_length=32)
     
 class ManageReservation(models.Model):
     """Manage service date."""
