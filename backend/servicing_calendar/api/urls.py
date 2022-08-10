@@ -3,8 +3,19 @@ from . import views
 
 urlpatterns = [
     path('', views.getRoutes, name="routes"),
-    path('<str:customer_username>/calendar/', views.get_my_calendar, name='calendar'), # get customer data
-    path('<str:customer_username>/calendar/<int:booking_id>', views.delete_booking, name='calendar'), # post delet reservation
-    path('<str:customer_username>/booking/', views.booking, name="booking"), # get aviable date and customor hours. & post new reservation.
-    path('<str:customer_username>/booking?date=<str:date>&course=<int:course>', views.get_booking, name="booking") # get available time.
+    path('my/about', views.get_store, name="about"),
+    path('my/calendar/', views.get_my_calendar, name='calendar'), # get customer data
+    path('my/calendar/cancel', views.delete_booking, name='cancel'), # post delet reservation
+    path('my/booking/', views.booking, name="booking"), # get aviable date and customor hours. & post new reservation.
+    path('my/booking/date=<str:date>/course=<int:course>', views.get_time_booking, name="get_booking"), # get available time.
+    path('login/', views.customer_login, name="login"),
+    path('logout/', views.customer_logout, name="logout"),
+
+    path('manager/calendar/', views.get_manager_calendar, name="manager_calendar"),
+    path('manager/calendar/cancel', views.manager_delete_booking, name="manager_cancel"),
+    path('manager/calendar/close', views.manager_close_date, name="manager_close"),
+    path('manager/customer/customer=<str:customer>', views.manage_customer, name="manage_customer"),
+    path('manager/history/customer=<str:customer>', views.manage_history, name="manage_history"),
+    path('manager/confirm', views.manager_confirmation, name="manager_confirmation"),
+    path('register/', views.register, name="register")
 ]

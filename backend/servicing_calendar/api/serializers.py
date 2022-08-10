@@ -1,12 +1,20 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Reservation, Customer, Store, ManageReservation
+from django.contrib.auth.models import User
+
+class UserSerializer(ModelSerializer):
+
+    class Meta:
+        model = User
+        exclude = ['password']
+
 
 class CustomerSerializer(ModelSerializer):
     """Serializer of customer model."""
 
     class Meta:
         model = Customer
-        fields = ['username', 'name', 'surname', 'email', 'course_minutes']
+        fields = '__all__'
 
 
 class ReservationSerializer(ModelSerializer):
