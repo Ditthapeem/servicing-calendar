@@ -5,6 +5,9 @@ from .models import Customer, Reservation, Store, ManageReservation
 from .utils import is_reservation_valid, get_available_time
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.http import Http404
@@ -155,7 +158,8 @@ def getRoutes(request):
     return Response(routes)
 
 @api_view(['GET'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def get_my_calendar(request):
     """
     Give all reservation data of a particular username. 
@@ -181,7 +185,8 @@ def get_my_calendar(request):
             return Response("User doesn't exist.")
 
 @api_view(['POST'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def delete_booking(request):
     """
     Delete reservation data of a particular username and booking id.
@@ -206,7 +211,8 @@ def delete_booking(request):
             return Response("Fail to delete reservation.")     
 
 @api_view(['GET', 'POST'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def booking(request):
     """
     Give a full, close and available date for booking. And booking reservation for customer.
@@ -252,7 +258,8 @@ def booking(request):
             return Response("Fail to reserved.")
 
 @api_view(['GET'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def get_time_booking(request, date, course):
     """
     Return a list of available time to reserve. 
@@ -312,7 +319,8 @@ def customer_logout(request):
         return Response(f"Successfully logout")
 
 @api_view(['GET'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def get_manager_calendar(request):
     """
     Returns all customer reservation and close date.
@@ -335,7 +343,8 @@ def get_manager_calendar(request):
             return Response("You shall not PASS!!!")
 
 @api_view(['POST'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def manager_delete_booking(request):
     """
     Delete reservation data of a particular username and booking id.
@@ -355,7 +364,8 @@ def manager_delete_booking(request):
             return Response("You shall not PASS!!!")
 
 @api_view(['POST'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def manager_close_date(request):
     """
     Close date of reservation.
@@ -380,7 +390,8 @@ def manager_close_date(request):
             return Response("You shall not PASS!!!")
 
 @api_view(['GET', 'POST'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def manage_customer(request, customer):
     """
     Manage customer data.
@@ -422,7 +433,8 @@ def manage_customer(request, customer):
             return Response("You shall not PASS!!!")
 
 @api_view(['GET', 'POST'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def manage_history(request, customer):
     """
     Manage customer history.
@@ -462,7 +474,8 @@ def manage_history(request, customer):
             return Response("You shall not PASS!!!")
 
 @api_view(['POST'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def register(request):
     """
     Register new customer.
@@ -495,7 +508,8 @@ def register(request):
             return Response("You shall not PASS!!!")
 
 @api_view(['GET'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def get_store(request):
     """
     Get store data.
@@ -512,7 +526,8 @@ def get_store(request):
         return Response(store_serializer.data)
 
 @api_view(['GET', 'POST'])
-@login_required(login_url='login')
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def manager_confirmation(request):
     """
     Confirmation for each reservation.
