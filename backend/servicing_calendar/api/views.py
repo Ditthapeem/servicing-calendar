@@ -4,6 +4,8 @@ from .serializers import CustomerSerializer, ReservationSerializer, StoreSeriali
 from .models import Customer, Reservation, Store, ManageReservation
 from .utils import is_reservation_valid, get_available_time
 from django.contrib.auth import login, authenticate, logout
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
@@ -285,8 +287,12 @@ def customer_login(request):
         user = authenticate(username = username, password=password)
         if user:
             login(request,user)
+            token, _ = Token.objects.get_or_create(user=user)
             serializer = UserSerializer(user, many=False)
-            return Response(serializer.data)
+            return Response({   "user":serializer.data,
+                                "token": token.key,
+                                "msg": "logged in"
+                                })
         return Http404("User does not exist")
 
 @api_view(['POST'])
