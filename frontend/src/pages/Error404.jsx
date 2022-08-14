@@ -2,6 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 
 const Error404 = () => {
+	let user = JSON.parse(sessionStorage.getItem('user'))
+	let [path, setPath] = useState("")
+
+	useEffect(() => {
+		if (!user) {
+      setPath("/")
+    } else if (user.user.is_staff) {
+			setPath("/reservation")
+		} else {
+			setPath("/home")
+		}
+  }, [user]);
+
 	const style = {
 		textAlign: "center",
 		position: "absolute",
@@ -13,7 +26,7 @@ const Error404 = () => {
 	return (
 		<div style={style}>
 			<h1>404 page not found</h1>
-			<p>get lost? <Link to={'/home'}>Home</Link> </p>
+			<p>get lost? <Link to={path}>Home</Link></p>
 		</div>
 	);
 }

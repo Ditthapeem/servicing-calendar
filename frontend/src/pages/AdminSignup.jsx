@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import configData from "../config";
@@ -6,7 +7,24 @@ import configData from "../config";
 import '../assets/Auth.css';
 
 const AdminSignup = () => {
-	const [inputs, setInputs] = useState({});
+	const navigate = useNavigate();
+	let user = JSON.parse(sessionStorage.getItem('user'))
+	const [inputs, setInputs] = useState({
+		"username": "",
+		"password": "",
+		"name": "",
+		"surname": "",
+		"email": "",
+		"phone": "",
+		"address": "",
+		"note": "",
+	});
+
+	useEffect(() => {
+		if (!user) {
+      window.location.replace("/");
+    }
+  }, [user]);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -14,27 +32,19 @@ const AdminSignup = () => {
     setInputs(values => ({...values, [name]: value}))
   }
 
-  async function signup(data) {
-		if (inputs.password === inputs.passwordCon) {
-			sessionStorage.setItem('user', JSON.stringify(data))
-    	return window.location.replace("/reservation")
-		} else {
-			window.alert("Password do not match")
-		}
-  }
-
   async function handleSignup(event) {
     event.preventDefault();
 		if (inputs.password === inputs.passwordCon) {
-			const data = {"username" : inputs.username, "password" : inputs.password}
-			await axios.post(`/signup/`, data)
+			delete inputs.passwordCon
+			await axios.post(configData.API.SIGNUP, inputs, {
+				headers:{'Authorization':'Token '+ user.token}
+				})
 				.then(response => {
-					// console.log(response.data)
-					window.alert(response.data)
+					window.alert("Success, account have been created.")
+					window.location.assign("/reservation")
 				})
 				.catch(error => {
 					window.alert(error)
-					// console.log(error)
 				})
 		} else {
 			window.alert("Password do not match")
@@ -95,13 +105,14 @@ const AdminSignup = () => {
 						name="email"
 						placeholder="Email"
 						value={inputs.email || ""}
+						required
 						onChange={handleChange}
 					/>
 					<input
 						className='auth-input'
 						type="tel"
 						// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-						maxlength={configData.PHONE_MAX}
+						maxLength={configData.PHONE_MAX}
 						name="phone"
 						placeholder="Phone"
 						value={inputs.phone || ""}
@@ -110,14 +121,26 @@ const AdminSignup = () => {
 					<textarea
 						style={{resize: "vertical"}}
 						className='auth-input'
-						rows="10"
+						rows="5"
 						type="text"
 						name="address"
 						placeholder="Address"
 						value={inputs.address || ""}
 						onChange={handleChange}
 					/>
+					<textarea
+						style={{resize: "vertical"}}
+						className='auth-input'
+						rows="3"
+						type="text"
+						name="note"
+						placeholder="Note"
+						value={inputs.note || ""}
+						onChange={handleChange}
+					/>
 					<button type="submit">Signup</button>
+					<button type="button" onClick={() => navigate(-1)}
+						style={{marginLeft:"20%", background:"gray"}}>Cancel</button>
 				</form>
 			</div>
 			<div className="auth-poster">poster</div>

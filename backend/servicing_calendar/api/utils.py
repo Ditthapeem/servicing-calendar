@@ -99,10 +99,10 @@ def get_available_time(date, course):
     list_of_available_time = []
     for i in range(0,len(list_of_time)-2,2):
         if minute_interval(list_of_time[i+1], list_of_time[i+2]) >= course+30:
-            list_of_available_time.append({"start":list_of_time[i+1], "end":list_of_time[i+2]})    
-    return time_interval(list_of_available_time, course) 
+            list_of_available_time.append({"start":list_of_time[i+1], "end":list_of_time[i+2]})   
+        return time_interval(date_object, list_of_available_time, course) 
 
-def time_interval(list_of_available_time, course):
+def time_interval(date_object, list_of_available_time, course):
     """
     Give a single Dict of available time.
     Args:
@@ -119,5 +119,7 @@ def time_interval(list_of_available_time, course):
         while current + timedelta(minutes = course) <= date_object_end:
             temp = current
             current = current + timedelta(minutes = course)
-            list_of_sub_interval.append({"start":temp.strftime("%H:%M:%S"), "end":current.strftime("%H:%M:%S")})
+            start = str(datetime.combine(date_object, temp.time()))+"Z"
+            end = str(datetime.combine(date_object, current.time()))+"Z"
+            list_of_sub_interval.append({"start": start, "end": end})
     return list_of_sub_interval

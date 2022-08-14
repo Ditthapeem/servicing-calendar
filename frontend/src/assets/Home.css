@@ -19,7 +19,7 @@
 
 .home-sidebar-table {
   overflow-y: scroll;
-  max-height: 78%;
+  max-height: 79%;
 }
 
 .home-sidebar-table table {
@@ -75,10 +75,25 @@
   height: 84vh;
 }
 
-.fc-daygrid-day div{
+.fc-day-disabled {
+  background-color: var(--red) !important;
+  opacity: 50% !important;
+  border: none !important;
+  cursor: not-allowed;
+}
+
+.fc-event {
+  cursor: pointer;
+}
+
+.fc-day-today {
+  background-color: var(--yellow) !important;
+}
+
+/* .fc-daygrid-day div{
   min-height: 100%;
   max-height: 60px;
-}
+} */
 
 ::-webkit-scrollbar {
   display: none;

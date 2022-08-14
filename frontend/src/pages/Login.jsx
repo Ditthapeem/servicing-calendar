@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
+import configData from "../config";
 import '../assets/Auth.css';
 
 const Login = () => {
 	const [inputs, setInputs] = useState({});
+	let user = JSON.parse(sessionStorage.getItem('user'))
+
+	useEffect(() => {
+		if (user) {
+      handleRedirect(user)
+    }
+  }, [user]);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -14,20 +22,26 @@ const Login = () => {
 
   async function login(data) {
     sessionStorage.setItem('user', JSON.stringify(data))
-    return window.location.replace("/home")
+		handleRedirect(data)
   }
+
+	function handleRedirect(user) {
+		if (user.user.is_staff) {
+			return window.location.replace("/reservation")
+		} else {
+			return window.location.replace("/home")
+		}
+	}
 
   async function handleLogin(event) {
     event.preventDefault();
-    const data = {"username" : inputs.username, "password" : inputs.password}
-    await axios.post(`/login/`, data)
+    await axios.post(configData.API.LOGIN, inputs)
       .then(response => {
-        // console.log(response.data)
         login(response.data);
       })
       .catch(error => {
         window.alert("Wrong username or password. Note that both fields may be case-sensitive")
-        // console.log(error)
+        console.log(error)
       })
   }
 

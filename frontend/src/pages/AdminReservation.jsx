@@ -5,7 +5,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import InteractionPlugin from '@fullcalendar/interaction';
 import configData from "../config";
 
-import addMinutes from '../utils/addMinutes';
 import addDays from '../utils/addDays';
 
 import AdminNavbar from '../components/AdminNavbar';
@@ -17,54 +16,54 @@ const AdminReservation = () => {
 	const dateOption = configData.DATE_OPTION;
 	const timeOption = configData.TIME_OPTION;
 
-	let [user, setUser] = useState(null)
-	let [userData, setUserData] = useState('')
-	let [reserve, setReserve] = useState([
-		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
-		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
-		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: ""},
-		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
-		{ title: 'customer name', start: addDays(new Date(), 1), end: addMinutes(addDays(new Date(), 1), 30), note: ""},
-		{ title: 'customer name', start: addDays(new Date(), 2), end: addMinutes(addDays(new Date(), 2), 30), note: "this is a note"},
-		{ title: 'customer name', start: addDays(new Date(), 3), end: addMinutes(addDays(new Date(), 3), 30), note: "this is a note"}
-	])
+	let user = JSON.parse(sessionStorage.getItem('user'))
+	let [reserve, setReserve] = useState([]
+	// [
+	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
+	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
+	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: ""},
+	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
+	// 	{ title: 'customer name', start: addDays(new Date(), 1), end: addMinutes(addDays(new Date(), 1), 30), note: ""},
+	// 	{ title: 'customer name', start: addDays(new Date(), 2), end: addMinutes(addDays(new Date(), 2), 30), note: "this is a note"},
+	// 	{ title: 'customer name', start: addDays(new Date(), 3), end: addMinutes(addDays(new Date(), 3), 30), note: "this is a note"}
+	// ]
+	)
 	let [selectReserve, setSelectReserve] = useState(null)
 	let [selectDate, setSelectDate] = useState(null)
-	let [selectReserveDate, setSelectReserveDate] = useState(reserve.filter(x => 
-		x.start.toISOString().substr(0, 10) === (new Date()).toISOString().substr(0, 10)))
+	let [selectReserveDate, setSelectReserveDate] = useState([])
+	let [closeDate, setCloseDate] = useState(null)
 
   useEffect(() => {
-    setUser(JSON.parse(sessionStorage.getItem('user')))
-		// if (!user) {
-    //   window.location.replace("/");
-    // }
-		// getUserData()
-		// getReserve()
-  }, []);
+		async function getReserve() {
+			await axios.get(configData.API.CALENDAR, {
+				headers:{'Authorization':'Token '+ user.token}
+				})
+				.then(response => {
+					setCloseDate(response.data[1])
+					setSelectReserveDate(response.data[0].filter(x => 
+						x.start.substr(0, 10) === (new Date()).toISOString().substr(0, 10)))
+					setReserve(setColor(response.data[0]))
+				})
+				.catch(error => {
+					window.alert(error)
+				})
+		}
 
-  async function getUserData() {
-    await axios.get(`/user/${user}`)
-      .then(response => {
-        console.log(response.data)
-				setUserData(response.data)
-      })
-      .catch(error => {
-        window.alert(error)
-        // console.log(error)
-      })
-  }
+		getReserve()
+  }, [user.token]);
 
-	// async function getReserve() {
-  //   await axios.get(`/reserve/${date}`)
-  //     .then(response => {
-  //       console.log(response.data)
-	// 			setUserData(response.data)
-  //     })
-  //     .catch(error => {
-  //       window.alert(error)
-  //       // console.log(error)
-  //     })
-  // }
+	function setColor(reserve) {
+		let reserveList = []
+		for (let i = 0; i < reserve.length; i++) {
+			reserveList.push(reserve[i])
+			if(reserve[i].confirmation) {
+				reserveList[i].color = configData.COLOR.GREEN
+			} else {
+				reserveList[i].color = configData.COLOR.BLACK
+			}
+		}
+		return reserveList
+	}
 
 	function handleSelectReserve(reserve) {
 		if (reserve !== selectReserve) {
@@ -75,19 +74,32 @@ const AdminReservation = () => {
 	}
 
 	function handleDateClick(info) {
-		console.log(info.date)
 		setSelectDate(info.date)
 	}
 
 	function handleDateSelect(info) {
 		let tempReserve = reserve.filter(x => 
-			x.start.toISOString().substr(0, 10) >= info.startStr &&
-			x.start.toISOString().substr(0, 10) < info.endStr)
+			x.start.substr(0, 10) >= info.startStr &&
+			x.start.substr(0, 10) < info.endStr)
 		if (tempReserve.length === 0) {
 			tempReserve = reserve.filter(x => 
-				x.start.toISOString().substr(0, 10) === (new Date()).toISOString().substr(0, 10))
+				x.start.substr(0, 10) === (new Date()).toISOString().substr(0, 10))
 		}
 		setSelectReserveDate(tempReserve)
+	}
+
+	function handleEventClick(info) {
+		let event = reserve.find(x => x.id.toString() === info.event.id)
+		let start = event.start.substr(0, 10)
+		let end = addDays(new Date(start), 1).toISOString().substr(0, 10)
+		handleSelectReserve(event)
+		handleDateSelect({startStr: start, endStr: end})
+	}
+
+	function handleDayCellClassNames(info) {
+		if (closeDate.some(x => x.close_date === info.date.toISOString().substr(0, 10))) {
+			info.isDisabled = true
+		} 
 	}
 
 	function renderEventContent(eventInfo) {
@@ -127,12 +139,14 @@ const AdminReservation = () => {
 					</table>
 				</div>
 				<div style={{justifyContent: "space-around", display: "flex"}}>
-					<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}}/>
-					<PopUp msg={{title: "Close Store", detail: selectDate}}/>
-				</div>
+					<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}} user={user}/>
+					<PopUp msg={{title: "Confirm Reservation", detail: selectReserve}} user={user}/>
+				</div>	
+					<PopUp msg={{title: "Close Store", detail: {start: selectDate}}} user={user}/>
 			</div>
-			<FullCalendar
+			{closeDate && <FullCalendar
 				plugins={[ dayGridPlugin, InteractionPlugin ]}
+				timeZone="UTC"
 				initialView="dayGridMonth"
 				events={reserve}
 				headerToolbar={{
@@ -152,11 +166,13 @@ const AdminReservation = () => {
 					meridiem: false
 				}}
 				dayMaxEventRows={3}
+				eventClick={handleEventClick}
+				dayCellClassNames={handleDayCellClassNames}
 				selectable
 				dateClick={handleDateClick}
 				select={handleDateSelect}
 				eventContent={renderEventContent}
-			/>
+			/>}
 		</div>
 	);
 }

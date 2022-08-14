@@ -1,16 +1,32 @@
 {
   "DATE_OPTION": {"weekday": "long", "year": "numeric", "month": "long", "day": "numeric"},
-  "TIME_OPTION": {"hour": "numeric", "minute": "2-digit"},
+  "TIME_OPTION": {"hour": "numeric", "minute": "2-digit", "timeZone": "UTC"},
   "WEEKDAY": ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
   "MONTH_NAME": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   "PHONE_MAX": 10,
   "BUSINESS_HOURS": [1, 2, 3, 4, 5],
+  "COURSE": [60, 75, 90],
   "COLOR": {
     "BLACK": "#2F3337",
     "GRAY": "#e6e6e6",
     "GRAY_LIGHT": "#e6e6e6",
     "GREEN": "#03A96B",
-    "YELLOW": "#FFC831",
-    "YELLOW_LIGHT": "#fcf8e3"
+    "YELLOW": "#FFC72C",
+    "YELLOW_LIGHT": "#fcf8e3",
+    "RED": "#CD001A"
+  },
+  "API": {
+    "ADMIN": "http://127.0.0.1:8000/admin",
+    "LOGIN": "http://127.0.0.1:8000/login/",
+    "LOGOUT": "http://127.0.0.1:8000/logout/",
+    "SIGNUP": "http://127.0.0.1:8000/register/",
+
+    "USER_DATA": "http://127.0.0.1:8000/my/calendar/",
+    "BOOKING": "http://127.0.0.1:8000/my/booking/",
+    "DELETE_RESERVE": "http://127.0.0.1:8000/my/calendar/cancel",
+
+    "CONFIRM_RESERVE": "http://127.0.0.1:8000/manager/confirm",
+    "CLOSE": "http://127.0.0.1:8000/manager/calendar/close",
+    "CALENDAR": "http://127.0.0.1:8000/manager/calendar/"
   }
 }

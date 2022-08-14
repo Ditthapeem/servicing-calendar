@@ -1,21 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 
+import configData from "../config";
 import '../assets/NavBar.css';
 
 const Navbar = ({ user }) => {
   const navigate = useNavigate();
   const path = window.location.pathname;
 
-  // useEffect(() => {
-  //   setUser(JSON.parse(sessionStorage.getItem('user')))
-  // }, []);
-
-  function logout() {
-    if (user) {
-      sessionStorage.removeItem('user')
+  useEffect(() => {
+		if (!user) {
+      window.location.replace("/");
+    } else if (user.user.is_staff) {
+      window.location.replace("/reservation");
     }
-    window.location.replace("/");
+  }, [user]);
+
+  async function logout() {
+    await axios.post(configData.API.LOGOUT, {
+      headers:{'Authorization':'Token '+ user.token}
+      })
+      .then(response => {
+        sessionStorage.removeItem('user')
+        window.location.replace("/");
+      })
+      .catch(error => {
+        window.alert(error)
+      })
   }
 
 	return (
@@ -29,7 +41,7 @@ const Navbar = ({ user }) => {
           className={path === "/about" ? 'nav-select' : 'nav-not-select'}>About</button>
       </div>
       <div>
-        {user && <p>{{user}}</p>}
+        {user && <>{user.user.username}</>}
         <button className="nav-logout" onClick={logout} >Logout</button>
       </div>
     </div>

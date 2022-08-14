@@ -26,6 +26,12 @@
   width: 70px;
 }
 
+.booking-date button:disabled {
+  color: white;
+  background: var(--red);
+  cursor: not-allowed;
+}
+
 .booking-course button {
   background: var(--gray-light);
   margin: 0 50px 0 10px;

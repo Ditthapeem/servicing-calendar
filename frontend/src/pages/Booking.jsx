@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 import Navbar from '../components/Navbar';
 import PopUp from '../components/PopUp';
 import configData from "../config";
@@ -12,20 +14,41 @@ const Booking = () => {
 	const weekday = configData.WEEKDAY;
 	const monthNames = configData.MONTH_NAME;
 	const timeOption = configData.TIME_OPTION;
+	const course = configData.COURSE;
 
-	const course = [60, 15, 80]
-	let [user, setUser] = useState(null)
+	let user = JSON.parse(sessionStorage.getItem('user'))
+	let [availableDate, setAvailableDate] = useState([])
 	let [date, setDate] = useState(createWeek(addDays(new Date(), 1)))
-	let [time, setTime] = useState(createWeek(addDays(new Date(), 1)))
+	let [time, setTime] = useState([])
 	let [select, setSelect] = useState({})
 
 	useEffect(() => {
-		setUser(JSON.parse(sessionStorage.getItem('user')))
-		// if (!user) {
-    //   window.location.replace("/");
-    // }
-		// getUserData()
-  }, []);
+		async function getDate() {
+			await axios.get(configData.API.BOOKING, {
+				headers:{'Authorization':'Token '+ user.token}
+				})
+				.then(response => {
+					setAvailableDate(response.data[2].available)
+				})
+				.catch(error => {
+					window.alert(error)
+				})
+		}
+
+		getDate()
+  }, [user.token]);
+
+	async function getTime(date, course) {
+    await axios.get(configData.API.BOOKING + `date=${date}/course=${course}`, {
+			headers:{'Authorization':'Token '+ user.token}
+			})
+      .then(response => {
+				setTime(response.data)
+      })
+      .catch(error => {
+        window.alert(error)
+      })
+  }
 
 	function createWeek(startDate) {
 		let dateList = []
@@ -49,6 +72,9 @@ const Booking = () => {
 		} else {
 			tempSelect[type] = data
 		}
+		if(tempSelect.hasOwnProperty("date") && tempSelect.hasOwnProperty("course")) {
+			getTime(tempSelect.date, tempSelect.course)
+		}
 		setSelect({...tempSelect})
 	}
 
@@ -59,11 +85,12 @@ const Booking = () => {
 				<h1>Booking</h1>
 				<table>
 					<tbody>
-						<tr>
+						{availableDate.length>0 && <tr>
 							<td>Select Date</td>
 							<td className="booking-date"><div style={{justifyContent: "space-between", display: "flex"}}>
-								<button onClick={() => handleSelect("date", new Date().toDateString())}
-									style={{background: (new Date()).toDateString() === select.date && selectColor}}>
+								<button onClick={() => handleSelect("date", new Date().toISOString().substr(0, 10))}
+									disabled={availableDate.includes((new Date()).toISOString().substr(0, 10))?false:true}
+									style={{background: (new Date()).toISOString().substr(0, 10) === select.date && selectColor}}>
 									<div style={{fontSize: "14px"}}>{weekday[(new Date()).getDay()]}</div>
 									<div style={{fontSize: "20px", fontWeight: "bold"}}>{(new Date()).getDate()}</div>
 									<div style={{fontSize: "14px"}}>{monthNames[(new Date()).getMonth()]}</div>
@@ -71,8 +98,9 @@ const Booking = () => {
 								<button onClick={() => handleDateNext(-7)} style={{fontSize: "20px", background: "none"}}>{"<"}</button>
 								{date.map((date, index) => {
 									return (
-										<button key={index} onClick={() => handleSelect("date", date.toDateString())}
-											style={{background: date.toDateString() === select.date && selectColor}}>
+										<button key={index} onClick={() => handleSelect("date", date.toISOString().substr(0, 10))}
+										disabled={availableDate.includes(date.toISOString().substr(0, 10))?false:true}
+											style={{background: date.toISOString().substr(0, 10) === select.date && selectColor}}>
 											<div style={{fontSize: "14px"}}>{weekday[date.getDay()]}</div>
 											<div style={{fontSize: "20px", fontWeight: "bold"}}>{date.getDate()}</div>
 											<div style={{fontSize: "14px"}}>{monthNames[date.getMonth()]}</div>
@@ -81,8 +109,8 @@ const Booking = () => {
 								})}
 								<button onClick={() => handleDateNext(7)} style={{fontSize: "20px", background: "none"}}>{">"}</button>
 							</div></td>
-						</tr>
-						<tr>
+						</tr>}
+						{select.hasOwnProperty("date") && <tr>
 							<td>Select Course</td>
 							<td className="booking-course"><div style={{justifyContent: "space-between", display: "flex"}}>
 								{course.map((course, index) => {
@@ -93,25 +121,26 @@ const Booking = () => {
 										</button>
 									);
 								})}
-								<div style={{width: "250px"}}>  out of 100 Hour</div>
+								<div style={{width: "100px"}}> Hour</div>
 							</div></td>
-						</tr>
-						<tr>
+						</tr>}
+						{select.hasOwnProperty("date") && select.hasOwnProperty("course") && time.length > 0 && <tr>
 							<td>Select Time</td>
 							<td className="booking-time"><div>
 								{time.map((time, index) => {
 									return (
-										<button key={index} onClick={() => handleSelect("time", time.toTimeString())}
-											style={{background: time.toTimeString() === select.time && selectColor}}>
-											{time.toLocaleTimeString([], timeOption)} - {time.toLocaleTimeString([], timeOption)}
+										<button key={index} onClick={() => {handleSelect("start", time.start); handleSelect("end", time.end)}}
+											style={{background: time.start === select.start && selectColor}}>
+											{new Date(time.start).toLocaleTimeString([], timeOption)} - {new Date(time.end).toLocaleTimeString([], timeOption)}
 										</button>
 									);
 								})}
 							</div></td>
-						</tr>
+						</tr>}
 					</tbody>
 				</table>
-				<PopUp msg={{title: "Confirm Booking", detail: select}}/>
+				{select.hasOwnProperty("date") && select.hasOwnProperty("course") && select.hasOwnProperty("start") &&
+				<PopUp msg={{title: "Confirm Booking", detail: select}} user={user}/>}
 			</div>
 		</div>
 	);

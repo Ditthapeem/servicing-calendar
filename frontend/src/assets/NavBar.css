@@ -6,6 +6,9 @@
   background-color: var(--green);
   width: 100vw;
   z-index: 4;
+  color: var(--yellow);
+  font-weight: 500;
+  font-size: 22px;
 }
 
 .nav-bar button {

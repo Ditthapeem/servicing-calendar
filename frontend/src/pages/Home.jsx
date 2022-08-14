@@ -5,7 +5,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import InteractionPlugin from '@fullcalendar/interaction';
 import configData from "../config";
 
-import addMinutes from '../utils/addMinutes';
 import addDays from '../utils/addDays';
 
 import Navbar from '../components/Navbar';
@@ -17,41 +16,52 @@ const Home = () => {
 	const dateOption = configData.DATE_OPTION;
 	const timeOption = configData.TIME_OPTION;
 
-	let [user, setUser] = useState(null)
-	let [userData, setUserData] = useState('')
-	let [reserve, setReserve] = useState([
-		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
-		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
-		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: ""},
-		{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
-		{ title: 'customer name', start: addDays(new Date(), 1), end: addMinutes(addDays(new Date(), 1), 30), note: ""},
-		{ title: 'customer name', start: addDays(new Date(), 2), end: addMinutes(addDays(new Date(), 2), 30), note: "this is a note"},
-		{ title: 'customer name', start: addDays(new Date(), 3), end: addMinutes(addDays(new Date(), 3), 30), note: "this is a note"}
-	])
+	let user = JSON.parse(sessionStorage.getItem('user'))
+	let [reserve, setReserve] = useState([]
+	// [
+	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
+	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
+	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: ""},
+	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
+	// 	{ title: 'customer name', start: addDays(new Date(), 1), end: addMinutes(addDays(new Date(), 1), 30), note: ""},
+	// 	{ title: 'customer name', start: addDays(new Date(), 2), end: addMinutes(addDays(new Date(), 2), 30), note: "this is a note"},
+	// 	{ title: 'customer name', start: addDays(new Date(), 3), end: addMinutes(addDays(new Date(), 3), 30), note: "this is a note"}
+	// ]
+	)
 	let [selectReserve, setSelectReserve] = useState(null)
-	let [selectReserveDate, setSelectReserveDate] = useState(reserve)
-
-	const [value, onChange] = useState(new Date());
+	let [selectReserveDate, setSelectReserveDate] = useState([])
+	let [closeDate, setCloseDate] = useState(null)
 
   useEffect(() => {
-    setUser(JSON.parse(sessionStorage.getItem('user')))
-		// if (!user) {
-    //   window.location.replace("/");
-    // }
-		// getUserData()
-  }, []);
+		async function getUserData() {
+			await axios.get(configData.API.USER_DATA, {
+				headers:{'Authorization':'Token '+ user.token}
+				})
+				.then(response => {
+					setCloseDate(response.data[1])
+					setSelectReserveDate(response.data[0])
+					setReserve(setColor(response.data[0]))
+				})
+				.catch(error => {
+					window.alert(error)
+				})
+		}
 
-  async function getUserData() {
-    await axios.get(`/user/${user}`)
-      .then(response => {
-        console.log(response.data)
-				setUserData(response.data)
-      })
-      .catch(error => {
-        window.alert(error)
-        // console.log(error)
-      })
-  }
+		getUserData()
+  }, [user.token]);
+
+	function setColor(reserve) {
+		let reserveList = []
+		for (let i = 0; i < reserve.length; i++) {
+			reserveList.push(reserve[i])
+			if(reserve[i].confirmation) {
+				reserveList[i].color = configData.COLOR.GREEN
+			} else {
+				reserveList[i].color = configData.COLOR.BLACK
+			}
+		}
+		return reserveList
+	}
 
 	function handleSelectReserve(reserve) {
 		if (reserve !== selectReserve) {
@@ -63,13 +73,27 @@ const Home = () => {
 
 	function handleDateSelect(info) {
 		let tempReserve = reserve.filter(x => 
-			x.start.toISOString().substr(0, 10) >= info.startStr &&
-			x.start.toISOString().substr(0, 10) < info.endStr)
+			x.start.substr(0, 10) >= info.startStr &&
+			x.start.substr(0, 10) < info.endStr)
 		if (tempReserve.length > 0) {
 			setSelectReserveDate(tempReserve)
 		} else {
 			setSelectReserveDate(reserve)
 		}
+	}
+
+	function handleEventClick(info) {
+		let event = reserve.find(x => x.id.toString() === info.event.id)
+		let start = event.start.substr(0, 10)
+		let end = addDays(new Date(start), 1).toISOString().substr(0, 10)
+		handleSelectReserve(event)
+		handleDateSelect({startStr: start, endStr: end})
+	}
+	
+	function handleDayCellClassNames(info) {
+		if (closeDate.some(x => x.close_date === info.date.toISOString().substr(0, 10))) {
+			info.isDisabled = true
+		} 
 	}
 
 	function renderEventContent(eventInfo) {
@@ -82,10 +106,6 @@ const Home = () => {
 		<div>
 			<Navbar user={user}/>
 			<div className="home-sidebar">
-				<div style={{justifyContent: "space-between", display: "flex", fontSize: "20px"}}>
-					<div>Total Course</div>
-					<div>{100} Hour</div>
-				</div>
 				<p>Reservations</p>
 				<hr />
 				<div className="home-sidebar-table">
@@ -106,10 +126,11 @@ const Home = () => {
 						})}</tbody>
 					</table>
 				</div>
-				<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}}/>
+				<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}} user={user}/>
 			</div>
-			<FullCalendar
+			{closeDate && <FullCalendar
 				plugins={[ dayGridPlugin, InteractionPlugin ]}
+				timeZone="UTC"
 				initialView="dayGridMonth"
 				events={reserve}
 				headerToolbar={{
@@ -117,7 +138,7 @@ const Home = () => {
 					center: "title",
 					right: "next",
 				}}
-				eventColor={configData.COLOR.GREEN}
+				// eventColor={configData.COLOR.GREEN}
 				eventDisplay="block"
 				displayEventEnd
 				businessHours={{
@@ -129,14 +150,16 @@ const Home = () => {
 					meridiem: "lowercase"
 				}}
 				dayMaxEventRows={3}
+				eventClick={handleEventClick}
 				validRange={{
 					start: new Date().toISOString().substr(0, 8) + "01",
 					end: addDays(new Date(), 42).toISOString().substr(0, 10)
 				}}
+				dayCellClassNames={handleDayCellClassNames}
 				selectable
 				select={handleDateSelect}
 				eventContent={renderEventContent}
-			/>
+			/>}
 		</div>
 	);
 }

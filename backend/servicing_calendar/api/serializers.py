@@ -1,3 +1,4 @@
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from .models import Reservation, Customer, Store, ManageReservation
 from django.contrib.auth.models import User
@@ -19,6 +20,7 @@ class CustomerSerializer(ModelSerializer):
 
 class ReservationSerializer(ModelSerializer):
     """Serializer of reservation model."""
+    title = serializers.CharField(source="customer.username", read_only=True)
 
     class Meta:
         model = Reservation
