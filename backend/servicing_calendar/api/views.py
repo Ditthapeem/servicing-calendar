@@ -314,7 +314,8 @@ def customer_logout(request):
         POST:    A response status.
     """
     customer_username = request.user
-    if request.method == 'POST':   
+    if request.method == 'POST': 
+        request.user.auth_token.delete()  
         logout(request)
         return Response(f"Successfully logout")
 
