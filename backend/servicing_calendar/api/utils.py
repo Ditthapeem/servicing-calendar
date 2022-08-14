@@ -100,7 +100,7 @@ def get_available_time(date, course):
     for i in range(0,len(list_of_time)-2,2):
         if minute_interval(list_of_time[i+1], list_of_time[i+2]) >= course+30:
             list_of_available_time.append({"start":list_of_time[i+1], "end":list_of_time[i+2]})   
-        return time_interval(date_object, list_of_available_time, course) 
+    return time_interval(date_object, list_of_available_time, course) 
 
 def time_interval(date_object, list_of_available_time, course):
     """
