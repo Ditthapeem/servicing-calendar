@@ -1,3 +1,4 @@
+from calendar import c
 from .models import Customer, Reservation
 from datetime import datetime, timedelta
 
@@ -99,5 +100,27 @@ def get_available_time(date, course):
     list_of_available_time = []
     for i in range(0,len(list_of_time)-2,2):
         if minute_interval(list_of_time[i+1], list_of_time[i+2]) >= course+30:
-            list_of_available_time.append({"start":list_of_time[i+1], "end":list_of_time[i+2]})   
-    return list_of_available_time
+            list_of_available_time.append({"start":list_of_time[i+1], "end":list_of_time[i+2]}) 
+    return time_interval(list_of_available_time, course) 
+
+def time_interval(list_of_available_time, course):
+    """
+    Give a single Dict of available time.
+
+    Args:
+        list_of_available_time: dict of range of available time.
+        course: The duration of time.
+
+    Returns:
+        A dict pair of available time.
+    """
+    list_of_sub_interval = []
+    for i in list_of_available_time:
+        date_object_start = datetime.strptime(str(i["start"]), '%H:%M:%S')
+        date_object_end = datetime.strptime(str(i["end"]), '%H:%M:%S')
+        current = date_object_start
+        while current + timedelta(minutes = course) <= date_object_end:
+            temp = current
+            current = current + timedelta(minutes = course)
+            list_of_sub_interval.append({"start":temp.strftime("%H:%M:%S"), "end":current.strftime("%H:%M:%S")})
+    return list_of_sub_interval
