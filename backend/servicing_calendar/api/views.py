@@ -231,7 +231,7 @@ def booking(request):
             date = datetime.today() + timedelta(days=i)
             if len(get_available_time(date.strftime('%Y-%m-%d'),60)) == 0:
                 list_of_full_date.append(date.strftime('%Y-%m-%d'))
-            elif(date.strftime('%Y-%m-%d') not in list_of_close_date):
+            elif(date.strftime('%Y-%m-%d') not in list_of_close_date and date.isoweekday() != 7 ):
                 list_of_available_date.append(date.strftime('%Y-%m-%d'))
         return Response([   {"close":   list_of_close_date},
                             {"full":    list_of_full_date},

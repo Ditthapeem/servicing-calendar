@@ -153,6 +153,7 @@ const AdminCustomer = () => {
 				</div>
 			</div>
 			<div className="manage-body">	
+			<h1>Customer Management</h1>
 			<form onSubmit={handleCustomerEditData} className="manage-customer-input">
 				<div className="set-label">
 					<div className="container">
