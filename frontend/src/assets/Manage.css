@@ -77,7 +77,7 @@
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    width: 80%;
+    width: 90%;
 }
 
 .manage-customer-input input{
@@ -99,7 +99,7 @@
     padding: 20px;
     border-radius: 10px;
     text-align: center;
-    width: 80%;
+    width: 90%;
 }
 
 .reserve-history-body div{
@@ -115,4 +115,34 @@
     margin-bottom:20px;
     color: white;
     background-color: var(--black);
+}
+
+.manage-username-input input{
+  border-radius: 10px;
+  width: 80%;
+  height: 40px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.set-label {
+  font-size: 20px;
+  font-weight: 500;
+  text-align: left;
+  display: flex;
+  
+}
+
+.set-label input{
+  font-size: 20px;
+  margin: 20px 20px  20px 20px ;
+}
+
+.set-label textarea{
+  margin: 20px auto 20px auto;
+  height: 60%;
+}
+
+.container {
+  margin: 30px;
 }

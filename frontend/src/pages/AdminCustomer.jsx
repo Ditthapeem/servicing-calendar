@@ -81,7 +81,7 @@ const AdminCustomer = () => {
 			name : inputs.name,
 			surname : inputs.surname,
 			email : inputs.email,
-			phone : inputs.phone,
+			phone : String(inputs.phone),
 			address : inputs.address,
 			note : inputs.note
 		}
@@ -115,7 +115,7 @@ const AdminCustomer = () => {
 		<div style={{display: "flex",height: "100vh"}}>
 			<AdminNavbar user={user}/>
 			<div className="manage-sidebar">
-				<form onSubmit={getCustomerData} style={{width: "100%"}}>
+				<form onSubmit={getCustomerData} style={{width: "100%"}} className="manage-username-input">
 					<input
 							type="text"
 							name="customer"
@@ -154,61 +154,80 @@ const AdminCustomer = () => {
 			</div>
 			<div className="manage-body">	
 			<form onSubmit={handleCustomerEditData} className="manage-customer-input">
-					<input
-						className='auth-input'
-						type="text"
-						name="name"
-						placeholder="Name"
-						value={inputs.name || ""}
-						onChange={handleChange}
-					/>
-					<input
-						className='auth-input'
-						type="text"
-						name="surname"
-						placeholder="Surname"
-						value={inputs.surname || ""}
-						onChange={handleChange}
-					/>
-					<input
-						className='auth-input'
-						type="email"
-						name="email"
-						placeholder="Email"
-						value={inputs.email || ""}
-						required
-						onChange={handleChange}
-					/>
-					<input
-						className='auth-input'
-						type="tel"
-						// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-						maxLength={configData.PHONE_MAX}
-						name="phone"
-						placeholder="Phone"
-						value={inputs.phone || ""}
-						onChange={handleChange}
-					/>
-					<textarea
-						style={{resize: "vertical"}}
-						className='auth-input'
-						rows="5"
-						type="text"
-						name="address"
-						placeholder="Address"
-						value={inputs.address || ""}
-						onChange={handleChange}
-					/>
-					<textarea
-						style={{resize: "vertical"}}
-						className='auth-input'
-						rows="3"
-						type="text"
-						name="note"
-						placeholder="Note"
-						value={inputs.note || ""}
-						onChange={handleChange}
-					/>
+				<div className="set-label">
+					<div className="container">
+					<label>Name: 
+						<input
+							className='auth-input'
+							type="text"
+							name="name"
+							placeholder="Name"
+							value={inputs.name || ""}
+							onChange={handleChange}
+						/>
+					</label>
+					<label>Surname: 
+						<input
+							className='auth-input'
+							type="text"
+							name="surname"
+							placeholder="Surname"
+							value={inputs.surname || ""}
+							onChange={handleChange}
+						/>
+					</label></div>
+					<div className="container">
+					<label>Email: 
+						<input
+							className='auth-input'
+							type="email"
+							name="email"
+							placeholder="Email"
+							value={inputs.email || ""}
+							required
+							onChange={handleChange}
+						/>
+					</label>
+					<label>Mobile number: 
+						<input
+							className='auth-input'
+							type="tel"
+							// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+							maxLength={configData.PHONE_MAX}
+							name="phone"
+							placeholder="Phone"
+							value={inputs.phone || ""}
+							onChange={handleChange}
+						/>
+					</label></div>
+					<div className="container">
+					<label>Address: 
+						<textarea
+							style={{resize: "vertical"}}
+							className='auth-input'
+							rows="5"
+							type="text"
+							name="address"
+							placeholder="Address"
+							value={inputs.address || ""}
+							onChange={handleChange}
+						/>
+					</label></div>
+					<div className="container">
+					<label>Note: 
+						<textarea
+							style={{resize: "vertical"}}
+							className='auth-input'
+							rows="3"
+							type="text"
+							name="note"
+							placeholder="Note"
+							value={inputs.note || ""}
+							onChange={handleChange}
+						/>
+					</label>
+					</div>
+					</div>
 					<button type="submit">Save</button>
 				</form>
 				<div className="reserve-history-body">

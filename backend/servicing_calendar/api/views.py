@@ -421,6 +421,7 @@ def manage_customer(request, customer):
                 customer_object = Customer.objects.filter(username=user_object).update( name = data["name"],
                                                                                         surname = data["surname"],
                                                                                         email = data["email"],
+                                                                                        phone = data["phone"],
                                                                                         address = data["address"],
                                                                                         note = data["note"]),                                         
                 return Response("Update Customer data successfully.")

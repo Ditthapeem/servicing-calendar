@@ -131,7 +131,7 @@ const AdminReservation = () => {
 											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
 												new Date(reserve.end).toLocaleTimeString([], timeOption)}<br/>
-											{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }
+											{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For Confirmation</> }
 										</div>
 										{reserve.note && <div style={{fontSize: "18px", textAlign: "left"}}>{reserve.note}</div>}
 									</div></td>
