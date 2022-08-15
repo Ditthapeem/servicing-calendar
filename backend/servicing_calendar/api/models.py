@@ -9,7 +9,8 @@ class Customer(models.Model):
     name = models.CharField(null=False, max_length=255)
     surname = models.CharField(null=False, max_length=255)
     email = models.EmailField(null=False, unique=True)
-    address = models.TextField()
+    phone = models.CharField(blank=True, max_length=32)
+    address = models.TextField(blank=True)
     note = models.TextField(blank=True) 
 
     def __str__(self) -> str:

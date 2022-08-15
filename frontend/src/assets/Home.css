@@ -42,7 +42,11 @@
   word-break: break-word;
 }
 
-.reserve-div {
+.reserve-confirm-div {
+  background-color: var(--green);
+}
+
+.reserve-not-confirm-div {
   background-color: #ffffffbb;
 }
 
@@ -86,9 +90,9 @@
   cursor: pointer;
 }
 
-.fc-day-today {
+/* .fc-day-today {
   background-color: var(--yellow) !important;
-}
+} */
 
 /* .fc-daygrid-day div{
   min-height: 100%;

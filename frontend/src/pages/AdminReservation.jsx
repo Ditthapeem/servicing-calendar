@@ -124,12 +124,14 @@ const AdminReservation = () => {
 							return (
 								<tr key={index}>
 									<td><div onClick={() => handleSelectReserve(reserve)}
-										className={reserve === selectReserve ? "reserve-select" : "reserve-div"}>
+										className={reserve === selectReserve ? "reserve-select" :
+											reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
 										<div style={{fontSize: "20px", fontWeight: "500"}}>
 											<b>{reserve.title}</b><br/>
 											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
-												new Date(reserve.end).toLocaleTimeString([], timeOption)}
+												new Date(reserve.end).toLocaleTimeString([], timeOption)}<br/>
+											{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }
 										</div>
 										{reserve.note && <div style={{fontSize: "18px", textAlign: "left"}}>{reserve.note}</div>}
 									</div></td>

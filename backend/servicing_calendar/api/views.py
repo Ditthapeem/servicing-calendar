@@ -226,12 +226,12 @@ def booking(request):
         close_date_object = ManageReservation.objects.filter(   close_date__gte=datetime.today(),
                                                                 close_date__lte=(datetime.today() + timedelta(days=WEEK*7)))
         for date in close_date_object:
-            list_of_close_date.append(date.close_date)
+            list_of_close_date.append(date.close_date.strftime('%Y-%m-%d'))
         for i in range(WEEK*7):
             date = datetime.today() + timedelta(days=i)
             if len(get_available_time(date.strftime('%Y-%m-%d'),60)) == 0:
                 list_of_full_date.append(date.strftime('%Y-%m-%d'))
-            else:
+            elif(date.strftime('%Y-%m-%d') not in list_of_close_date):
                 list_of_available_date.append(date.strftime('%Y-%m-%d'))
         return Response([   {"close":   list_of_close_date},
                             {"full":    list_of_full_date},

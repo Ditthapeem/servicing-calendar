@@ -27,6 +27,9 @@
 
     "CONFIRM_RESERVE": "http://127.0.0.1:8000/manager/confirm",
     "CLOSE": "http://127.0.0.1:8000/manager/calendar/close",
-    "CALENDAR": "http://127.0.0.1:8000/manager/calendar/"
+    "CALENDAR": "http://127.0.0.1:8000/manager/calendar/",
+
+    "HISTORY":"http://127.0.0.1:8000/manager/history/customer=",
+    "CUSTOMER": "http://127.0.0.1:8000/manager/customer/customer="
   }
 }

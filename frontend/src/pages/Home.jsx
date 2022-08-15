@@ -114,8 +114,10 @@ const Home = () => {
 							return (
 								<tr key={index}>
 									<td><div onClick={() => handleSelectReserve(reserve)}
-										className={reserve === selectReserve ? "reserve-select" : "reserve-div"}>
+										className={reserve === selectReserve ? "reserve-select" :
+											reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
 										<div style={{fontSize: "20px", fontWeight: "500"}}>
+											{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }<br/>
 											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
 												new Date(reserve.end).toLocaleTimeString([], timeOption)}
