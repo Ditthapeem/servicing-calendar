@@ -2,16 +2,12 @@ from .models import Customer, Reservation
 from datetime import datetime, timedelta
 
 BREAK = 30
-LUNCH_BREAK = datetime.strptime('12-00-00', '%H-%M-%S')
-LUNCH_BREAK_END = datetime.strptime('13-00-00', '%H-%M-%S')
 OPEN = datetime.strptime('08-00-00', '%H-%M-%S')
 OPEN_END = datetime.strptime('09-00-00', '%H-%M-%S')
 CLOSE = datetime.strptime('19-00-00', '%H-%M-%S')
 CLOSE_END = datetime.strptime('20-00-00', '%H-%M-%S')
 LIST_OF_BREAK = [   OPEN.time(),
                     OPEN_END.time(),
-                    LUNCH_BREAK.time(),
-                    LUNCH_BREAK_END.time(),
                     CLOSE.time(),
                     CLOSE_END.time()
                 ]
