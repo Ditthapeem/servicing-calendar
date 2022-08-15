@@ -452,7 +452,7 @@ def manage_history(request, customer):
             try:
                 user_object = User.objects.get(username=customer)
                 customer_object = Customer.objects.get(username=user_object)
-                reservation_object = Reservation.objects.filter(customer=customer_object)
+                reservation_object = Reservation.objects.filter(customer=customer_object).order_by('start')
                 reservation_serializer = ReservationSerializer(reservation_object, many=True)
                 return Response(reservation_serializer.data)
             except:
