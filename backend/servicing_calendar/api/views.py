@@ -174,9 +174,9 @@ def get_my_calendar(request):
         try:
             customer_username = request.user
             customer_object = Customer.objects.get(username= customer_username)
-            reservation_object = Reservation.objects.filter(customer=customer_object, start__gte=datetime.today())
+            reservation_object = Reservation.objects.filter(customer=customer_object, start__gte=datetime.today().replace(hour=0,minute=0,second=0)).order_by('start')
             reservation_serializer = ReservationSerializer(reservation_object, many=True)
-            close_date_object = ManageReservation.objects.filter(close_date__gte=datetime.today())
+            close_date_object = ManageReservation.objects.filter(close_date__gte=datetime.today().replace(hour=0,minute=0,second=0))
             close_date_serializer = ManageReservationSerializer(close_date_object, many=True)
             return Response([reservation_serializer.data, close_date_serializer.data])
         except:
@@ -198,11 +198,21 @@ def delete_booking(request):
     """
     if request.method == 'POST':
         data = request.data
-        try:
-            Reservation.objects.filter(id=data['id']).delete()
-            return Response("Successfully, delete reservation.")
-        except:
-            return Response("Fail to delete reservation.")     
+        if request.user.is_superuser:
+            try:
+                Reservation.objects.filter(id=data['id']).delete()
+                return Response("Successfully, delete reservation.")
+            except:
+                return Response("Fail to delete reservation.")   
+        else:
+            try:
+                tomorrow_datetime = datetime.now() + timedelta(days=1)
+                reservation = Reservation.objects.filter(id=data['id'], start__gte=tomorrow_datetime)
+                reservation.delete()
+                return Response("Successfully, delete reservation.")
+            except:
+                return Response("Fail to delete reservation.")
+
 
 @api_view(['GET', 'POST'])
 @authentication_classes([BasicAuthentication, TokenAuthentication])
@@ -223,8 +233,8 @@ def booking(request):
         list_of_available_date = []
         list_of_full_date = []
         list_of_close_date = []
-        close_date_object = ManageReservation.objects.filter(   close_date__gte=datetime.today(),
-                                                                close_date__lte=(datetime.today() + timedelta(days=WEEK*7)))
+        close_date_object = ManageReservation.objects.filter(   close_date__gte=datetime.today().replace(hour=0,minute=0,second=0),
+                                                                close_date__lte=(datetime.today().replace(hour=0,minute=0,second=0) + timedelta(days=WEEK*7)))
         for date in close_date_object:
             list_of_close_date.append(date.close_date.strftime('%Y-%m-%d'))
         for i in range(WEEK*7):
@@ -326,9 +336,9 @@ def get_manager_calendar(request):
     admin = request.user
     if request.method == 'GET':
         if admin.is_superuser:
-            reservation_object = Reservation.objects.filter(start__gte=datetime.today())
+            reservation_object = Reservation.objects.filter(start__gte=datetime.today().replace(hour=0,minute=0,second=0))
             reservation_serializer = ReservationSerializer(reservation_object, many=True)
-            close_date_object = ManageReservation.objects.filter(close_date__gte=datetime.today())
+            close_date_object = ManageReservation.objects.filter(close_date__gte=datetime.today().replace(hour=0,minute=0,second=0))
             close_date_serializer = ManageReservationSerializer(close_date_object, many=True)
             return Response([reservation_serializer.data, close_date_serializer.data])
         else:
@@ -542,7 +552,7 @@ def manager_confirmation(request):
     if request.method == 'GET':
         if admin.is_superuser:
             try:
-                reservation_object = Reservation.objects.filter(confirmation=False, start__gte=datetime.today())
+                reservation_object = Reservation.objects.filter(confirmation=False, start__gte=datetime.today().replace(hour=0,minute=0,second=0))
                 reservation_serializer = ReservationSerializer(reservation_object, many=True)
                 return Response(reservation_serializer.data)
             except:
