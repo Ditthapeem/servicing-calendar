@@ -15,13 +15,13 @@ const PopUp = ({ msg, user }) => {
 
   function confirm() {
     if (window.confirm(msg.title + "\n" + date + "\n" + startTime + " - " + endTime) === true) {
-      if (msg.title === "Cancel Reservation") {
+      if (msg.type === "cancel") {
         handleCancelReserve()
-      } else if (msg.title === "Confirm Booking") {
+      } else if (msg.type === "booking") {
         handleBooking()
-      } else if (msg.title === "Close Store") {
+      } else if (msg.type === "close") {
         handleClose()
-      } else if (msg.title === "Confirm Reservation") {
+      } else if (msg.type === "confirm") {
         handleConfirmReserve()
       }
     } else {
@@ -94,9 +94,9 @@ const PopUp = ({ msg, user }) => {
 
   function handleCheck() {
     if (msg.detail === null) {
-      msg.title === "Cancel Reservation" && window.alert(`Please select your reservation.`)
-      msg.title === "Confirm Booking" && window.alert(`Please choose your booking time.`)
-      msg.title === "Close Store" && window.alert(`Please select closing date.`)
+      msg.type === "cancel" && window.alert(`Please select your reservation.`)
+      msg.type === "booking" && window.alert(`Please choose your booking time.`)
+      msg.type === "close" && window.alert(`Please select closing date.`)
     } else {
       setDate(new Date(msg.detail.start).toLocaleDateString("en-GB", dateOption))
       setStartTime(new Date(msg.detail.start).toLocaleTimeString([], timeOption))
@@ -112,7 +112,7 @@ const PopUp = ({ msg, user }) => {
         <div className='popup'>
           <div className='popup-div'>
             <h2>{msg.title}</h2>
-            {msg.title === "Close Store" ? 
+            {msg.type === "close" ? 
             <p>{date}</p> : <p>{date}<br/>{startTime + " - " + endTime}</p> 
             }
             <div style={{justifyContent: "space-around", display: "flex"}}>

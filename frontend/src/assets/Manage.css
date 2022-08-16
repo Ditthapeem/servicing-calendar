@@ -1,12 +1,12 @@
 .manage-sidebar {
-    background-color: var(--black);
-    padding: 70px 2% 0 2%;
-    flex-grow: 1;
-    color: white;
-    text-align: center;
-    display: block;
-    overflow-y: scroll;
-    max-height: 110%;
+  background: var(--black);
+  padding: 70px 2% 0 2%;
+  flex-grow: 1;
+  color: white;
+  text-align: center;
+  display: block;
+  overflow-y: scroll;
+  max-height: 110%;
 }
 
 .manage-sidebar p {
@@ -40,15 +40,16 @@
 }
 
 .reserve-confirm-div {
-  background-color: var(--green);
+  background: var(--green);
+  color: white;
 }
 
 .reserve-not-confirm-div {
-  background-color: #ffffffbb;
+  background: #ffffffbb;
 }
 
 .reserve-select {
-  background-color: var(--yellow);
+  background: var(--yellow);
 }
 
 .manage-sidebar tr:hover {
@@ -68,90 +69,92 @@
 }
 
 .manage-body {
-    width: 75%;
-}
-
-.manage-customer-input {
-    margin: 70px auto 20px auto;
-    background-color: var(--gray);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    width: 90%;
-}
-
-.manage-customer-input input{
-    background-color: white;
-}
-
-.manage-customer-input textarea{
-    background-color: white;
-}
-
-.manage-customer-input button{
-    background-color: var(--black);
-    color: white;
-}
-
-.reserve-history-body {
-    margin: auto;
-    background-color: var(--gray);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    width: 90%;
-}
-
-.reserve-history-body div{
-    border-radius: 10px;
-}
-
-.reserve-history-body textarea{
-    margin: 0 auto 20px auto;
-    background-color: white;
-}
-
-.reserve-history-body button{
-    margin-bottom:20px;
-    color: white;
-    background-color: var(--black);
-}
-
-.manage-username-input input{
-  border-radius: 10px;
-  width: 80%;
-  height: 40px;
   text-align: center;
-  font-size: 20px;
+  margin-top: 60px;
+  width: 75%;
 }
 
-.set-label {
-  font-size: 20px;
-  font-weight: 500;
-  text-align: left;
-  display: flex;
-  
+.manage-customer {
+  margin: 70px auto 20px auto;
+  background: var(--gray);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 90%;
 }
 
-.set-label input{
-  font-size: 20px;
-  margin: 20px 20px  20px 20px ;
+.manage-customer input{
+  background: white;
+  width: 94%;
 }
 
-.set-label textarea{
-  margin: 20px auto 20px auto;
+.manage-customer textarea{
+  background: white;
   height: 60%;
 }
 
-.container {
-  margin: 30px;
+.manage-customer button{
+  background: var(--black);
+  color: white;
 }
 
-h1 {
+.reserve-history-body {
+  margin: auto;
+  background: var(--gray);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 90%;
+}
+
+.reserve-history-body form{
+  border-radius: 10px;
+}
+
+.reserve-history-body textarea{
+  width: 95%;
+  background: white;
+  margin: auto;
+}
+
+.reserve-history-body button{
+  margin: 20px 0 20px;
+  color: white;
+  background: var(--black);
+}
+
+.manage-username-input input{
+  width: 60%;
+  padding: 10px;
+}
+
+.set-label {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* .set-label input{
+  font-size: 20px;
+  margin: 20px 20px  20px 20px ;
+} */
+
+/* .set-label textarea{
+  margin: 20px auto 20px auto;
+  height: 60%;
+} */
+
+.container {
+  font-size: 20px;
+  font-weight: 500;
+  text-align: left;
+  margin: 0 30px 0 30px;
+}
+
+/* h1 {
   margin: 70px auto 10px auto;
   text-align: center;
-}
+} */
 
-.manage-button {
+/* .manage-button {
   height: 100%;
-}
+} */

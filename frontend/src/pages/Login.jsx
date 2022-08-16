@@ -51,7 +51,6 @@ const Login = () => {
 				<h1 style={{textAlign: "left", fontSize: "40px"}}>Login</h1>
 				<form onSubmit={handleLogin} style={{width: "100%"}}>
 					<input
-						className='auth-input'
 						type="text"
 						name="username"
 						placeholder="Username"
@@ -60,7 +59,6 @@ const Login = () => {
 						onChange={handleChange}
 					/>
 					<input
-						className='auth-input'
 						type="password"
 						name="password"
 						placeholder="Password"

@@ -18,7 +18,7 @@ const Booking = () => {
 
 	let user = JSON.parse(sessionStorage.getItem('user'))
 	let [availableDate, setAvailableDate] = useState([])
-	let [date, setDate] = useState(createWeek(addDays(new Date(), 1)))
+	let [date, setDate] = useState(createWeek(addDays(new Date(), 2)))
 	let [time, setTime] = useState([])
 	let [select, setSelect] = useState({})
 
@@ -84,16 +84,16 @@ const Booking = () => {
 				<h1>Booking</h1>
 				<table>
 					<tbody>
-						{availableDate.length>0 && <tr>
+						{availableDate.length > 0 && <tr>
 							<td>Select Date</td>
 							<td className="booking-date"><div style={{justifyContent: "space-between", display: "flex"}}>
-								<button onClick={() => {handleSelect("date", new Date().toISOString().substr(0, 10)); getTime(new Date().toISOString().substr(0, 10), select.course)}}
+								{/* <button onClick={() => {handleSelect("date", new Date().toISOString().substr(0, 10)); getTime(new Date().toISOString().substr(0, 10), select.course)}}
 									disabled={availableDate.includes((new Date()).toISOString().substr(0, 10))?false:true}
 									style={{background: (new Date()).toISOString().substr(0, 10) === select.date && selectColor}}>
 									<div style={{fontSize: "14px"}}>{weekday[(new Date()).getDay()]}</div>
 									<div style={{fontSize: "20px", fontWeight: "bold"}}>{(new Date()).getDate()}</div>
 									<div style={{fontSize: "14px"}}>{monthNames[(new Date()).getMonth()]}</div>
-								</button>
+								</button> */}
 								<button onClick={() => handleDateNext(-7)} style={{fontSize: "20px", background: "none"}}>{"<"}</button>
 								{date.map((date, index) => {
 									return (
@@ -139,7 +139,7 @@ const Booking = () => {
 					</tbody>
 				</table>
 				{select.hasOwnProperty("date") && select.hasOwnProperty("course") && select.hasOwnProperty("start") &&
-				<PopUp msg={{title: "Confirm Booking", detail: select}} user={user}/>}
+				<PopUp msg={{type: "booking", title: "Confirm Booking", detail: select}} user={user}/>}
 			</div>
 		</div>
 	);

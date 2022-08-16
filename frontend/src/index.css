@@ -35,6 +35,25 @@ button:hover {
   opacity: 80%;
 }
 
+input {
+  border: none;
+  margin: 20px 0 20px 0;
+  border-radius: 5px;
+  display: block;
+  font-size: 16px;
+  padding: 10px;
+}
+
+textarea {
+  border: none;
+  margin: 20px 0 20px 0;
+  border-radius: 5px;
+  display: block;
+  font-size: 18px;
+  padding: 10px;
+  resize: vertical;
+}
+
 table tr{
   animation: fadeIn ease 1s;
 }

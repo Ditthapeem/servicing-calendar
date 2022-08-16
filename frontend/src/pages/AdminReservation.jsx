@@ -131,7 +131,8 @@ const AdminReservation = () => {
 											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
 												new Date(reserve.end).toLocaleTimeString([], timeOption)}<br/>
-											{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For Confirmation</> }
+											{ reserve.confirmation?<small>Reservation Confirmed</small>:
+												<small>Waiting For Confirmation</small> }
 										</div>
 										{reserve.note && <div style={{fontSize: "18px", textAlign: "left"}}></div>}
 									</div></td>
@@ -141,10 +142,10 @@ const AdminReservation = () => {
 					</table>
 				</div>
 				<div style={{justifyContent: "space-around", display: "flex"}}>
-					<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}} user={user}/>
-					<PopUp msg={{title: "Confirm Reservation", detail: selectReserve}} user={user}/>
+					<PopUp msg={{type: "cancel", title: "Delete Reservation", detail: selectReserve}} user={user}/>
+					<PopUp msg={{type: "confirm", title: "Confirm Reservation", detail: selectReserve}} user={user}/>
 				</div>	
-					<PopUp msg={{title: "Close Store", detail: {start: selectDate}}} user={user}/>
+					<PopUp msg={{type: "close", title: "Close Store", detail: {start: selectDate}}} user={user}/>
 			</div>
 			{closeDate && <FullCalendar
 				plugins={[ dayGridPlugin, InteractionPlugin ]}

@@ -117,7 +117,8 @@ const Home = () => {
 										className={reserve === selectReserve ? "reserve-select" :
 											reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
 										<div style={{fontSize: "20px", fontWeight: "500"}}>
-											{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For Confirmation</> }<br/>
+											{ reserve.confirmation?<small>Reservation Confirmed</small>:
+												<small>Waiting For Confirmation</small> }<br/>
 											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
 												new Date(reserve.end).toLocaleTimeString([], timeOption)}
@@ -128,7 +129,7 @@ const Home = () => {
 						})}</tbody>
 					</table>
 				</div>
-				<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}} user={user}/>
+				<PopUp msg={{type: "cancel", title: "Cancel Reservation", detail: selectReserve}} user={user}/>
 			</div>
 			{closeDate && <FullCalendar
 				plugins={[ dayGridPlugin, InteractionPlugin ]}

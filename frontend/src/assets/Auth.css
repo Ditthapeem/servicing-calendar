@@ -14,20 +14,19 @@
   width: 75%;
 }
 
-.auth-input {
-  border: none;
-  background-color: var(--gray-light);
-  padding: 10px;
-  margin: 20px 0 20px 0;
-  border-radius: 5px;
-  display: block;
-  width: 94%;
-  font-size: 18px;
-}
-
 .auth-sidebar button {
   background: var(--black);
   color: white;
+}
+
+.auth-sidebar input {
+  background-color: var(--gray-light);
+  width: 94%;
+}
+
+.auth-sidebar textarea {
+  background-color: var(--gray-light);
+  width: 94%;
 }
 
 .auth-sign {

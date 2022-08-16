@@ -14,8 +14,6 @@ const AdminCustomer = () => {
 	const timeOption = configData.TIME_OPTION;
 	let [reserve, setReserve] = useState(null)
 	let [selectReserve, setSelectReserve] = useState(null)
-	let [customer, setCustomer] = useState([])
-	let [selectCustomer, setSelectCustomer] = useState(null) 
 	const [inputs, setInputs] = useState({});
 	const [historyReserve, setHistoryReserve] = useState(null);
 
@@ -126,7 +124,7 @@ const AdminCustomer = () => {
 		}
 
 	return (
-		<div style={{display: "flex",height: "100vh"}}>
+		<div style={{display: "flex", height: "100vh"}}>
 			<AdminNavbar user={user}/>
 			<div className="manage-sidebar">
 				<form onSubmit={handleCustomerSearch} style={{width: "100%"}} className="manage-username-input">
@@ -141,7 +139,7 @@ const AdminCustomer = () => {
 					/>
 					<div className="manage-button"><button type="submit">Search</button></div></div>
 				</form>
-				{!reserve?<p>Plese search customer.</p>:
+				{!reserve?<p>Plese search customer</p>:
 				<div>
 					<p>Reservations</p>
 					<hr />
@@ -166,115 +164,107 @@ const AdminCustomer = () => {
 						</table>
 					</div>
 					<div style={{justifyContent: "space-around", display: "flex"}}>
-						<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}} user={user}/>
-						<PopUp msg={{title: "Confirm Reservation", detail: selectReserve}} user={user}/>
+						<PopUp msg={{type: "cancel", title: "Delete Reservation", detail: selectReserve}} user={user}/>
+						<PopUp msg={{type: "confirm", title: "Confirm Reservation", detail: selectReserve}} user={user}/>
 					</div>
 				</div>}
 			</div>
 			<div className="manage-body">	
-			<h1>Customer Management</h1>
-			<form onSubmit={handleCustomerEditData} className="manage-customer-input">
-				<div className="set-label">
-					<div className="container">
-					<label>Name: 
-						<input
-							className='auth-input'
-							type="text"
-							name="name"
-							placeholder="Name"
-							value={inputs.name || ""}
-							onChange={handleChange}
-						/>
-					</label>
-					<label>Surname: 
-						<input
-							className='auth-input'
-							type="text"
-							name="surname"
-							placeholder="Surname"
-							value={inputs.surname || ""}
-							onChange={handleChange}
-						/>
-					</label></div>
-					<div className="container">
-					<label>Email: 
-						<input
-							className='auth-input'
-							type="email"
-							name="email"
-							placeholder="Email"
-							value={inputs.email || ""}
-							required
-							onChange={handleChange}
-						/>
-					</label>
-					<label>Mobile number: 
-						<input
-							className='auth-input'
-							type="tel"
-							// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-							maxLength={configData.PHONE_MAX}
-							name="phone"
-							placeholder="Phone"
-							value={inputs.phone || ""}
-							onChange={handleChange}
-						/>
-					</label></div>
-					<div className="container">
-					<label>Address: 
-						<textarea
-							style={{resize: "vertical"}}
-							className='auth-input'
-							rows="5"
-							type="text"
-							name="address"
-							placeholder="Address"
-							value={inputs.address || ""}
-							onChange={handleChange}
-						/>
-					</label></div>
-					<div className="container">
-					<label>Note: 
-						<textarea
-							style={{resize: "vertical"}}
-							className='auth-input'
-							rows="3"
-							type="text"
-							name="note"
-							placeholder="Note"
-							value={inputs.note || ""}
-							onChange={handleChange}
-						/>
-					</label>
-					</div>
+				<h1>Customer Management</h1>
+				{inputs.email && <form onSubmit={handleCustomerEditData} className="manage-customer">
+					<div className="set-label">
+						<div className="container">
+							<label>Name: 
+								<input
+									type="text"
+									name="name"
+									placeholder="Name"
+									value={inputs.name || ""}
+									onChange={handleChange}
+								/>
+							</label>
+							<label>Surname: 
+								<input
+									type="text"
+									name="surname"
+									placeholder="Surname"
+									value={inputs.surname || ""}
+									onChange={handleChange}
+								/>
+							</label></div>
+						<div className="container">
+							<label>Email: 
+								<input
+									type="email"
+									name="email"
+									placeholder="Email"
+									value={inputs.email || ""}
+									required
+									onChange={handleChange}
+								/>
+							</label>
+							<label>Mobile number: 
+								<input
+									type="tel"
+									// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+									maxLength={configData.PHONE_MAX}
+									name="phone"
+									placeholder="Phone"
+									value={inputs.phone || ""}
+									onChange={handleChange}
+								/>
+							</label></div>
+						<div className="container">
+							<label>Address: 
+								<textarea
+									style={{resize: "vertical"}}
+									rows="5"
+									type="text"
+									name="address"
+									placeholder="Address"
+									value={inputs.address || ""}
+									onChange={handleChange}
+								/>
+							</label></div>
+						<div className="container">
+							<label>Note: 
+								<textarea
+									style={{resize: "vertical"}}
+									rows="3"
+									type="text"
+									name="note"
+									placeholder="Note"
+									value={inputs.note || ""}
+									onChange={handleChange}
+								/>
+							</label>
+						</div>
 					</div>
 					<button type="submit">Save</button>
-				</form>
-				<div className="reserve-history-body">
-				{selectReserve?<form onSubmit={handleHistoryEditData} 
-					className={selectReserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
-					<div style={{justifyContent: "space-around", display: "flex",fontSize: "20px", fontWeight: "500"}}>
-						<p>{new Date(selectReserve.start).toLocaleDateString("en-GB", dateOption)}</p>
-						<p>{new Date(selectReserve.start).toLocaleTimeString([], timeOption) + " - " +
-							new Date(selectReserve.end).toLocaleTimeString([], timeOption)}</p>
-
-					</div>
-					<textarea
-						style={{resize: "vertical"}}
-						className='auth-input'
-						rows="3"
-						type="text"
-						name="note"
-						placeholder="Note"
-						value={historyReserve.note || ""}
-						onChange={handleHistoryChange}
-					/>
-					<button type="submit">Save</button>
-				</form>:<p>Select Reservation</p>}
-				</div>
+				</form>}
+				{inputs.email && <div className="reserve-history-body">
+					{selectReserve ?
+						<form onSubmit={handleHistoryEditData} 
+							className={selectReserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
+							<div style={{justifyContent: "space-around", display: "flex",fontSize: "20px", fontWeight: "500"}}>
+								<p>{new Date(selectReserve.start).toLocaleDateString("en-GB", dateOption)}</p>
+								<p>{new Date(selectReserve.start).toLocaleTimeString([], timeOption) + " - " +
+									new Date(selectReserve.end).toLocaleTimeString([], timeOption)}</p>
+							</div>
+							<textarea
+								rows="3"
+								type="text"
+								name="note"
+								placeholder="Note"
+								value={historyReserve.note || ""}
+								onChange={handleHistoryChange}
+							/>
+							<button type="submit">Save</button>
+						</form>:
+						<p>Select Reservation</p>}
+				</div>}
 			</div>
 		</div>
-		
 	);
 }
 

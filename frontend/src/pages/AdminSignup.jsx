@@ -57,7 +57,6 @@ const AdminSignup = () => {
 				<h1 style={{textAlign: "left", fontSize: "40px"}}>Signup</h1>
 				<form onSubmit={handleSignup} style={{width: "100%"}}>
 					<input
-						className='auth-input'
 						type="text"
 						name="username"
 						placeholder="Username"
@@ -66,7 +65,6 @@ const AdminSignup = () => {
 						onChange={handleChange}
 					/>
 					<input
-						className='auth-input'
 						type="password"
 						name="password"
 						placeholder="Password"
@@ -75,7 +73,6 @@ const AdminSignup = () => {
 						onChange={handleChange}
 					/>
 					<input
-						className='auth-input'
 						type="password"
 						name="passwordCon"
 						placeholder="Password"
@@ -84,7 +81,6 @@ const AdminSignup = () => {
 						onChange={handleChange}
 					/>
 					<input
-						className='auth-input'
 						type="text"
 						name="name"
 						placeholder="Name"
@@ -92,7 +88,6 @@ const AdminSignup = () => {
 						onChange={handleChange}
 					/>
 					<input
-						className='auth-input'
 						type="text"
 						name="surname"
 						placeholder="Surname"
@@ -100,7 +95,6 @@ const AdminSignup = () => {
 						onChange={handleChange}
 					/>
 					<input
-						className='auth-input'
 						type="email"
 						name="email"
 						placeholder="Email"
@@ -109,7 +103,6 @@ const AdminSignup = () => {
 						onChange={handleChange}
 					/>
 					<input
-						className='auth-input'
 						type="tel"
 						// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
 						maxLength={configData.PHONE_MAX}
@@ -119,8 +112,6 @@ const AdminSignup = () => {
 						onChange={handleChange}
 					/>
 					<textarea
-						style={{resize: "vertical"}}
-						className='auth-input'
 						rows="5"
 						type="text"
 						name="address"
@@ -129,8 +120,6 @@ const AdminSignup = () => {
 						onChange={handleChange}
 					/>
 					<textarea
-						style={{resize: "vertical"}}
-						className='auth-input'
 						rows="3"
 						type="text"
 						name="note"
