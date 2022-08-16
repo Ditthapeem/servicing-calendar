@@ -39,15 +39,17 @@ const Booking = () => {
   }, [user.token]);
 
 	async function getTime(date, course) {
-    await axios.get(configData.API.BOOKING + `date=${date}/course=${course}`, {
-			headers:{'Authorization':'Token '+ user.token}
-			})
-      .then(response => {
-				setTime(response.data)
-      })
-      .catch(error => {
-        window.alert(error)
-      })
+	if(date && course) {
+		await axios.get(configData.API.BOOKING + `date=${date}/course=${course}`, {
+				headers:{'Authorization':'Token '+ user.token}
+				})
+		.then(response => {
+					setTime(response.data)
+		})
+		.catch(error => {
+			window.alert(error)
+		})
+	}
   }
 
 	function createWeek(startDate) {
@@ -72,9 +74,6 @@ const Booking = () => {
 		} else {
 			tempSelect[type] = data
 		}
-		if(tempSelect.hasOwnProperty("date") && tempSelect.hasOwnProperty("course")) {
-			getTime(tempSelect.date, tempSelect.course)
-		}
 		setSelect({...tempSelect})
 	}
 
@@ -88,7 +87,7 @@ const Booking = () => {
 						{availableDate.length>0 && <tr>
 							<td>Select Date</td>
 							<td className="booking-date"><div style={{justifyContent: "space-between", display: "flex"}}>
-								<button onClick={() => handleSelect("date", new Date().toISOString().substr(0, 10))}
+								<button onClick={() => {handleSelect("date", new Date().toISOString().substr(0, 10)); getTime(new Date().toISOString().substr(0, 10), select.course)}}
 									disabled={availableDate.includes((new Date()).toISOString().substr(0, 10))?false:true}
 									style={{background: (new Date()).toISOString().substr(0, 10) === select.date && selectColor}}>
 									<div style={{fontSize: "14px"}}>{weekday[(new Date()).getDay()]}</div>
@@ -98,7 +97,7 @@ const Booking = () => {
 								<button onClick={() => handleDateNext(-7)} style={{fontSize: "20px", background: "none"}}>{"<"}</button>
 								{date.map((date, index) => {
 									return (
-										<button key={index} onClick={() => handleSelect("date", date.toISOString().substr(0, 10))}
+										<button key={index} onClick={() => {handleSelect("date", date.toISOString().substr(0, 10)); getTime(date.toISOString().substr(0, 10), select.course)}}
 										disabled={availableDate.includes(date.toISOString().substr(0, 10))?false:true}
 											style={{background: date.toISOString().substr(0, 10) === select.date && selectColor}}>
 											<div style={{fontSize: "14px"}}>{weekday[date.getDay()]}</div>
@@ -115,7 +114,7 @@ const Booking = () => {
 							<td className="booking-course"><div style={{justifyContent: "space-between", display: "flex"}}>
 								{course.map((course, index) => {
 									return (
-										<button key={index} onClick={() => handleSelect("course", course)}
+										<button key={index} onClick={() => {handleSelect("course", course); getTime(select.date, course)}}
 											style={{background: course === select.course && selectColor}}>
 											{course}
 										</button>

@@ -12,7 +12,7 @@ const AdminCustomer = () => {
 	let user = JSON.parse(sessionStorage.getItem('user'))
 	const dateOption = configData.DATE_OPTION;
 	const timeOption = configData.TIME_OPTION;
-	let [reserve, setReserve] = useState([])
+	let [reserve, setReserve] = useState(null)
 	let [selectReserve, setSelectReserve] = useState(null)
 	let [customer, setCustomer] = useState([])
 	let [selectCustomer, setSelectCustomer] = useState(null) 
@@ -38,7 +38,14 @@ const AdminCustomer = () => {
 			headers:{'Authorization':'Token '+ user.token}
 			})
 			.then(response => {
-				setReserve(response.data)
+				if(typeof(response.data) === "string") {
+					window.alert(response.data)
+					setReserve(null)
+				} else {
+					setReserve(response.data)
+				}
+				setHistoryReserve(null)
+				setSelectReserve(null)		
 			})
 			.catch(error => {
 				window.alert(error)
@@ -57,22 +64,29 @@ const AdminCustomer = () => {
 		setHistoryReserve(values => ({...values, [name]: value}))
 	}
 
-	async function getCustomerData(event) {
-		event.preventDefault();
+	async function getCustomerData() {
 		await axios.get(configData.API.CUSTOMER + inputs.customer, {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 		  .then(response => {
-			console.log(response.data)
-			let data = response.data
-			delete data.id
-			delete data.username 
-			setInputs(values => ({...data, ["customer"]:values.customer}))
-			getCustomerReserve()
+			if(typeof(response.data) === "string") {
+				setInputs({})
+			} else {
+				let data = response.data
+				delete data.id
+				delete data.username 
+				setInputs(values => ({...data, ["customer"]:values.customer}))
+			}
 		  })
 		  .catch(error => {
 			window.alert(error)
 		  })
+	}
+
+	function handleCustomerSearch(event) {
+		event.preventDefault();
+		getCustomerData()
+		getCustomerReserve()
 	}
 
 	  async function handleCustomerEditData(event) {
@@ -90,7 +104,7 @@ const AdminCustomer = () => {
 			})
 			.then(response => {
 				window.alert(response.data)
-				window.location.reload()
+				getCustomerData()
 			})
 			.catch(error => {
 				window.alert(error)
@@ -115,42 +129,47 @@ const AdminCustomer = () => {
 		<div style={{display: "flex",height: "100vh"}}>
 			<AdminNavbar user={user}/>
 			<div className="manage-sidebar">
-				<form onSubmit={getCustomerData} style={{width: "100%"}} className="manage-username-input">
+				<form onSubmit={handleCustomerSearch} style={{width: "100%"}} className="manage-username-input">
+					<div className="set-label">
 					<input
-							type="text"
-							name="customer"
-							placeholder="Customer username"
-							value={inputs.customer || ""}
-							required
-							onChange={handleChange}
+						type="text"
+						name="customer"
+						placeholder="Customer username"
+						value={inputs.customer || ""}
+						required
+						onChange={handleChange}
 					/>
+					<div className="manage-button"><button type="submit">Search</button></div></div>
 				</form>
-				<p>Reservations</p>
-				<hr />
-				<div className="manage-sidebar-table">
-					<table>
-						<tbody>{reserve.map((reserve, index) => {
-							return (
-								<tr key={index}>
-									<td><div onClick={() => handleSelectReserve(reserve)}
-										className={reserve === selectReserve ? "reserve-select" :
-											reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
-										<div style={{fontSize: "20px", fontWeight: "500"}}>
-											{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }<br/>
-											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
-											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
-												new Date(reserve.end).toLocaleTimeString([], timeOption)}
-										</div>
-									</div></td>
-								</tr>
-							);
-						})}</tbody>
-					</table>
-				</div>
-				<div style={{justifyContent: "space-around", display: "flex"}}>
-					<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}} user={user}/>
-					<PopUp msg={{title: "Confirm Reservation", detail: selectReserve}} user={user}/>
-				</div>
+				{!reserve?<p>Plese search customer.</p>:
+				<div>
+					<p>Reservations</p>
+					<hr />
+					<div className="manage-sidebar-table">
+						<table>
+							<tbody>{reserve.map((reserve, index) => {
+								return (
+									<tr key={index}>
+										<td><div onClick={() => handleSelectReserve(reserve)}
+											className={reserve === selectReserve ? "reserve-select" :
+												reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
+											<div style={{fontSize: "20px", fontWeight: "500"}}>
+												{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }<br/>
+												{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
+												{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
+													new Date(reserve.end).toLocaleTimeString([], timeOption)}
+											</div>
+										</div></td>
+									</tr>
+								);
+							})}</tbody>
+						</table>
+					</div>
+					<div style={{justifyContent: "space-around", display: "flex"}}>
+						<PopUp msg={{title: "Cancel Reservation", detail: selectReserve}} user={user}/>
+						<PopUp msg={{title: "Confirm Reservation", detail: selectReserve}} user={user}/>
+					</div>
+				</div>}
 			</div>
 			<div className="manage-body">	
 			<h1>Customer Management</h1>
