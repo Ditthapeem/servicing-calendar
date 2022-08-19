@@ -1,26 +1,28 @@
 .store {
   text-align: center;
   margin: auto;
+  width: 60%;
+  animation: fadeIn ease 1s;
+}
+.store-container {
+  display: flex;
+  justify-content: space-around;
 }
 
-.store div {
+.store-container div {
   margin: 20px auto 20px auto;
   background: var(--gray);
   padding: 20px;
   border-radius: 10px;
   text-align: left;
-  width: 50%;
+  width: 40%;
 }
 
 .store input {
-  box-sizing: border-box;
-  width: 100%;
   padding: 10px;
 }
 
 .store textarea {
-  box-sizing: border-box;
-  width: 100%;
   padding: 10px;
 }
 

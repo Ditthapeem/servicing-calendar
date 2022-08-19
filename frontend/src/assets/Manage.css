@@ -81,16 +81,16 @@
   border-radius: 10px;
   text-align: center;
   width: 90%;
+  animation: fadeIn ease 1s;
 }
 
 .manage-customer input{
   background: white;
-  width: 94%;
 }
 
 .manage-customer textarea{
   background: white;
-  height: 60%;
+  height: 68%;
 }
 
 .manage-customer button{
@@ -105,6 +105,7 @@
   border-radius: 10px;
   text-align: center;
   width: 90%;
+  animation: fadeIn ease 1s;
 }
 
 .reserve-history-body form{

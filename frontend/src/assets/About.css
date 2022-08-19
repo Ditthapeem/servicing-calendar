@@ -1,27 +1,49 @@
 .about {
   text-align: center;
   margin-top: 80px;
+  font-size: 20px;
 }
 
 .about div {
   border-radius: 8px;
   padding: 10px;
+  animation: fadeIn ease 1s;
+}
+
+.about-location {
+  width:30%;
 }
 
 .about-location div {
   background: var(--gray-light);
 }
 
+.about-info {
+  width:40%;
+}
+
 .about-info div {
   background: var(--gray-light);
   text-align: left;
-  width: 700px;
+  text-indent: 50px;
+  /* margin-bottom: 50px; */
 }
 
-.about-faq div {
+.about-contact {
+  width:20%;
+}
+
+.about-contact table {
   background: var(--gray-light);
-  width: 400px;
+  width: 100%;
   text-align: left;
-  line-height: 10px;
-  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  vertical-align: top;
+}
+
+.about-contact table td {
+  vertical-align: top;
+  padding: 10px 0 10px 10px;
+  box-sizing: border-box;
 }

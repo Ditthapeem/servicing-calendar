@@ -38,6 +38,7 @@ const AdminCustomer = () => {
 
 	async function handleUpdateStore(event) {
 		event.preventDefault();
+		console.log(inputs);
 		await axios.post(configData.API.STORE, inputs, {
 			headers:{'Authorization':'Token '+ user.token}
 			})
@@ -54,87 +55,89 @@ const AdminCustomer = () => {
 			<AdminNavbar user={user}/>
 			<h1 style={{marginTop: "80px"}}>Store Management</h1>
 			<div className="store">	
-				{Object.keys(inputs).length > 0 && 
 				<form onSubmit={handleUpdateStore}>
-					<div>
-						<label>Info: 
-							<textarea
-								style={{resize: "vertical"}}
-								rows="5"
-								type="text"
-								name="info"
-								placeholder="Info"
-								value={inputs.info || ""}
-								onChange={handleChange}
-							/>
-						</label>
+					<div className="store-container">
+						<div>
+							<label>Info: 
+								<textarea
+									style={{height: "85%"}}
+									rows="5"
+									type="text"
+									name="info"
+									placeholder="Info"
+									value={inputs.info || ""}
+									onChange={handleChange}
+								/>
+							</label>
+						</div>
+						<div>
+							<label>Address: 
+								<textarea
+									rows="5"
+									type="text"
+									name="address"
+									placeholder="Address"
+									value={inputs.address || ""}
+									onChange={handleChange}
+								/>
+							</label>
+							<label>Address Url: 
+								<input
+									type="url"
+									name="addressUrl"
+									placeholder="Address Url"
+									value={inputs.addressUrl || ""}
+									onChange={handleChange}
+								/>
+							</label>
+						</div>
 					</div>
-					<div>
-						<label>Address: 
-							<textarea
-								style={{resize: "vertical"}}
-								rows="5"
-								type="text"
-								name="address"
-								placeholder="Address"
-								value={inputs.address || ""}
-								onChange={handleChange}
-							/>
-						</label>
-						<label>Address Url: 
-							<input
-								type="url"
-								name="addressUrl"
-								placeholder="Address Url"
-								value={inputs.addressUrl || ""}
-								onChange={handleChange}
-							/>
-						</label>
-					</div>
-					<div>
-						<label>Open: 
-							<input
-								type="time"
-								name="open"
-								placeholder="Open"
-								value={inputs.open || ""}
-								onChange={handleChange}
-							/>
-						</label>
-						<label>Close: 
-							<input
-								type="time"
-								name="close"
-								placeholder="Close"
-								value={inputs.close || ""}
-								onChange={handleChange}
-							/>
-						</label>
-					</div>
-					<div>
-						<label>Email: 
-							<input
-								type="email"
-								name="email"
-								placeholder="Email"
-								value={inputs.email || ""}
-								onChange={handleChange}
-							/>
-						</label>
-						<label>Note: 
-							<input
-								type="tel"
-								// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-								maxLength={configData.PHONE_MAX}
-								name="phone"
-								placeholder="Phone"
-								value={inputs.phone || ""}
-								onChange={handleChange}
-							/>
-						</label>
+					<div className="store-container">
+						<div>
+							<label>Open: 
+								<input
+									type="time"
+									name="open"
+									placeholder="Open"
+									value={inputs.open || ""}
+									onChange={handleChange}
+								/>
+							</label>
+							<label>Close: 
+								<input
+									type="time"
+									name="close"
+									placeholder="Close"
+									value={inputs.close || ""}
+									onChange={handleChange}
+								/>
+							</label>
+						</div>
+						<div>
+							<label>Email: 
+								<input
+									type="email"
+									name="email"
+									placeholder="Email"
+									value={inputs.email || ""}
+									onChange={handleChange}
+								/>
+							</label>
+							<label>Phone: 
+								<input
+									type="tel"
+									// pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+									maxLength={configData.PHONE_MAX}
+									name="phone"
+									placeholder="Phone"
+									value={inputs.phone || ""}
+									onChange={handleChange}
+								/>
+							</label>
+						</div>
 					</div>
 					<button type="submit">Save</button>
-				</form>}
+				</form>
 			</div>
 		</div>
 	);

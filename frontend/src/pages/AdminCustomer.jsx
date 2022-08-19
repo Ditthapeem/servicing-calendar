@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import configData from "../config";
 
@@ -139,7 +139,7 @@ const AdminCustomer = () => {
 					/>
 					<div className="manage-button"><button type="submit">Search</button></div></div>
 				</form>
-				{!reserve?<p>Plese search customer</p>:
+				{!reserve?<p>Search customer by username</p>:
 				<div>
 					<p>Reservations</p>
 					<hr />

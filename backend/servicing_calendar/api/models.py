@@ -41,7 +41,7 @@ class Store(models.Model):
 
     info = models.TextField()
     address = models.TextField()
-    address_url = models.URLField()
+    address_url = models.TextField()
     open = models.TimeField()
     close = models.TimeField()
     email = models.EmailField()

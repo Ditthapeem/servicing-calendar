@@ -3,7 +3,7 @@
   "TIME_OPTION": {"hour": "numeric", "minute": "2-digit", "timeZone": "UTC"},
   "WEEKDAY": ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
   "MONTH_NAME": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-  "PHONE_MAX": 10,
+  "PHONE_MAX": 13,
   "BUSINESS_HOURS": [1, 2, 3, 4, 5],
   "COURSE": [60, 75, 90],
   "COLOR": {

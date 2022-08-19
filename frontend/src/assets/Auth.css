@@ -21,12 +21,10 @@
 
 .auth-sidebar input {
   background-color: var(--gray-light);
-  width: 94%;
 }
 
 .auth-sidebar textarea {
   background-color: var(--gray-light);
-  width: 94%;
 }
 
 .auth-sign {
