@@ -16,11 +16,7 @@ const AdminCustomer = () => {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 				.then(response => {
-					// if(typeof(response.data) === "string") {
-					// 	window.alert(response.data)
-					// }
-					console.log(response.data);
-					setInputs(response.data)
+					setInputs(response.data[0])
 				})
 				.catch(error => {
 					window.alert(error)
@@ -38,7 +34,6 @@ const AdminCustomer = () => {
 
 	async function handleUpdateStore(event) {
 		event.preventDefault();
-		console.log(inputs);
 		await axios.post(configData.API.STORE, inputs, {
 			headers:{'Authorization':'Token '+ user.token}
 			})
@@ -84,9 +79,9 @@ const AdminCustomer = () => {
 							<label>Address Url: 
 								<input
 									type="url"
-									name="addressUrl"
+									name="address_url"
 									placeholder="Address Url"
-									value={inputs.addressUrl || ""}
+									value={inputs.address_url || ""}
 									onChange={handleChange}
 								/>
 							</label>
