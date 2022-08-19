@@ -509,6 +509,7 @@ def register(request):
                                                 surname = data['surname'],
                                                 email =data['email'],
                                                 address = data['address'],
+                                                phone = data['phone'],
                                                 note = data['note'])
             customer_reservation = CustomerSerializer(customer, many=False)
             return Response(customer_reservation.data)
