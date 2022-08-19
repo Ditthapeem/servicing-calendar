@@ -33,12 +33,14 @@ const Navbar = ({ user }) => {
 	return (
     <div className='nav-bar'>
       <div>
-        <button onClick={()=>{localStorage.state="home";  navigate('/reservation')}}
+        <button onClick={()=>{localStorage.state="reservation";  navigate('/reservation')}}
           className={path === "/reservation" ? 'nav-select' : 'nav-not-select'}>Home</button>
         <button onClick={()=>{localStorage.state="signup"; navigate('/signup')}}
           className={path === "/signup" ? 'nav-select' : 'nav-not-select'}>Signup</button>
-        <button onClick={()=>{localStorage.state="booking"; navigate('/customer')}}
+        <button onClick={()=>{localStorage.state="customer"; navigate('/customer')}}
           className={path === "/customer" ? 'nav-select' : 'nav-not-select'}>Customer</button>
+        <button onClick={()=>{localStorage.state="store"; navigate('/store')}}
+          className={path === "/store" ? 'nav-select' : 'nav-not-select'}>Store</button>
         <button onClick={()=>{localStorage.state="admin"; window.location.assign(configData.API.ADMIN)}}
           className={'nav-not-select'}>Admin</button>
       </div>

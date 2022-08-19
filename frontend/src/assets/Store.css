@@ -1,0 +1,31 @@
+.store {
+  text-align: center;
+  margin: auto;
+}
+
+.store div {
+  margin: 20px auto 20px auto;
+  background: var(--gray);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: left;
+  width: 50%;
+}
+
+.store input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+}
+
+.store textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+}
+
+.store button{
+  margin-bottom: 20px;
+  color: white;
+  background: var(--black);
+}

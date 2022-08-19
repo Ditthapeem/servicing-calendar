@@ -17,17 +17,7 @@ const Home = () => {
 	const timeOption = configData.TIME_OPTION;
 
 	let user = JSON.parse(sessionStorage.getItem('user'))
-	let [reserve, setReserve] = useState([]
-	// [
-	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
-	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
-	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: ""},
-	// 	{ title: 'customer name', start: new Date(), end: addMinutes(new Date(), 30), note: "this is a note"},
-	// 	{ title: 'customer name', start: addDays(new Date(), 1), end: addMinutes(addDays(new Date(), 1), 30), note: ""},
-	// 	{ title: 'customer name', start: addDays(new Date(), 2), end: addMinutes(addDays(new Date(), 2), 30), note: "this is a note"},
-	// 	{ title: 'customer name', start: addDays(new Date(), 3), end: addMinutes(addDays(new Date(), 3), 30), note: "this is a note"}
-	// ]
-	)
+	let [reserve, setReserve] = useState([])
 	let [selectReserve, setSelectReserve] = useState(null)
 	let [selectReserveDate, setSelectReserveDate] = useState([])
 	let [closeDate, setCloseDate] = useState(null)
