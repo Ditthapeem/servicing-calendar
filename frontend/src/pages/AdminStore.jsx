@@ -8,7 +8,15 @@ import '../assets/Store.css'
 
 const AdminCustomer = () => {
 	let user = JSON.parse(sessionStorage.getItem('user'))
-	const [inputs, setInputs] = useState({});
+	const [inputs, setInputs] = useState({
+		info: "",
+		address: "",
+		address_url: "",
+		open: "",
+		close: "",
+		email: "",
+		phone: ""
+	})
 
 	useEffect(() => {
 		async function getStore() {
@@ -16,7 +24,9 @@ const AdminCustomer = () => {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 				.then(response => {
-					setInputs(response.data[0])
+					if(response.data.lenght > 0) {
+						setInputs(response.data[0])
+					} 	
 				})
 				.catch(error => {
 					window.alert(error)

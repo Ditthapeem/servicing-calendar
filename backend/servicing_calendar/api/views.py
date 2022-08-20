@@ -200,19 +200,16 @@ def delete_booking(request):
     if request.method == 'POST':
         data = request.data
         if request.user.is_superuser:
-            try:
-                Reservation.objects.filter(id=data['id']).delete()
-                return Response("Successfully, delete reservation.")
-            except:
-                return Response("Fail to delete reservation.")   
+            Reservation.objects.filter(id=data['id']).delete()
+            return Response(True) 
         else:
-            try:
-                tomorrow_datetime = datetime.now() + timedelta(days=1)
-                reservation = Reservation.objects.filter(id=data['id'], start__gte=tomorrow_datetime)
+            tomorrow_datetime = datetime.now() + timedelta(days=1)
+            reservation = Reservation.objects.filter(id=data['id'], start__gte=tomorrow_datetime)
+            if(reservation.__len__() == 0):
+                return Response(False)  
+            else:
                 reservation.delete()
-                return Response("Successfully, delete reservation.")
-            except:
-                return Response("Fail to delete reservation.")
+                return Response(True)
 
 
 @api_view(['GET', 'POST'])

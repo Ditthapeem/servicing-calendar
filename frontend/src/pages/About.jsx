@@ -29,7 +29,9 @@ const About = () => {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 				.then(response => {
-					setStore(response.data[0])
+					if(response.data.lenght > 0) {
+						setStore(response.data[0])
+					} 	
 				})
 				.catch(error => {
 					window.alert(error)

@@ -36,7 +36,11 @@ const PopUp = ({ msg, user }) => {
 			})
       .then(response => {
         setPopUp(false)
-        return window.location.reload()
+        if(!response.data) {
+          window.alert("Fail to cancel the reservation with in one day.\nPlease contact admin if you want to cancel reservation.")
+        } else {
+          return window.location.reload()
+        }
       })
       .catch(error => {
         window.alert(error)
