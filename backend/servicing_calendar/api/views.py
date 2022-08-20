@@ -1,3 +1,4 @@
+import re
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer, UserSerializer
@@ -519,7 +520,7 @@ def register(request):
 @api_view(['GET'])
 @authentication_classes([BasicAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def get_store(request):
+def about(request):
     """
     Get store data.
 
@@ -529,10 +530,19 @@ def get_store(request):
     Returns:
         GET: A specific data from store.
     """
+    data = request.data
     if request.method == 'GET':
         store_object = Store.objects.all()
         store_serializer = StoreSerializer(store_object, many=True)
         return Response(store_serializer.data)
+    elif request.method == 'POST':
+        about_object = Store.objects.create(    info = data['info'],
+                                                address = data['address'],
+                                                address_url = data['address_url'],
+                                                open = data['open'],
+                                                close = data['close'],
+                                                email = data['email'],
+                                                phone = data['iphone'])
 
 @api_view(['GET', 'POST'])
 @authentication_classes([BasicAuthentication, TokenAuthentication])
