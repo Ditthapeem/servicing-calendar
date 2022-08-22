@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer, UserSerializer
 from .models import Customer, Reservation, Store, ManageReservation
-from .utils import is_reservation_valid, get_available_time
+from .utils import is_reservation_valid, get_available_time, get_list_of_date_booking
 from django.contrib.auth import login, authenticate, logout
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -233,14 +233,10 @@ def booking(request):
         list_of_close_date = []
         close_date_object = ManageReservation.objects.filter(   close_date__gte=datetime.today().replace(hour=0,minute=0,second=0),
                                                                 close_date__lte=(datetime.today().replace(hour=0,minute=0,second=0) + timedelta(days=WEEK*7)))
-        for date in close_date_object:
-            list_of_close_date.append(date.close_date.strftime('%Y-%m-%d'))
-        for i in range(WEEK*7):
-            date = datetime.today() + timedelta(days=i)
-            if len(get_available_time(date.strftime('%Y-%m-%d'),60)) == 0:
-                list_of_full_date.append(date.strftime('%Y-%m-%d'))
-            elif(date.strftime('%Y-%m-%d') not in list_of_close_date and date.isoweekday() != 7 ):
-                list_of_available_date.append(date.strftime('%Y-%m-%d'))
+        list_of_available_date, list_of_full_date, list_of_close_date = get_list_of_date_booking(   list_of_available_date,
+                                                                                                    list_of_full_date,
+                                                                                                    list_of_close_date, 
+                                                                                                    close_date_object)
         return Response([   {"close":   list_of_close_date},
                             {"full":    list_of_full_date},
                             {"available": list_of_available_date}])

@@ -2,6 +2,7 @@ from .models import Customer, Reservation
 from datetime import datetime, timedelta
 
 BREAK = 30
+WEEK = 6
 OPEN = datetime.strptime('08-00-00', '%H-%M-%S')
 OPEN_END = datetime.strptime('09-00-00', '%H-%M-%S')
 CLOSE = datetime.strptime('19-00-00', '%H-%M-%S')
@@ -101,6 +102,7 @@ def get_available_time(date, course):
 def time_interval(date_object, list_of_available_time, course):
     """
     Give a single Dict of available time.
+    
     Args:
         list_of_available_time: dict of range of available time.
         course: The duration of time.
@@ -119,3 +121,28 @@ def time_interval(date_object, list_of_available_time, course):
             end = str(datetime.combine(date_object, current.time()))+"Z"
             list_of_sub_interval.append({"start": start, "end": end})
     return list_of_sub_interval
+
+def get_list_of_date_booking(list_of_available_date, list_of_full_date, list_of_close_date, close_date_object):
+    """
+    Find a available date, full date and close date.
+
+    Args:
+        list_of_available_date: A empty list for available date
+        list_of_full_date: A empty list for full date
+        list_of_close_date: A empty list for close date
+        close_date_object: A list for close date
+    Returns:
+        list_of_available_date: A ist of available date
+        list_of_full_date: A list of full date
+        list_of_close_date: A list of close date
+        close_date_object: A list of close date  
+    """
+    for date in close_date_object:
+        list_of_close_date.append(date.close_date.strftime('%Y-%m-%d'))
+    for i in range(WEEK*7):
+        date = datetime.today() + timedelta(days=i)
+        if len(get_available_time(date.strftime('%Y-%m-%d'),60)) == 0:
+            list_of_full_date.append(date.strftime('%Y-%m-%d'))
+        elif(date.strftime('%Y-%m-%d') not in list_of_close_date and date.isoweekday() != 7 ):
+            list_of_available_date.append(date.strftime('%Y-%m-%d'))
+    return list_of_available_date, list_of_full_date, list_of_close_date
