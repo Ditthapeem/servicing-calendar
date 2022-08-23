@@ -22,7 +22,7 @@ const Navbar = ({ user }) => {
       headers:{'Authorization':'Token '+ user.token}
       })
       .then(response => {
-        sessionStorage.removeItem('user')
+        sessionStorage.clear()
         window.location.replace("/");
       })
       .catch(error => {
@@ -39,6 +39,8 @@ const Navbar = ({ user }) => {
           className={path === "/signup" ? 'nav-select' : 'nav-not-select'}>Signup</button>
         <button onClick={()=>{localStorage.state="customer"; navigate('/customer')}}
           className={path === "/customer" ? 'nav-select' : 'nav-not-select'}>Customer</button>
+        <button onClick={()=>{localStorage.state="booking"; navigate('/booking'); sessionStorage.setItem('customer', 'admin')}}
+          className={path === "/booking" ? 'nav-select' : 'nav-not-select'}>Booking</button>
         <button onClick={()=>{localStorage.state="store"; navigate('/store')}}
           className={path === "/store" ? 'nav-select' : 'nav-not-select'}>Store</button>
         <button onClick={()=>{localStorage.state="admin"; window.location.assign(configData.API.ADMIN)}}

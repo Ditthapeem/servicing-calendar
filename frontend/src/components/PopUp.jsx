@@ -12,6 +12,7 @@ const PopUp = ({ msg, user }) => {
   let [date, setDate] = useState()
   let [startTime, setStartTime] = useState()
   let [endTime, setEndTime] = useState()
+  let customer = sessionStorage.getItem('customer')
 
   function confirm() {
     if (window.confirm(msg.title + "\n" + date + "\n" + startTime + " - " + endTime) === true) {
@@ -66,14 +67,25 @@ const PopUp = ({ msg, user }) => {
       start: msg.detail.start.split(' ').join('T'),
       end: msg.detail.end.split(' ').join('T'),
       duration: convertMinutes(msg.detail.course),
-      note: ""
+    }
+    if(msg.detail.note) {
+      data.note = msg.detail.note
+    } else {
+      data.note = ""
+    }
+    if(customer) {
+      data.customer = customer
     }
     await axios.post(configData.API.BOOKING, data, {
 			headers:{'Authorization':'Token '+ user.token}
 			})
       .then(response => {
         setPopUp(false)
-        return window.location.replace("/home")
+        if(user.user.is_staff) {
+          return window.location.replace("/reservation")
+        } else {
+          return window.location.replace("/home")
+        }
       })
       .catch(error => {
         window.alert(error)
@@ -116,6 +128,7 @@ const PopUp = ({ msg, user }) => {
         <div className='popup'>
           <div className='popup-div'>
             <h2>{msg.title}</h2>
+            {customer&& <p>Customer: {customer}</p>}
             {msg.type === "close" ? 
             <p>{date}</p> : <p>{date}<br/>{startTime + " - " + endTime}</p> 
             }

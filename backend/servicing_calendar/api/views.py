@@ -241,11 +241,16 @@ def booking(request):
                             {"full":    list_of_full_date},
                             {"available": list_of_available_date}])
     elif request.method == 'POST':
-        customer = request.user
+        user = request.user
         data = request.data
         if is_reservation_valid(data):
+            if (user.is_superuser):
+                user_object = User.objects.get(username=data["customer"])
+                customer =  Customer.objects.get(username_id=user_object.id)
+            else:
+                customer =  Customer.objects.get(username_id=user.id)
             reserve = Reservation.objects.create(
-                customer = Customer.objects.get(username_id=customer.id),
+                customer = customer,
                 start = data["start"],
                 end = data["end"],
                 duration = data["duration"],

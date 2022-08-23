@@ -124,7 +124,7 @@ const AdminReservation = () => {
 											{ reserve.confirmation?<small>Reservation Confirmed</small>:
 												<small>Waiting For Confirmation</small> }
 										</div>
-										{reserve.note && <div style={{fontSize: "18px", textAlign: "left"}}></div>}
+										{reserve.note && <div style={{fontSize: "16px", textAlign: "left"}}>{reserve.note}</div>}
 									</div></td>
 								</tr>
 							);

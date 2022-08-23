@@ -22,7 +22,7 @@ const Navbar = ({ user }) => {
       headers:{'Authorization':'Token '+ user.token}
       })
       .then(response => {
-        sessionStorage.removeItem('user')
+        sessionStorage.clear()
         window.location.replace("/");
       })
       .catch(error => {

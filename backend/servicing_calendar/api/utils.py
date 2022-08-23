@@ -117,8 +117,8 @@ def time_interval(date_object, list_of_available_time, course):
         while current + timedelta(minutes = course) <= date_object_end:
             temp = current
             current = current + timedelta(minutes = course)
-            start = str(datetime.combine(date_object, temp.time()))+"Z"
-            end = str(datetime.combine(date_object, current.time()))+"Z"
+            start = (str(datetime.combine(date_object, temp.time()))+"Z").replace(" ", "T")
+            end = (str(datetime.combine(date_object, current.time()))+"Z").replace(" ", "T")
             list_of_sub_interval.append({"start": start, "end": end})
     return list_of_sub_interval
 

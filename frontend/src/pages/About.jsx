@@ -29,7 +29,7 @@ const About = () => {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 				.then(response => {
-					if(response.data.lenght > 0) {
+					if(response.data[0]) {
 						setStore(response.data[0])
 					} 	
 				})

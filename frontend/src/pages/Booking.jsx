@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import Navbar from '../components/Navbar';
+import AdminNavbar from '../components/AdminNavbar';
 import PopUp from '../components/PopUp';
 import configData from "../config";
 
@@ -21,6 +22,7 @@ const Booking = () => {
 	let [date, setDate] = useState(createWeek(addDays(new Date(), 2)))
 	let [time, setTime] = useState([])
 	let [select, setSelect] = useState({})
+	let customer = sessionStorage.getItem('customer')
 
 	useEffect(() => {
 		async function getDate() {
@@ -38,13 +40,19 @@ const Booking = () => {
 		getDate()
   }, [user.token]);
 
+	const handleChange = (event) => {
+		const name = event.target.name;
+		const value = event.target.value;
+		setSelect(values => ({...values, [name]: value}))
+	}
+
 	async function getTime(date, course) {
 	if(date && course) {
 		await axios.get(configData.API.BOOKING + `date=${date}/course=${course}`, {
-				headers:{'Authorization':'Token '+ user.token}
-				})
+			headers:{'Authorization':'Token '+ user.token}
+			})
 		.then(response => {
-					setTime(response.data)
+			setTime(response.data)
 		})
 		.catch(error => {
 			window.alert(error)
@@ -79,21 +87,15 @@ const Booking = () => {
 
 	return (
 		<div>
-			<Navbar user={user}/>
+			{user.user.is_staff? <AdminNavbar user={user}/> : <Navbar user={user}/>}
 			<div className="booking">
 				<h1>Booking</h1>
+				{customer && <p>Customer: {customer}</p>}
 				<table>
 					<tbody>
 						{availableDate.length > 0 && <tr>
 							<td>Select Date</td>
 							<td className="booking-date"><div style={{justifyContent: "space-between", display: "flex"}}>
-								{/* <button onClick={() => {handleSelect("date", new Date().toISOString().substr(0, 10)); getTime(new Date().toISOString().substr(0, 10), select.course)}}
-									disabled={availableDate.includes((new Date()).toISOString().substr(0, 10))?false:true}
-									style={{background: (new Date()).toISOString().substr(0, 10) === select.date && selectColor}}>
-									<div style={{fontSize: "14px"}}>{weekday[(new Date()).getDay()]}</div>
-									<div style={{fontSize: "20px", fontWeight: "bold"}}>{(new Date()).getDate()}</div>
-									<div style={{fontSize: "14px"}}>{monthNames[(new Date()).getMonth()]}</div>
-								</button> */}
 								<button onClick={() => handleDateNext(-7)} style={{fontSize: "20px", background: "none"}}>{"<"}</button>
 								{date.map((date, index) => {
 									return (
@@ -135,6 +137,18 @@ const Booking = () => {
 									);
 								})}
 							</div></td>
+						</tr>}
+						{user.user.is_staff && select.hasOwnProperty("start") && <tr>
+							<td>Note</td>
+							<td><textarea
+								style={{width: "100%", background: configData.COLOR.GRAY}}
+								rows="3"
+								type="text"
+								name="note"
+								placeholder="Note"
+								value={select.note || ""}
+								onChange={handleChange}
+							/></td>
 						</tr>}
 					</tbody>
 				</table>

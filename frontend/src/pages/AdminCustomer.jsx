@@ -123,6 +123,15 @@ const AdminCustomer = () => {
 			})
 		}
 
+		function handleBooking() {
+			if (inputs.customer) {
+				sessionStorage.setItem('customer', inputs.customer)
+				window.location.assign("/booking")
+			} else {
+				window.alert("Select Customer")
+			}
+		}
+
 	return (
 		<div style={{display: "flex", height: "100vh"}}>
 			<AdminNavbar user={user}/>
@@ -167,6 +176,7 @@ const AdminCustomer = () => {
 						<PopUp msg={{type: "cancel", title: "Delete Reservation", detail: selectReserve}} user={user}/>
 						<PopUp msg={{type: "confirm", title: "Confirm Reservation", detail: selectReserve}} user={user}/>
 					</div>
+						<button onClick={()=>{handleBooking()}} >Booking</button>
 				</div>}
 			</div>
 			<div className="manage-body">	
@@ -217,7 +227,6 @@ const AdminCustomer = () => {
 						<div className="container">
 							<label>Address: 
 								<textarea
-									style={{resize: "vertical"}}
 									rows="5"
 									type="text"
 									name="address"
@@ -229,7 +238,6 @@ const AdminCustomer = () => {
 						<div className="container">
 							<label>Note: 
 								<textarea
-									style={{resize: "vertical"}}
 									rows="3"
 									type="text"
 									name="note"
