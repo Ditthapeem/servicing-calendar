@@ -1,4 +1,4 @@
-import re
+from django.db import IntegrityError
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer, UserSerializer
@@ -117,7 +117,7 @@ def getRoutes(request):
             'description': 'Manage customer data.'           
         },
         {
-            'Endpoint': 'manage/history/customer=<str:customer>',
+            'Endpoint': 'manager/history/customer=<str:customer>',
             'method': 'GET, POST',
             'body': {
                         'id' : '',
@@ -152,6 +152,12 @@ def getRoutes(request):
                         'id' : ''
                     },
             'description': 'Confirmation for each reservation.'           
+        },
+        {
+            'Endpoint': 'manager/customer/data',
+            'method': 'GET',
+            'body': None,
+            'description': 'Filter all customer data.'
         }
     ]
     return Response(routes)
@@ -481,8 +487,6 @@ def manage_history(request, customer):
             return Response("You shall not PASS!!!")
 
 @api_view(['POST'])
-@authentication_classes([BasicAuthentication, TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def register(request):
     """
     Register new customer.
@@ -493,10 +497,9 @@ def register(request):
     Returns:
         POST: New customer.
     """
-    admin = request.user
     data = request.data
     if request.method == 'POST':
-        if admin.is_superuser:
+        try:
             user = User.objects.create( username = data['username'],
                                         email = data['email'],
                                         first_name = data['name'],
@@ -511,11 +514,12 @@ def register(request):
                                                 phone = data['phone'],
                                                 note = data['note'])
             customer_reservation = CustomerSerializer(customer, many=False)
-            return Response(customer_reservation.data)
-        else:
-            return Response("You shall not PASS!!!")
+        except IntegrityError:
+            return Response("This username or email is already exist please try again.")
+            
+        return Response(customer_reservation.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @authentication_classes([BasicAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def about(request):
@@ -534,13 +538,14 @@ def about(request):
         store_serializer = StoreSerializer(store_object, many=True)
         return Response(store_serializer.data)
     elif request.method == 'POST':
-        about_object = Store.objects.create(    info = data['info'],
-                                                address = data['address'],
-                                                address_url = data['address_url'],
-                                                open = data['open'],
-                                                close = data['close'],
-                                                email = data['email'],
-                                                phone = data['iphone'])
+        about_object = Store.objects.filter(pk=1).update(   info = data['info'],
+                                                            address = data['address'],
+                                                            address_url = data['address_url'],
+                                                            open = data['open'],
+                                                            close = data['close'],
+                                                            email = data['email'],
+                                                            phone = data['phone'])
+        return Response("Update store infomation successfully.")
 
 @api_view(['GET', 'POST'])
 @authentication_classes([BasicAuthentication, TokenAuthentication])
@@ -575,5 +580,28 @@ def manager_confirmation(request):
                 return Response("Reservation confirmed.")
             except:
                 return Response("Reservation doesn't exist.")
+        else:
+            return Response("You shall not PASS!!!")
+
+@api_view(['GET'])
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_all_customer(request):
+    """
+    Filter all customer data.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        GET: All of customer data.
+    """
+    admin = request.user
+    data = request.data
+    if request.method == 'GET':
+        if admin.is_superuser:
+            customer_object = Customer.objects.all()
+            customer_serializer = CustomerSerializer(customer_object, many=True)
+            return Response(customer_serializer.data)
         else:
             return Response("You shall not PASS!!!")

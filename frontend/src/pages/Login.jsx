@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 import configData from "../config";
 import '../assets/Auth.css';
@@ -22,7 +23,7 @@ const Login = () => {
 
   async function login(data) {
     sessionStorage.setItem('user', JSON.stringify(data))
-		handleRedirect(data)
+	handleRedirect(data)
   }
 
 	function handleRedirect(user) {
@@ -67,7 +68,7 @@ const Login = () => {
 						onChange={handleChange}
 					/>
 					<div className='auth-sign'>
-						New account can be registered at the front desk.
+						Create you account <Link to={"/signup"}>Sign Up</Link>
 					</div>
 					<button type="submit">Login</button>
 				</form>

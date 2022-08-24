@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 import configData from "../config";
@@ -20,28 +20,39 @@ const AdminSignup = () => {
 		"note": "",
 	});
 
-	useEffect(() => {
-		if (!user) {
-      window.location.replace("/");
-    }
-  }, [user]);
-
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setInputs(values => ({...values, [name]: value}))
   }
 
+  async function handleLogin(data) {
+    await axios.post(configData.API.LOGIN, data)
+      .then(response => {
+        sessionStorage.setItem('user', JSON.stringify(response.data));
+		return window.location.replace("/home")
+      })
+      .catch(error => {
+        window.alert("Wrong username or password. Note that both fields may be case-sensitive")
+        console.log(error)
+      })
+  }
+
   async function handleSignup(event) {
     event.preventDefault();
 		if (inputs.password === inputs.passwordCon) {
 			delete inputs.passwordCon
-			await axios.post(configData.API.SIGNUP, inputs, {
-				headers:{'Authorization':'Token '+ user.token}
-				})
+			await axios.post(configData.API.SIGNUP, inputs)
 				.then(response => {
-					window.alert("Success, account have been created.")
-					window.location.assign("/reservation")
+					if(typeof(response.data) == "string") {
+						window.alert(response.data)
+					} else {
+						window.alert("Success, account have been created.")
+						if(user && user.user.is_staff) {
+							return window.location.replace("/reservation")
+						}
+						handleLogin({username: inputs.username, password: inputs.password})
+					}
 				})
 				.catch(error => {
 					window.alert(error)
@@ -127,6 +138,9 @@ const AdminSignup = () => {
 						value={inputs.note || ""}
 						onChange={handleChange}
 					/>
+					<div className='auth-sign'>
+						Already have an account <Link to={"/"}>Login</Link>
+					</div>
 					<button type="submit">Signup</button>
 					<button type="button" onClick={() => navigate(-1)}
 						style={{marginLeft:"20%", background:"gray"}}>Cancel</button>

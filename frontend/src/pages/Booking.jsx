@@ -138,7 +138,7 @@ const Booking = () => {
 								})}
 							</div></td>
 						</tr>}
-						{user.user.is_staff && select.hasOwnProperty("start") && <tr>
+						{select.hasOwnProperty("start") && <tr>
 							<td>Note</td>
 							<td><textarea
 								style={{width: "100%", background: configData.COLOR.GRAY}}

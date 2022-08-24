@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.getRoutes, name="routes"),
-    path('my/about', views.about, name="about"),
+    path('my/about/', views.about, name="about"),
     path('my/calendar/', views.get_my_calendar, name='calendar'), # get customer data
     path('my/calendar/cancel', views.delete_booking, name='cancel'), # post delet reservation
     path('my/booking/', views.booking, name="booking"), # get aviable date and customor hours. & post new reservation.
@@ -17,5 +17,6 @@ urlpatterns = [
     path('manager/customer/customer=<str:customer>', views.manage_customer, name="manage_customer"),
     path('manager/history/customer=<str:customer>', views.manage_history, name="manage_history"),
     path('manager/confirm', views.manager_confirmation, name="manager_confirmation"),
+    path('manager/customer/data', views.get_all_customer, name="manage_all_customer"),
     path('register/', views.register, name="register")
 ]
