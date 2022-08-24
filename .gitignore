@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 backend/servicing_calendar/api/migrations
+frontend/package-lock.json
+.DS_Store
