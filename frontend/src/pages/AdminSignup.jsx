@@ -142,8 +142,8 @@ const AdminSignup = () => {
 						Already have an account <Link to={"/"}>Login</Link>
 					</div>
 					<button type="submit">Signup</button>
-					<button type="button" onClick={() => navigate(-1)}
-						style={{marginLeft:"20%", background:"gray"}}>Cancel</button>
+					{user&&<button type="button" onClick={() => navigate(-1)}
+						style={{marginLeft:"20%", background:"gray"}}>Cancel</button>}
 				</form>
 			</div>
 			<div className="auth-poster">poster</div>

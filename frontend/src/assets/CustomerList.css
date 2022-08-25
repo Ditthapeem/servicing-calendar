@@ -1,0 +1,58 @@
+.customer-table {
+    text-align: center;
+    margin-top: 8%;
+    padding-bottom: 5%;
+}
+
+.customer-table table{
+    border-collapse: collapse;
+    text-align: left;
+    margin: auto;
+    min-width: 60%;
+    padding: 10px 5px 10px 5px;
+    border-radius: 10px;
+}
+
+.customer-table table thead{
+    font-weight: bold;
+    font-size: 22px;
+    padding: 20px 5px 20px 5px;
+    text-align: center;
+}
+
+.customer-table table thead td{
+    padding: 15px 10px 15px 10px;
+    background: var(--green);
+    color: white;
+    border: 1px var(--gray) solid;
+}
+
+.customer-table table tbody{
+    font-size: 20px;
+}
+
+.customer-table table tbody tr:hover{
+    opacity: 80%;
+    cursor: pointer;
+}
+
+.customer-table-select{
+    background: var(--yellow);
+}
+
+.customer-table tr:nth-child(even){
+    background: var(--gray-light);
+}
+
+.customer-table tr:nth-child(odd){
+    background: var(--gray);
+}
+
+.customer-table table tbody td{
+    padding: 15px 10px 15px 10px;
+    border: 1px white solid;
+}
+
+.customer-button {
+    margin: 20px;
+}

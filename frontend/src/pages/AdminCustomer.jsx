@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import configData from "../config";
 
@@ -17,6 +17,14 @@ const AdminCustomer = () => {
 	const [inputs, setInputs] = useState({});
 	const [historyReserve, setHistoryReserve] = useState(null);
 
+	useEffect(() => {
+		if(sessionStorage.getItem("customer")) {
+			setInputs({customer:sessionStorage.getItem("customer")})
+			getCustomerData(sessionStorage.getItem("customer"))
+			getCustomerReserve(sessionStorage.getItem("customer"))
+		}
+    }, []);
+
   	function handleSelectReserve(reserve) {
 		if (reserve !== selectReserve) {
 			let data = {
@@ -31,8 +39,8 @@ const AdminCustomer = () => {
 		}
 	}
 
-	async function getCustomerReserve() {
-		await axios.get(configData.API.HISTORY + inputs.customer, {
+	async function getCustomerReserve(customer) {
+		await axios.get(configData.API.HISTORY + customer, {
 			headers:{'Authorization':'Token '+ user.token}
 			})
 			.then(response => {
@@ -62,8 +70,8 @@ const AdminCustomer = () => {
 		setHistoryReserve(values => ({...values, [name]: value}))
 	}
 
-	async function getCustomerData() {
-		await axios.get(configData.API.CUSTOMER + inputs.customer, {
+	async function getCustomerData(customer) {
+		await axios.get(configData.API.CUSTOMER + customer, {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 		  .then(response => {
@@ -83,8 +91,8 @@ const AdminCustomer = () => {
 
 	function handleCustomerSearch(event) {
 		event.preventDefault();
-		getCustomerData()
-		getCustomerReserve()
+		getCustomerData(inputs.customer)
+		getCustomerReserve(inputs.customer)
 	}
 
 	  async function handleCustomerEditData(event) {
@@ -102,7 +110,7 @@ const AdminCustomer = () => {
 			})
 			.then(response => {
 				window.alert(response.data)
-				getCustomerData()
+				getCustomerData(inputs.customer)
 			})
 			.catch(error => {
 				window.alert(error)
@@ -116,7 +124,7 @@ const AdminCustomer = () => {
 			})
 			.then(response => {
 				window.alert(response.data)
-				getCustomerReserve()
+				getCustomerReserve(inputs.customer)
 			})
 			.catch(error => {
 				window.alert(error)

@@ -43,6 +43,8 @@ const Navbar = ({ user }) => {
           className={path === "/booking" ? 'nav-select' : 'nav-not-select'}>Booking</button>
         <button onClick={()=>{localStorage.state="store"; navigate('/store')}}
           className={path === "/store" ? 'nav-select' : 'nav-not-select'}>Store</button>
+        <button onClick={()=>{localStorage.state="customerlist"; navigate('/customerlist')}}
+          className={path === "/customerlist" ? 'nav-select' : 'nav-not-select'}>Customer List</button>
         <button onClick={()=>{localStorage.state="admin"; window.location.assign(configData.API.ADMIN)}}
           className={'nav-not-select'}>Admin</button>
       </div>
