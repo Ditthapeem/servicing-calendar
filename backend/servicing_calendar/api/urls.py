@@ -17,6 +17,6 @@ urlpatterns = [
     path('manager/customer/customer=<str:customer>', views.manage_customer, name="manage_customer"),
     path('manager/history/customer=<str:customer>', views.manage_history, name="manage_history"),
     path('manager/confirm', views.manager_confirmation, name="manager_confirmation"),
-    path('manager/customer/data', views.get_all_customer, name="manage_all_customer"),
+    path('manager/customer_list', views.customer_list, name="manage_customer_list"),
     path('register/', views.register, name="register")
 ]

@@ -534,7 +534,16 @@ def about(request):
     """
     data = request.data
     if request.method == 'GET':
-        store_object = Store.objects.all()
+        try:
+            store_object = Store.objects.filter(id=1)
+        except:
+            store_object = Store.objects.create(    info = "",
+                                                    address = "",
+                                                    address_url = "",
+                                                    open = "",
+                                                    close = "",
+                                                    email = "",
+                                                    phone = "")
         store_serializer = StoreSerializer(store_object, many=True)
         return Response(store_serializer.data)
     elif request.method == 'POST':
@@ -586,7 +595,7 @@ def manager_confirmation(request):
 @api_view(['GET'])
 @authentication_classes([BasicAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def get_all_customer(request):
+def customer_list(request):
     """
     Filter all customer data.
 
@@ -600,8 +609,17 @@ def get_all_customer(request):
     data = request.data
     if request.method == 'GET':
         if admin.is_superuser:
-            customer_object = Customer.objects.all()
-            customer_serializer = CustomerSerializer(customer_object, many=True)
-            return Response(customer_serializer.data)
+            user_list = []
+            user_object = User.objects.all()
+            for user in user_object:
+                customer = Customer.objects.filter(username=user)
+                try:
+                    customer_serializer = CustomerSerializer(customer, many=True)
+                    if(len(customer_serializer.data) != 0 ):
+                        user_list.append([user.username, customer_serializer.data])
+                except:
+                    pass
+            print(customer_list)
+            return Response(user_list)
         else:
             return Response("You shall not PASS!!!")
