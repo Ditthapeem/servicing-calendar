@@ -5,8 +5,30 @@ import axios from 'axios';
 import configData from "../config";
 
 import '../assets/Auth.css';
+import img1 from '../img/img1.jpg';
+import img2 from '../img/img2.jpg';
+import img3 from '../img/img3.jpg';
+import img4 from '../img/img4.jpg';
+import img5 from '../img/img5.jpg';
 
 const AdminSignup = () => {
+	let [state, setState] = useState({
+		img:[img1,img2,img3,img4,img5],
+		activeImageIndex: 0
+	})
+
+	useEffect(() => {
+		const interval = setInterval(()=>{
+			let newActiveIndex = state.activeImageIndex < state.img.length ? state.activeImageIndex++ : 0
+			console.log(newActiveIndex);
+			setState({
+				img: state.img,
+			   	activeImageIndex: newActiveIndex
+			})
+		}, 2000);
+		return () => clearInterval(interval)
+	});
+
 	const navigate = useNavigate();
 	let user = JSON.parse(sessionStorage.getItem('user'))
 	const [inputs, setInputs] = useState({
@@ -65,6 +87,7 @@ const AdminSignup = () => {
 	return (
 		<div style={{display: "flex", height: "100vh"}}>
 			<div className="auth-sidebar">
+				<img src={"./Logo2.jpeg"} alt="Logo" style={{borderRadius: "8px"}}/>
 				<h1 style={{textAlign: "left", fontSize: "40px"}}>Signup</h1>
 				<form onSubmit={handleSignup} style={{width: "100%"}}>
 					<input
@@ -130,14 +153,6 @@ const AdminSignup = () => {
 						value={inputs.address || ""}
 						onChange={handleChange}
 					/>
-					<textarea
-						rows="3"
-						type="text"
-						name="note"
-						placeholder="Note"
-						value={inputs.note || ""}
-						onChange={handleChange}
-					/>
 					<div className='auth-sign'>
 						Already have an account <Link to={"/"}>Login</Link>
 					</div>
@@ -146,8 +161,7 @@ const AdminSignup = () => {
 						style={{marginLeft:"20%", background:"gray"}}>Cancel</button>}
 				</form>
 			</div>
-			<div className="auth-poster">poster</div>
-			{/* <img className="auth-poster"></img> */}
+			<img src={state.img[state.activeImageIndex]} className="auth-poster"/>
 		</div>
 	);
 }

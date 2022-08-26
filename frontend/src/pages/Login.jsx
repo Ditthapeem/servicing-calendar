@@ -4,16 +4,37 @@ import { Link } from 'react-router-dom';
 
 import configData from "../config";
 import '../assets/Auth.css';
+import img1 from '../img/img1.jpg';
+import img2 from '../img/img2.jpg';
+import img3 from '../img/img3.jpg';
+import img4 from '../img/img4.jpg';
+import img5 from '../img/img5.jpg';
+
 
 const Login = () => {
+	let [state, setState] = useState({
+		img:[img1,img2,img3,img4,img5],
+		activeImageIndex: 0
+	})
 	const [inputs, setInputs] = useState({});
 	let user = JSON.parse(sessionStorage.getItem('user'))
 
 	useEffect(() => {
 		if (user) {
-      handleRedirect(user)
-    }
-  }, [user]);
+			handleRedirect(user)
+		}
+		const interval = setInterval(()=>{
+			let newActiveIndex = state.activeImageIndex < state.img.length ? state.activeImageIndex++ : 0
+			console.log(newActiveIndex);
+			setState({
+				img: state.img,
+			   	activeImageIndex: newActiveIndex
+			})
+		}, 2000);
+		return () => clearInterval(interval)
+	}, [user]);
+
+
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -49,6 +70,7 @@ const Login = () => {
 	return (
 		<div style={{display: "flex", height: "100vh"}}>
 			<div className="auth-sidebar">
+			<img src={"./Logo2.jpeg"} alt="Logo" style={{borderRadius: "8px"}}/>
 				<h1 style={{textAlign: "left", fontSize: "40px"}}>Login</h1>
 				<form onSubmit={handleLogin} style={{width: "100%"}}>
 					<input
@@ -73,8 +95,7 @@ const Login = () => {
 					<button type="submit">Login</button>
 				</form>
 			</div>
-			<div className="auth-poster">poster</div>
-			{/* <img className="auth-poster"></img> */}
+			<img src={state.img[state.activeImageIndex]} className="auth-poster"/>
 		</div>
 	);
 }
