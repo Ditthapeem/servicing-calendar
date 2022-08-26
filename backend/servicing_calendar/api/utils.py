@@ -1,5 +1,7 @@
 from .models import Customer, Reservation
 from datetime import datetime, timedelta
+# from django.core.mail import send_mail
+# from servicing_calendar.settings import EMAIL_HOST_USER
 
 BREAK = 30
 WEEK = 6
@@ -146,3 +148,24 @@ def get_list_of_date_booking(list_of_available_date, list_of_full_date, list_of_
         elif(date.strftime('%Y-%m-%d') not in list_of_close_date and date.isoweekday() != 7 ):
             list_of_available_date.append(date.strftime('%Y-%m-%d'))
     return list_of_available_date, list_of_full_date, list_of_close_date
+
+def email_confirm(customer, reservation):
+    """
+    Send an Email for confirmations.
+
+    Args:
+        customer: An object of customer.
+        reservation:  An object of reservation
+    
+    Returns:
+        Void
+    """
+    send_mail('Thanks for your reservation',
+                f"""Dear {customer.name} {customer.surname},
+                    Your reservation on {reservation.start.date()} at {reservation.start.time()} to {reservation.end.time()} has been confirmed,
+
+                Annatta Thai Massage.""",
+                        EMAIL_HOST_USER,
+                        [customer.email]
+                )
+    return

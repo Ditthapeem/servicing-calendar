@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer, UserSerializer
 from .models import Customer, Reservation, Store, ManageReservation
-from .utils import is_reservation_valid, get_available_time, get_list_of_date_booking
+from .utils import is_reservation_valid, get_available_time, get_list_of_date_booking, email_confirm
 from django.contrib.auth import login, authenticate, logout
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -585,7 +585,14 @@ def manager_confirmation(request):
     elif request.method == 'POST':
         if admin.is_superuser:
             try:
-                reservation_object = Reservation.objects.filter(id=data["id"]).update(confirmation=True)
+                reservation_object = Reservation.objects.get(id=data["id"])
+                user_object = User.objects.get(username=reservation_object.customer.username)
+                customer_object = Customer.objects.get(username=user_object)
+                reservation_update = Reservation.objects.filter(id=data["id"]).update(confirmation=True)
+                # email_confirm(  customer_object, 
+                #                 reservation_object.start.date(), 
+                #                 reservation_object.start.time(), 
+                #                 reservation_object.end.time())
                 return Response("Reservation confirmed.")
             except:
                 return Response("Reservation doesn't exist.")
