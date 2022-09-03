@@ -132,9 +132,6 @@ const Home = () => {
 					center: "title",
 					right: "next",
 				}}
-				// eventColor={configData.COLOR.GREEN}
-				eventDisplay="block"
-				displayEventEnd
 				businessHours={{
 					daysOfWeek: configData.BUSINESS_HOURS,
 				}}
@@ -143,6 +140,7 @@ const Home = () => {
 					minute: '2-digit',
 					meridiem: "lowercase"
 				}}
+				eventDisplay="block"
 				dayMaxEventRows={3}
 				eventClick={handleEventClick}
 				validRange={{
@@ -150,9 +148,10 @@ const Home = () => {
 					end: addDays(new Date(), 42).toISOString().substr(0, 10)
 				}}
 				dayCellClassNames={handleDayCellClassNames}
-				selectable
 				select={handleDateSelect}
 				eventContent={renderEventContent}
+				selectable
+				displayEventEnd
 			/>}
 		</div>
 	);

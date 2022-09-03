@@ -49,8 +49,8 @@ const Navbar = ({ user }) => {
           className={'nav-not-select'}>Admin</button>
       </div>
       <div>
-        {user && <>{user.user.username}</>}
-        <button className="nav-logout" onClick={logout} >Logout</button>
+        {user && <>{user.user.username}
+        <button className="nav-logout" onClick={logout} >Logout</button></>}
       </div>
     </div>
 	);

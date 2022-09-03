@@ -148,9 +148,6 @@ const AdminReservation = () => {
 					center: "title",
 					right: "next",
 				}}
-				eventColor={configData.COLOR.GREEN}
-				eventDisplay="block"
-				displayEventEnd
 				businessHours={{
 					daysOfWeek: configData.BUSINESS_HOURS,
 				}}
@@ -159,13 +156,15 @@ const AdminReservation = () => {
 					minute: '2-digit',
 					meridiem: false
 				}}
+				eventDisplay="block"
 				dayMaxEventRows={3}
 				eventClick={handleEventClick}
 				dayCellClassNames={handleDayCellClassNames}
-				selectable
 				dateClick={handleDateClick}
 				select={handleDateSelect}
 				eventContent={renderEventContent}
+				selectable
+				displayEventEnd
 			/>}
 		</div>
 	);

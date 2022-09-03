@@ -129,7 +129,6 @@ const PopUp = ({ msg, user }) => {
         <div className='popup'>
           <div className='popup-div'>
             <h2>{msg.title}</h2>
-            
             {msg.type === "close" ? 
               <p>{date}</p> : 
               <>

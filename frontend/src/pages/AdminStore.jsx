@@ -4,7 +4,7 @@ import configData from "../config";
 
 import AdminNavbar from '../components/AdminNavbar';
 
-import '../assets/Store.css'
+import '../assets/Store.css';
 
 const AdminCustomer = () => {
 	let user = JSON.parse(sessionStorage.getItem('user'))

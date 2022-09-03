@@ -1,37 +1,24 @@
-.manage-sidebar {
+.customer-sidebar {
   background: var(--black);
   padding: 70px 2% 0 2%;
   flex-grow: 1;
   color: white;
   text-align: center;
-  display: block;
   overflow-y: scroll;
-  max-height: 110%;
 }
 
-.manage-sidebar p {
+.customer-sidebar p {
   font-size: 20px;
   opacity: 80%;
 }
 
-.manage-sidebar-table {
-  overflow-y: scroll;
-  max-height: 79%;
-}
-
-.manage-sidebar-table table {
+.customer-sidebar table {
   color: black;
   font-size: 20px;
-  height: 74%;
   width: 100%;
 }
 
-.manage-sidebar table td {
-  width: 100%;
-  border: none;
-}
-
-.manage-sidebar table div {
+.customer-sidebar table div {
   padding: 1px 10px 1px 10px;
   margin: 10px 0 10px 0;
   border-radius: 8px;
@@ -52,48 +39,46 @@
   background: var(--yellow);
 }
 
-.manage-sidebar tr:hover {
+.customer-sidebar tr:hover {
   opacity: 80%;
+  cursor: pointer;
 }
 
-.manage-sidebar button {
-  text-align: center;
-  border: none;
+.customer-sidebar button {
   background: var(--green);
-  text-decoration: none;
-  padding: 10px 20px 10px 20px;
   margin-top: 22px;
   color: white;
   border-radius: 10px;
   cursor: pointer;
 }
 
-.manage-body {
+.customer-body {
   text-align: center;
   margin-top: 60px;
   width: 75%;
 }
 
-.manage-customer {
+.customer-detail {
+  font-size: 20px;
+  font-weight: 500;
   margin: 70px auto 20px auto;
   background: var(--gray);
   padding: 20px;
   border-radius: 10px;
-  text-align: center;
   width: 90%;
   animation: fadeIn ease 1s;
 }
 
-.manage-customer input{
+.customer-detail input {
   background: white;
 }
 
-.manage-customer textarea{
+.customer-detail textarea {
   background: white;
   height: 68%;
 }
 
-.manage-customer button{
+.customer-detail button {
   background: var(--black);
   color: white;
 }
@@ -108,23 +93,23 @@
   animation: fadeIn ease 1s;
 }
 
-.reserve-history-body form{
+.reserve-history-body form {
   border-radius: 10px;
 }
 
-.reserve-history-body textarea{
+.reserve-history-body textarea {
   width: 95%;
   background: white;
   margin: auto;
 }
 
-.reserve-history-body button{
+.reserve-history-body button {
   margin: 20px 0 20px;
   color: white;
   background: var(--black);
 }
 
-.manage-username-input input{
+.customer-username-input input {
   width: 60%;
   padding: 10px;
 }
@@ -132,30 +117,5 @@
 .set-label {
   display: flex;
   justify-content: space-around;
-}
-
-/* .set-label input{
-  font-size: 20px;
-  margin: 20px 20px  20px 20px ;
-} */
-
-/* .set-label textarea{
-  margin: 20px auto 20px auto;
-  height: 60%;
-} */
-
-.container {
-  font-size: 20px;
-  font-weight: 500;
   text-align: left;
-  margin: 0 30px 0 30px;
 }
-
-/* h1 {
-  margin: 70px auto 10px auto;
-  text-align: center;
-} */
-
-/* .manage-button {
-  height: 100%;
-} */

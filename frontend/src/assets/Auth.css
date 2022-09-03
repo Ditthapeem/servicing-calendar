@@ -5,9 +5,7 @@
   flex-grow: 1;
   color: white;
   text-align: center;
-  display: block;
   overflow-y: scroll;
-  min-height: 98%;
 }
 
 .auth-poster {

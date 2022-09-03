@@ -3,10 +3,9 @@ import axios from "axios";
 import configData from "../config";
 
 import AdminNavbar from '../components/AdminNavbar';
-
-import '../assets/Manage.css'
-
 import PopUp from "../components/PopUp";
+
+import '../assets/Customer.css';
 
 const AdminCustomer = () => {
 	let user = JSON.parse(sessionStorage.getItem('user'))
@@ -19,9 +18,10 @@ const AdminCustomer = () => {
 
 	useEffect(() => {
 		if(sessionStorage.getItem("customer")) {
-			setInputs({customer:sessionStorage.getItem("customer")})
-			getCustomerData(sessionStorage.getItem("customer"))
-			getCustomerReserve(sessionStorage.getItem("customer"))
+			let customer = sessionStorage.getItem("customer")
+			setInputs({customer: customer})
+			getCustomerData(customer)
+			getCustomerReserve(customer)
 		}
     }, []);
 
@@ -81,7 +81,7 @@ const AdminCustomer = () => {
 				let data = response.data
 				delete data.id
 				delete data.username 
-				setInputs(values => ({...data, ["customer"]:values.customer}))
+				setInputs(values => ({...data, "customer":values.customer}))
 			}
 		  })
 		  .catch(error => {
@@ -143,8 +143,8 @@ const AdminCustomer = () => {
 	return (
 		<div style={{display: "flex", height: "100vh"}}>
 			<AdminNavbar user={user}/>
-			<div className="manage-sidebar">
-				<form onSubmit={handleCustomerSearch} style={{width: "100%"}} className="manage-username-input">
+			<div className="customer-sidebar">
+				<form onSubmit={handleCustomerSearch} style={{width: "100%"}} className="customer-username-input">
 					<div className="set-label">
 					<input
 						type="text"
@@ -154,13 +154,13 @@ const AdminCustomer = () => {
 						required
 						onChange={handleChange}
 					/>
-					<div className="manage-button"><button type="submit">Search</button></div></div>
+					<div className="customer-button"><button type="submit">Search</button></div></div>
 				</form>
 				{!reserve?<p>Search customer by username</p>:
 				<div>
 					<p>Reservations</p>
 					<hr />
-					<div className="manage-sidebar-table">
+					<div className="customer-sidebar-table">
 						<table>
 							<tbody>{reserve.map((reserve, index) => {
 								return (
@@ -188,11 +188,11 @@ const AdminCustomer = () => {
 						<button onClick={()=>{handleBooking()}} >Booking</button>
 				</div>}
 			</div>
-			<div className="manage-body">	
+			<div className="customer-body">	
 				<h1>Customer Management</h1>
-				{inputs.email && <form onSubmit={handleCustomerEditData} className="manage-customer">
+				{inputs.email && <form onSubmit={handleCustomerEditData} className="customer-detail">
 					<div className="set-label">
-						<div className="container">
+						<div>
 							<label>Name: 
 								<input
 									type="text"
@@ -211,7 +211,7 @@ const AdminCustomer = () => {
 									onChange={handleChange}
 								/>
 							</label></div>
-						<div className="container">
+						<div>
 							<label>Email: 
 								<input
 									type="email"
@@ -233,7 +233,7 @@ const AdminCustomer = () => {
 									onChange={handleChange}
 								/>
 							</label></div>
-						<div className="container">
+						<div>
 							<label>Address: 
 								<textarea
 									rows="5"
@@ -244,10 +244,10 @@ const AdminCustomer = () => {
 									onChange={handleChange}
 								/>
 							</label></div>
-						<div className="container">
+						<div>
 							<label>Note: 
 								<textarea
-									rows="3"
+									rows="5"
 									type="text"
 									name="note"
 									placeholder="Note"

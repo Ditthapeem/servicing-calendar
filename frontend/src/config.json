@@ -17,9 +17,10 @@
   },
   "API": {
     "ADMIN": "http://127.0.0.1:8000/admin",
+
     "LOGIN": "http://127.0.0.1:8000/login/",
-    "LOGOUT": "http://127.0.0.1:8000/logout/",
     "SIGNUP": "http://127.0.0.1:8000/register/",
+    "LOGOUT": "http://127.0.0.1:8000/logout/",
 
     "USER_DATA": "http://127.0.0.1:8000/my/calendar/",
     "BOOKING": "http://127.0.0.1:8000/my/booking/",

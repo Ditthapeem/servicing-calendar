@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import configData from "../config";
+
+import addDays from '../utils/addDays';
 
 import Navbar from '../components/Navbar';
 import AdminNavbar from '../components/AdminNavbar';
 import PopUp from '../components/PopUp';
-import configData from "../config";
-
-import addDays from '../utils/addDays';
 
 import '../assets/Booking.css';
 
@@ -90,12 +90,12 @@ const Booking = () => {
 	}
 
 	function handleSelect(type, data) {
-		if (type == "date") {
+		if (type === "date") {
 			setSelect({[type]: data})
-		} else if (type == "course") {
-			setSelect({["date"]: select.date, [type]: data})
-		} else if (type == "start") {
-			setSelect({["date"]: select.date, ["course"]: select.course, [type]: data})
+		} else if (type === "course") {
+			setSelect({"date": select.date, [type]: data})
+		} else if (type === "start") {
+			setSelect({"date": select.date, "course": select.course, [type]: data})
 		} else {
 			setSelect(values => ({...values, [type]: data}))
 		} 

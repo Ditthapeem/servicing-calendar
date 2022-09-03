@@ -94,7 +94,7 @@
   background-color: var(--yellow) !important;
 } */
 
-.fc-daygrid-day div{
+.fc-daygrid-day div {
   min-height: 100%;
   max-height: 60px;
 }

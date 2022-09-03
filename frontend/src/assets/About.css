@@ -11,7 +11,7 @@
 }
 
 .about-location {
-  width:30%;
+  width: 30%;
 }
 
 .about-location div {
@@ -19,7 +19,7 @@
 }
 
 .about-info {
-  width:40%;
+  width: 40%;
   word-break: break-word;
 }
 
@@ -27,11 +27,10 @@
   background: var(--gray-light);
   text-align: left;
   text-indent: 50px;
-  /* margin-bottom: 50px; */
 }
 
 .about-contact {
-  width:20%;
+  width: 20%;
 }
 
 .about-contact table {

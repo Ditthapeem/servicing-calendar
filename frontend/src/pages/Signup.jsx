@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-
+import { useNavigate, Link } from 'react-router-dom';
 import configData from "../config";
 
 import '../assets/Auth.css';
@@ -74,7 +73,7 @@ const Signup = () => {
 				})
 		} else {
 			window.alert("Password do not match")
-			setInputs(values => ({...values, ["passwordCon"]: ""}))
+			setInputs(values => ({...values, "passwordCon": ""}))
 		}
   }
 
