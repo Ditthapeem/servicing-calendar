@@ -2,6 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractBaseUser
 import datetime
 
+class Massage(models.Model):
+    """Type of massage."""
+
+    massage_type = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return str(self.massage_type)
+
+
 class Customer(models.Model):
     """Customer model."""
 
@@ -30,6 +39,7 @@ class Reservation(models.Model):
     start = models.DateTimeField(null=False)
     end = models.DateTimeField(null=False)
     duration = models.TimeField(choices=Time.choices)
+    massage_type = models.ForeignKey(Massage, related_name="Reservation", default=None, on_delete=models.CASCADE)
     note = models.TextField(blank=True)
     confirmation = models.BooleanField(default=False)
 

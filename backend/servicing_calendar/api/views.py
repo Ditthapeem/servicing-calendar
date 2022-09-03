@@ -1,8 +1,8 @@
 from django.db import IntegrityError
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer, UserSerializer
-from .models import Customer, Reservation, Store, ManageReservation
+from .serializers import CustomerSerializer, ReservationSerializer, StoreSerializer, ManageReservationSerializer, UserSerializer, MassageTypeSerializer
+from .models import Customer, Reservation, Store, ManageReservation, Massage
 from .utils import is_reservation_valid, get_available_time, get_list_of_date_booking, email_confirm
 from django.contrib.auth import login, authenticate, logout
 from rest_framework.authentication import TokenAuthentication, BasicAuthentication
@@ -41,6 +41,7 @@ def getRoutes(request):
                         'start': '',
                         'end': '',
                         'duration': '',
+                        'type_massage':'',
                         'note': ''
                     },
             'description': 'Give a full, close and available date for booking. And booking reservation for customer.'
@@ -158,7 +159,16 @@ def getRoutes(request):
             'method': 'GET',
             'body': None,
             'description': 'Filter all customer data.'
-        }
+        },
+        {
+            'Endpoint': 'manager/massage/type',
+            'method': 'GET, POST',
+            'body': {
+                        'type_massage':''
+                    },
+            'description': 'Manage type of each massage.'           
+        },
+
     ]
     return Response(routes)
 
@@ -255,11 +265,13 @@ def booking(request):
                 customer =  Customer.objects.get(username_id=user_object.id)
             else:
                 customer =  Customer.objects.get(username_id=user.id)
+            massage = Massage.objects.get(massage_type = data['massage_type'])
             reserve = Reservation.objects.create(
                 customer = customer,
                 start = data["start"],
                 end = data["end"],
                 duration = data["duration"],
+                massage_type = massage,
                 note = data["note"]
             )
             serializer = ReservationSerializer(reserve, many=False)
@@ -342,6 +354,7 @@ def get_manager_calendar(request):
     if request.method == 'GET':
         if admin.is_superuser:
             reservation_object = Reservation.objects.filter(start__gte=datetime.today().replace(hour=0,minute=0,second=0))
+
             reservation_serializer = ReservationSerializer(reservation_object, many=True)
             close_date_object = ManageReservation.objects.filter(close_date__gte=datetime.today().replace(hour=0,minute=0,second=0))
             close_date_serializer = ManageReservationSerializer(close_date_object, many=True)
@@ -626,7 +639,35 @@ def customer_list(request):
                         user_list.append([user.username, customer_serializer.data])
                 except:
                     pass
-            print(customer_list)
             return Response(user_list)
+        else:
+            return Response("You shall not PASS!!!")
+
+@api_view(['GET', 'POST'])
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def manage_massage_type(request):
+    """
+    Manage type of each massage.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        GET: All of massage type.
+        POST: Create new type of massage.
+    """
+    admin = request.user
+    data = request.data
+    if request.method == 'GET':
+        massage_type_object = Massage.objects.all()
+        massage_type_serializer = MassageTypeSerializer(massage_type_object, many=True)
+        return Response(massage_type_serializer.data)
+    elif request.method == 'POST':
+        if admin.is_superuser:
+            massage = Massage.objects.filter(type_massage = data['type_massage'])
+            massage_type_object = Massage.objects.create(type_massage = massage)
+            massage_type_serializer = MassageTypeSerializer(massage_type_object, many=True)
+            return Response(massage_type_serializer.data)
         else:
             return Response("You shall not PASS!!!")

@@ -19,7 +19,8 @@ const Booking = () => {
 
 	let user = JSON.parse(sessionStorage.getItem('user'))
 	let [availableDate, setAvailableDate] = useState([])
-	let [date, setDate] = useState(createWeek(addDays(new Date(), 2)))
+	let [availableType, setAvailableType] = useState([])
+	let [date, setDate] = useState(createWeek(addDays(new Date(), 0)))
 	let [time, setTime] = useState([])
 	let [select, setSelect] = useState({})
 	let customer = sessionStorage.getItem('customer')
@@ -36,8 +37,22 @@ const Booking = () => {
 					window.alert(error)
 				})
 		}
+	
+		async function getType() {
+			await axios.get(configData.API.BOOKING_TYPE, {
+				headers:{'Authorization':'Token '+ user.token}
+				})
+				.then(response => {
+					console.log(response.data);
+					setAvailableType(response.data)
+				})
+				.catch(error => {
+					window.alert(error)
+				})
+		}
 
 		getDate()
+		getType()
   }, [user.token]);
 
 	const handleChange = (event) => {
@@ -112,7 +127,7 @@ const Booking = () => {
 							</div></td>
 						</tr>}
 						{select.hasOwnProperty("date") && <tr>
-							<td>Select Course</td>
+							<td>Select Durations</td>
 							<td className="booking-course"><div style={{justifyContent: "space-between", display: "flex"}}>
 								{course.map((course, index) => {
 									return (
@@ -122,7 +137,7 @@ const Booking = () => {
 										</button>
 									);
 								})}
-								<div style={{width: "100px"}}> Hour</div>
+								<div style={{width: "100px"}}> Minutes</div>
 							</div></td>
 						</tr>}
 						{select.hasOwnProperty("date") && select.hasOwnProperty("course") && time.length > 0 && <tr>
@@ -138,7 +153,20 @@ const Booking = () => {
 								})}
 							</div></td>
 						</tr>}
-						{select.hasOwnProperty("start") && <tr>
+						{select.hasOwnProperty("date") && select.hasOwnProperty("course") && select.hasOwnProperty("start") && <tr>
+							<td>Select Massage Type</td>
+							<td className="booking-time"><div>
+								{availableType.map((type, index) => {
+									return (
+										<button key={index} onClick={() => {handleSelect("type", type.massage_type)}}
+											style={{background: type.massage_type === select.type && selectColor}}>
+											{type.massage_type}
+										</button>
+									);
+								})}
+							</div></td>
+						</tr>}
+						{select.hasOwnProperty("date") && select.hasOwnProperty("course") && select.hasOwnProperty("start") && select.hasOwnProperty("type") && <tr>
 							<td>Note</td>
 							<td><textarea
 								style={{width: "100%", background: configData.COLOR.GRAY}}

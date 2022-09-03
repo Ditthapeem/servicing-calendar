@@ -1,6 +1,7 @@
+from xml.etree.ElementInclude import include
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from .models import Reservation, Customer, Store, ManageReservation
+from .models import Reservation, Customer, Store, ManageReservation, Massage
 from django.contrib.auth.models import User
 
 class UserSerializer(ModelSerializer):
@@ -21,6 +22,7 @@ class CustomerSerializer(ModelSerializer):
 class ReservationSerializer(ModelSerializer):
     """Serializer of reservation model."""
     title = serializers.CharField(source="customer.username", read_only=True)
+    massage_type = serializers.StringRelatedField(many=False)
 
     class Meta:
         model = Reservation
@@ -38,4 +40,11 @@ class ManageReservationSerializer(ModelSerializer):
 
     class Meta:
         model = ManageReservation
+        fields = '__all__'
+
+class MassageTypeSerializer(ModelSerializer):
+    """Serializer od massage type model."""
+
+    class Meta:
+        model = Massage
         fields = '__all__'

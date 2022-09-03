@@ -111,7 +111,8 @@ const Home = () => {
 												<small>Waiting For Confirmation</small> }<br/>
 											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
-												new Date(reserve.end).toLocaleTimeString([], timeOption)}
+												new Date(reserve.end).toLocaleTimeString([], timeOption)}<br/>
+											Massage Type: {reserve.massage_type}
 										</div>
 									</div></td>
 								</tr>

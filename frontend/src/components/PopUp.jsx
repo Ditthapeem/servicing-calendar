@@ -15,7 +15,7 @@ const PopUp = ({ msg, user }) => {
   let customer = sessionStorage.getItem('customer')
 
   function confirm() {
-    if (window.confirm(msg.title + "\n" + date + "\n" + startTime + " - " + endTime) === true) {
+    if (window.confirm(msg.title + "\n" + date + "\n" + startTime + " - " + endTime + "\nType: " + msg.detail.type) === true) {
       if (msg.type === "cancel") {
         handleCancelReserve()
       } else if (msg.type === "booking") {
@@ -67,6 +67,7 @@ const PopUp = ({ msg, user }) => {
       start: msg.detail.start.split(' ').join('T'),
       end: msg.detail.end.split(' ').join('T'),
       duration: convertMinutes(msg.detail.course),
+      massage_type: msg.detail.type
     }
     if(msg.detail.note) {
       data.note = msg.detail.note

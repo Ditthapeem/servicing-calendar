@@ -23,6 +23,7 @@
 
     "USER_DATA": "http://127.0.0.1:8000/my/calendar/",
     "BOOKING": "http://127.0.0.1:8000/my/booking/",
+    "BOOKING_TYPE": "http://127.0.0.1:8000/manager/massage/type",
     "DELETE_RESERVE": "http://127.0.0.1:8000/my/calendar/cancel",
 
     "CONFIRM_RESERVE": "http://127.0.0.1:8000/manager/confirm",

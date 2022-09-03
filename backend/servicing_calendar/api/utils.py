@@ -1,3 +1,4 @@
+from time import time
 from .models import Customer, Reservation
 from datetime import datetime, timedelta
 # from django.core.mail import send_mail
@@ -103,7 +104,7 @@ def get_available_time(date, course):
 
 def time_interval(date_object, list_of_available_time, course):
     """
-    Give a single Dict of available time.
+    Devide a range of time into sub interval which is depend on course durations.
     
     Args:
         list_of_available_time: dict of range of available time.
@@ -119,9 +120,17 @@ def time_interval(date_object, list_of_available_time, course):
         while current + timedelta(minutes = course) <= date_object_end:
             temp = current
             current = current + timedelta(minutes = course)
-            start = (str(datetime.combine(date_object, temp.time()))+"Z").replace(" ", "T")
-            end = (str(datetime.combine(date_object, current.time()))+"Z").replace(" ", "T")
-            list_of_sub_interval.append({"start": start, "end": end})
+            if (date_object != datetime.today().replace(hour=0,minute=0,second=0,microsecond=0)):
+                start = (str(datetime.combine(date_object, temp.time()))+"Z").replace(" ", "T")
+                end = (str(datetime.combine(date_object, current.time()))+"Z").replace(" ", "T")
+            else:
+                if(datetime.now().time().replace(minute=0,second=0,microsecond=0) < temp.time()):
+                    start = (str(datetime.combine(date_object, temp.time()))+"Z").replace(" ", "T")
+                    end = (str(datetime.combine(date_object, current.time()))+"Z").replace(" ", "T")
+            try:
+                list_of_sub_interval.append({"start": start, "end": end})
+            except:
+                pass
     return list_of_sub_interval
 
 def get_list_of_date_booking(list_of_available_date, list_of_full_date, list_of_close_date, close_date_object):

@@ -172,7 +172,8 @@ const AdminCustomer = () => {
 												{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }<br/>
 												{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 												{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
-													new Date(reserve.end).toLocaleTimeString([], timeOption)}
+													new Date(reserve.end).toLocaleTimeString([], timeOption)}<br/>
+												Massage Type: {reserve.massage_type}
 											</div>
 										</div></td>
 									</tr>
@@ -266,6 +267,7 @@ const AdminCustomer = () => {
 								<p>{new Date(selectReserve.start).toLocaleDateString("en-GB", dateOption)}</p>
 								<p>{new Date(selectReserve.start).toLocaleTimeString([], timeOption) + " - " +
 									new Date(selectReserve.end).toLocaleTimeString([], timeOption)}</p>
+								<p>Massage Type: {selectReserve.massage_type}</p>
 							</div>
 							<textarea
 								rows="3"

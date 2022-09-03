@@ -121,6 +121,7 @@ const AdminReservation = () => {
 											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
 												new Date(reserve.end).toLocaleTimeString([], timeOption)}<br/>
+											Massage Type: {reserve.massage_type} <br/>
 											{ reserve.confirmation?<small>Reservation Confirmed</small>:
 												<small>Waiting For Confirmation</small> }
 										</div>
