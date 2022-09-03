@@ -1,11 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import Login from './pages/Login'
+import Signup from './pages/Signup'
 import Home from './pages/Home'
 import Booking from './pages/Booking'
 import About from './pages/About'
 
-import AdminSignup from './pages/AdminSignup'
 import AdminReservation from './pages/AdminReservation'
 import AdminCustomer from './pages/AdminCustomer'
 import AdminStore from './pages/AdminStore'
@@ -17,11 +17,11 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/home" element={<Home />} />
       <Route path="/booking" element={<Booking />} />
       <Route path="/about" element={<About />} />
-      
-      <Route path="/signup" element={<AdminSignup />} />
+
       <Route path="/reservation" element={<AdminReservation />} />
       <Route path="/customer" element={<AdminCustomer />} />
       <Route path="/store" element={<AdminStore />} />

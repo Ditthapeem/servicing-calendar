@@ -121,12 +121,12 @@ def time_interval(date_object, list_of_available_time, course):
             temp = current
             current = current + timedelta(minutes = course)
             if (date_object != datetime.today().replace(hour=0,minute=0,second=0,microsecond=0)):
-                start = (str(datetime.combine(date_object, temp.time()))+"Z").replace(" ", "T")
-                end = (str(datetime.combine(date_object, current.time()))+"Z").replace(" ", "T")
+                start = datetime.combine(date_object, temp.time()).strftime("%Y-%m-%dT%H:%M:%SZ")
+                end = datetime.combine(date_object, current.time()).strftime("%Y-%m-%dT%H:%M:%SZ")
             else:
                 if(datetime.now().time().replace(minute=0,second=0,microsecond=0) < temp.time()):
-                    start = (str(datetime.combine(date_object, temp.time()))+"Z").replace(" ", "T")
-                    end = (str(datetime.combine(date_object, current.time()))+"Z").replace(" ", "T")
+                    start = datetime.combine(date_object, temp.time()).strftime("%Y-%m-%dT%H:%M:%SZ")
+                    end = datetime.combine(date_object, current.time()).strftime("%Y-%m-%dT%H:%M:%SZ")
             try:
                 list_of_sub_interval.append({"start": start, "end": end})
             except:

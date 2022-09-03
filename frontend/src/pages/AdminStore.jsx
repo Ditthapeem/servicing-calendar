@@ -24,9 +24,9 @@ const AdminCustomer = () => {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 				.then(response => {
-					if(response.data[0]) {
-						setInputs(response.data[0])
-					} 	
+					if	(response.data) {
+						setInputs(response.data)
+					}
 				})
 				.catch(error => {
 					window.alert(error)
@@ -34,7 +34,7 @@ const AdminCustomer = () => {
 		}
 
 		getStore()
-  }, [user.token]);
+  }, []);
 
 	const handleChange = (event) => {
 		const name = event.target.name;

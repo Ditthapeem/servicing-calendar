@@ -20,6 +20,7 @@
 
 .about-info {
   width:40%;
+  word-break: break-word;
 }
 
 .about-info div {

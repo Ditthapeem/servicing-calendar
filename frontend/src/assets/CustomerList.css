@@ -4,6 +4,13 @@
     padding-bottom: 5%;
 }
 
+.customer-table button{
+    font-size: 18px;
+    margin: 20px;
+    background: var(--black);
+    color: white;
+}
+
 .customer-table table{
     border-collapse: collapse;
     text-align: left;
@@ -51,8 +58,4 @@
 .customer-table table tbody td{
     padding: 15px 10px 15px 10px;
     border: 1px white solid;
-}
-
-.customer-button {
-    margin: 20px;
 }

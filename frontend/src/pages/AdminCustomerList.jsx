@@ -25,15 +25,15 @@ const AdminCustomerList = () => {
 		}
 
 		getCustomerList()
-    }, [user.token]);
+    }, []);
 
     function handleCustomer() {
-        if (selectCustomer) {
-            sessionStorage.setItem('customer', selectCustomer)
-            window.location.assign("/customer")
-        } else {
-            window.alert("Select Customer")
-        }
+			if (selectCustomer) {
+				sessionStorage.setItem('customer', selectCustomer)
+				window.location.assign("/customer")
+			} else {
+				window.alert("Select Customer")
+			}
     }
 
     function handleSelectCustomer(customer) {
@@ -44,41 +44,38 @@ const AdminCustomerList = () => {
 		}
 	}
 
-    return (
-        <div style={{textAlign: "center"}}>
+	return (
+		<div style={{textAlign: "center"}}>
 			<AdminNavbar user={user}/>
-            <div className="customer-table">
-                <h1>Customer List</h1>
-                {customerList&&<table>
-                    <thead>
-                        <tr>
-                            <td>Username</td>
-                            <td>Name</td>
-                            <td>Surname</td>
-                            <td>Email</td>    
-                            <td>Phone</td>
-                        </tr>
-                    </thead>
-						<tbody>{customerList.map((customer, index) => {
-                            console.log(customer[0]=== selectCustomer);
-							return (
-								<tr key={index} style={{background: customer[0]=== selectCustomer && configData.COLOR.YELLOW}} 
-                                    onClick={() => handleSelectCustomer(customer[0])}>
-									<td>{customer[0]}</td>
-                                    <td>{customer[1][0].name}</td>
-                                    <td>{customer[1][0].surname}</td>
-                                    <td>{customer[1][0].email}</td>
-                                    <td>{customer[1][0].phone}</td>
-								</tr>
-							);
-						})}</tbody>
-					</table>}
-                    <div className="customer-button">
-                        <button onClick={()=>{handleCustomer()}} >Customer</button>
-                    </div>
-            </div>
-        </div>
-    )
+			<div className="customer-table">
+				<h1>Customer List</h1>
+				{customerList&&<table>
+					<thead>
+						<tr>
+							<td>Username</td>
+							<td>Name</td>
+							<td>Surname</td>
+							<td>Email</td>    
+							<td>Phone</td>
+						</tr>
+					</thead>
+					<tbody>{customerList.map((customer, index) => {
+						return (
+							<tr key={index} style={{background: customer[0]=== selectCustomer && configData.COLOR.YELLOW}} 
+								onClick={() => handleSelectCustomer(customer[0])}>
+								<td>{customer[0]}</td>
+								<td>{customer[1][0].name}</td>
+								<td>{customer[1][0].surname}</td>
+								<td>{customer[1][0].email}</td>
+								<td>{customer[1][0].phone}</td>
+							</tr>
+						);
+					})}</tbody>
+				</table>}
+				<button onClick={()=>{handleCustomer()}} >Customer Details</button>
+			</div>
+		</div>
+	)
 }
 
 export default AdminCustomerList;

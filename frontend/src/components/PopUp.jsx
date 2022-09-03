@@ -15,7 +15,7 @@ const PopUp = ({ msg, user }) => {
   let customer = sessionStorage.getItem('customer')
 
   function confirm() {
-    if (window.confirm(msg.title + "\n" + date + "\n" + startTime + " - " + endTime + "\nType: " + msg.detail.type) === true) {
+    if (window.confirm(msg.title + "\n" + msg.detail.massage_type + "\n" + date + "\n" + startTime + " - " + endTime) === true) {
       if (msg.type === "cancel") {
         handleCancelReserve()
       } else if (msg.type === "booking") {
@@ -67,7 +67,7 @@ const PopUp = ({ msg, user }) => {
       start: msg.detail.start.split(' ').join('T'),
       end: msg.detail.end.split(' ').join('T'),
       duration: convertMinutes(msg.detail.course),
-      massage_type: msg.detail.type
+      massage_type: msg.detail.massage_type
     }
     if(msg.detail.note) {
       data.note = msg.detail.note
@@ -129,9 +129,16 @@ const PopUp = ({ msg, user }) => {
         <div className='popup'>
           <div className='popup-div'>
             <h2>{msg.title}</h2>
-            {customer&& <p>Customer: {customer}</p>}
+            
             {msg.type === "close" ? 
-            <p>{date}</p> : <p>{date}<br/>{startTime + " - " + endTime}</p> 
+              <p>{date}</p> : 
+              <>
+                {customer && <p>Customer: {customer}</p>}
+                <p>{msg.detail.massage_type}<br/>
+                  {date}<br/>
+                  {startTime + " - " + endTime}
+                </p>
+              </>
             }
             <div style={{justifyContent: "space-around", display: "flex"}}>
               <button onClick={e => confirm()}>Yes</button>

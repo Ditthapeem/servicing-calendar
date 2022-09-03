@@ -548,16 +548,16 @@ def about(request):
     data = request.data
     if request.method == 'GET':
         try:
-            store_object = Store.objects.filter(id=1)
+            store_object = Store.objects.get(id=1)
         except:
             store_object = Store.objects.create(    info = "",
                                                     address = "",
                                                     address_url = "",
-                                                    open = "",
-                                                    close = "",
+                                                    open = datetime.now().strftime("%H:%M"),
+                                                    close = datetime.now().strftime("%H:%M"),
                                                     email = "",
                                                     phone = "")
-        store_serializer = StoreSerializer(store_object, many=True)
+        store_serializer = StoreSerializer(store_object, many=False)
         return Response(store_serializer.data)
     elif request.method == 'POST':
         about_object = Store.objects.filter(pk=1).update(   info = data['info'],

@@ -19,7 +19,7 @@ const Booking = () => {
 
 	let user = JSON.parse(sessionStorage.getItem('user'))
 	let [availableDate, setAvailableDate] = useState([])
-	let [availableType, setAvailableType] = useState([])
+	let [type, setType] = useState([])
 	let [date, setDate] = useState(createWeek(addDays(new Date(), 0)))
 	let [time, setTime] = useState([])
 	let [select, setSelect] = useState({})
@@ -43,8 +43,7 @@ const Booking = () => {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 				.then(response => {
-					console.log(response.data);
-					setAvailableType(response.data)
+					setType(response.data)
 				})
 				.catch(error => {
 					window.alert(error)
@@ -53,7 +52,7 @@ const Booking = () => {
 
 		getDate()
 		getType()
-  }, [user.token]);
+  }, []);
 
 	const handleChange = (event) => {
 		const name = event.target.name;
@@ -91,25 +90,27 @@ const Booking = () => {
 	}
 
 	function handleSelect(type, data) {
-		let tempSelect = select
-		if (type in tempSelect) {
-			data !== tempSelect[type] ? tempSelect[type] = data : delete tempSelect[type];
+		if (type == "date") {
+			setSelect({[type]: data})
+		} else if (type == "course") {
+			setSelect({["date"]: select.date, [type]: data})
+		} else if (type == "start") {
+			setSelect({["date"]: select.date, ["course"]: select.course, [type]: data})
 		} else {
-			tempSelect[type] = data
-		}
-		setSelect({...tempSelect})
+			setSelect(values => ({...values, [type]: data}))
+		} 
 	}
 
 	return (
 		<div>
-			{user.user.is_staff? <AdminNavbar user={user}/> : <Navbar user={user}/>}
+			{user && user.user.is_staff? <AdminNavbar user={user}/> : <Navbar user={user}/>}
 			<div className="booking">
 				<h1>Booking</h1>
 				{customer && <p>Customer: {customer}</p>}
 				<table>
 					<tbody>
 						{availableDate.length > 0 && <tr>
-							<td>Select Date</td>
+							<td>Date</td>
 							<td className="booking-date"><div style={{justifyContent: "space-between", display: "flex"}}>
 								<button onClick={() => handleDateNext(-7)} style={{fontSize: "20px", background: "none"}}>{"<"}</button>
 								{date.map((date, index) => {
@@ -127,7 +128,7 @@ const Booking = () => {
 							</div></td>
 						</tr>}
 						{select.hasOwnProperty("date") && <tr>
-							<td>Select Durations</td>
+							<td>Durations</td>
 							<td className="booking-course"><div style={{justifyContent: "space-between", display: "flex"}}>
 								{course.map((course, index) => {
 									return (
@@ -137,11 +138,11 @@ const Booking = () => {
 										</button>
 									);
 								})}
-								<div style={{width: "100px"}}> Minutes</div>
+								<div style={{margin: "auto"}}> Minutes</div>
 							</div></td>
 						</tr>}
-						{select.hasOwnProperty("date") && select.hasOwnProperty("course") && time.length > 0 && <tr>
-							<td>Select Time</td>
+						{select.hasOwnProperty("course") && time.length > 0 && <tr>
+							<td>Time</td>
 							<td className="booking-time"><div>
 								{time.map((time, index) => {
 									return (
@@ -153,20 +154,20 @@ const Booking = () => {
 								})}
 							</div></td>
 						</tr>}
-						{select.hasOwnProperty("date") && select.hasOwnProperty("course") && select.hasOwnProperty("start") && <tr>
-							<td>Select Massage Type</td>
+						{select.hasOwnProperty("start") && <tr>
+							<td>Massage Type</td>
 							<td className="booking-time"><div>
-								{availableType.map((type, index) => {
+								{type.map((type, index) => {
 									return (
-										<button key={index} onClick={() => {handleSelect("type", type.massage_type)}}
-											style={{background: type.massage_type === select.type && selectColor}}>
+										<button key={index} onClick={() => {handleSelect("massage_type", type.massage_type)}}
+											style={{background: type.massage_type === select.massage_type && selectColor}}>
 											{type.massage_type}
 										</button>
 									);
 								})}
 							</div></td>
 						</tr>}
-						{select.hasOwnProperty("date") && select.hasOwnProperty("course") && select.hasOwnProperty("start") && select.hasOwnProperty("type") && <tr>
+						{select.hasOwnProperty("massage_type") && <tr>
 							<td>Note</td>
 							<td><textarea
 								style={{width: "100%", background: configData.COLOR.GRAY}}
@@ -180,7 +181,7 @@ const Booking = () => {
 						</tr>}
 					</tbody>
 				</table>
-				{select.hasOwnProperty("date") && select.hasOwnProperty("course") && select.hasOwnProperty("start") &&
+				{select.hasOwnProperty("massage_type") &&
 				<PopUp msg={{type: "booking", title: "Confirm Booking", detail: select}} user={user}/>}
 			</div>
 		</div>

@@ -40,7 +40,7 @@ const AdminReservation = () => {
 		}
 
 		getReserve()
-  }, [user.token]);
+  }, []);
 
 	function setColor(reserve) {
 		let reserveList = []
@@ -118,14 +118,14 @@ const AdminReservation = () => {
 											reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
 										<div style={{fontSize: "20px", fontWeight: "500"}}>
 											<b>{reserve.title}</b><br/>
+											{reserve.massage_type}<br/>
 											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
 												new Date(reserve.end).toLocaleTimeString([], timeOption)}<br/>
-											Massage Type: {reserve.massage_type} <br/>
 											{ reserve.confirmation?<small>Reservation Confirmed</small>:
 												<small>Waiting For Confirmation</small> }
 										</div>
-										{reserve.note && <div style={{fontSize: "16px", textAlign: "left"}}>{reserve.note}</div>}
+										{reserve.note && <div style={{fontSize: "16px", textAlign: "left", background: "white", color: "black"}}>{reserve.note}</div>}
 									</div></td>
 								</tr>
 							);

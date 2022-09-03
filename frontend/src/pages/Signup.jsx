@@ -5,29 +5,10 @@ import axios from 'axios';
 import configData from "../config";
 
 import '../assets/Auth.css';
-import img1 from '../img/img1.jpg';
-import img2 from '../img/img2.jpg';
-import img3 from '../img/img3.jpg';
-import img4 from '../img/img4.jpg';
-import img5 from '../img/img5.jpg';
 
-const AdminSignup = () => {
-	let [state, setState] = useState({
-		img:[img1,img2,img3,img4,img5],
-		activeImageIndex: 0
-	})
-
-	useEffect(() => {
-		const interval = setInterval(()=>{
-			let newActiveIndex = state.activeImageIndex < state.img.length ? state.activeImageIndex++ : 0
-			console.log(newActiveIndex);
-			setState({
-				img: state.img,
-			   	activeImageIndex: newActiveIndex
-			})
-		}, 2000);
-		return () => clearInterval(interval)
-	});
+const Signup = () => {
+	let imgs = ["img/img1.jpg", "img/img2.jpg", "img/img3.jpg", "img/img4.jpg", "img/img5.jpg"]
+	let [img, setImag] = useState(imgs[imgs.length-1])
 
 	const navigate = useNavigate();
 	let user = JSON.parse(sessionStorage.getItem('user'))
@@ -42,6 +23,18 @@ const AdminSignup = () => {
 		"note": "",
 	});
 
+	useEffect(() => {
+		if (user && !user.user.is_staff) {
+      window.location.replace("/home");
+    }
+		const interval = setInterval(()=>{
+			let imgT = imgs.shift()
+			imgs.push(imgT)
+			setImag(imgT)
+		}, 5000);
+		return () => clearInterval(interval);
+	}, []);
+
   const handleChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
@@ -52,7 +45,7 @@ const AdminSignup = () => {
     await axios.post(configData.API.LOGIN, data)
       .then(response => {
         sessionStorage.setItem('user', JSON.stringify(response.data));
-		return window.location.replace("/home")
+				return window.location.replace("/home")
       })
       .catch(error => {
         window.alert("Wrong username or password. Note that both fields may be case-sensitive")
@@ -69,8 +62,8 @@ const AdminSignup = () => {
 					if(typeof(response.data) == "string") {
 						window.alert(response.data)
 					} else {
-						window.alert("Success, account have been created.")
 						if(user && user.user.is_staff) {
+							window.alert("Success, account have been created.")
 							return window.location.replace("/reservation")
 						}
 						handleLogin({username: inputs.username, password: inputs.password})
@@ -81,6 +74,7 @@ const AdminSignup = () => {
 				})
 		} else {
 			window.alert("Password do not match")
+			setInputs(values => ({...values, ["passwordCon"]: ""}))
 		}
   }
 
@@ -109,7 +103,7 @@ const AdminSignup = () => {
 					<input
 						type="password"
 						name="passwordCon"
-						placeholder="Password"
+						placeholder="Confirm Password"
 						value={inputs.passwordCon || ""}
 						required
 						onChange={handleChange}
@@ -146,24 +140,24 @@ const AdminSignup = () => {
 						onChange={handleChange}
 					/>
 					<textarea
-						rows="5"
+						rows="4"
 						type="text"
 						name="address"
 						placeholder="Address"
 						value={inputs.address || ""}
 						onChange={handleChange}
 					/>
-					<div className='auth-sign'>
+					{!user && <div className='auth-sign'>
 						Already have an account <Link to={"/"}>Login</Link>
-					</div>
-					<button type="submit">Signup</button>
-					{user&&<button type="button" onClick={() => navigate(-1)}
-						style={{marginLeft:"20%", background:"gray"}}>Cancel</button>}
+					</div>}
+					<button type="submit" style={{marginBottom:"10%"}}>Signup</button>
+					{user && <button type="button" onClick={() => navigate(-1)}
+						style={{marginLeft:"20%", background: configData.COLOR.RED}}>Cancel</button>}
 				</form>
 			</div>
-			<img src={state.img[state.activeImageIndex]} className="auth-poster"/>
+			<img src={img} alt="poster" className="auth-poster"/>
 		</div>
 	);
 }
 
-export default AdminSignup;
+export default Signup;

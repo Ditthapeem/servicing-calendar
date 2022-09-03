@@ -38,7 +38,7 @@ const Home = () => {
 		}
 
 		getUserData()
-  }, [user.token]);
+  }, []);
 
 	function setColor(reserve) {
 		let reserveList = []
@@ -109,10 +109,10 @@ const Home = () => {
 										<div style={{fontSize: "20px", fontWeight: "500"}}>
 											{ reserve.confirmation?<small>Reservation Confirmed</small>:
 												<small>Waiting For Confirmation</small> }<br/>
+											{reserve.massage_type}<br/>
 											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
 											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
 												new Date(reserve.end).toLocaleTimeString([], timeOption)}<br/>
-											Massage Type: {reserve.massage_type}
 										</div>
 									</div></td>
 								</tr>

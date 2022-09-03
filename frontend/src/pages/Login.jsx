@@ -4,18 +4,11 @@ import { Link } from 'react-router-dom';
 
 import configData from "../config";
 import '../assets/Auth.css';
-import img1 from '../img/img1.jpg';
-import img2 from '../img/img2.jpg';
-import img3 from '../img/img3.jpg';
-import img4 from '../img/img4.jpg';
-import img5 from '../img/img5.jpg';
 
 
 const Login = () => {
-	let [state, setState] = useState({
-		img:[img1,img2,img3,img4,img5],
-		activeImageIndex: 0
-	})
+	let imgs = ["img/img1.jpg", "img/img2.jpg", "img/img3.jpg", "img/img4.jpg", "img/img5.jpg"]
+	let [img, setImag] = useState(imgs[imgs.length-1])
 	const [inputs, setInputs] = useState({});
 	let user = JSON.parse(sessionStorage.getItem('user'))
 
@@ -24,17 +17,12 @@ const Login = () => {
 			handleRedirect(user)
 		}
 		const interval = setInterval(()=>{
-			let newActiveIndex = state.activeImageIndex < state.img.length ? state.activeImageIndex++ : 0
-			console.log(newActiveIndex);
-			setState({
-				img: state.img,
-			   	activeImageIndex: newActiveIndex
-			})
-		}, 2000);
-		return () => clearInterval(interval)
+			let imgT = imgs.shift()
+			imgs.push(imgT)
+			setImag(imgT)
+		}, 5000);
+		return () => clearInterval(interval);
 	}, [user]);
-
-
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -49,6 +37,7 @@ const Login = () => {
 
 	function handleRedirect(user) {
 		if (user.user.is_staff) {
+			sessionStorage.setItem('customer', 'admin')
 			return window.location.replace("/reservation")
 		} else {
 			return window.location.replace("/home")
@@ -92,10 +81,10 @@ const Login = () => {
 					<div className='auth-sign'>
 						Create you account <Link to={"/signup"}>Sign Up</Link>
 					</div>
-					<button type="submit">Login</button>
+					<button type="submit" style={{marginBottom:"10%"}}>Login</button>
 				</form>
 			</div>
-			<img src={state.img[state.activeImageIndex]} className="auth-poster"/>
+			<img src={img} alt="poster" className="auth-poster"/>
 		</div>
 	);
 }

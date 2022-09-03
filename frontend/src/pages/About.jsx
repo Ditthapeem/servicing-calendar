@@ -18,10 +18,6 @@ const About = () => {
 		email: "",
 		phone: ""
 	})
-	// let [faq, setFAQ] = useState([	{question: "Location", answer: "Av. du Théatre 7 1005 Lausanne"},
-	// 								{question: "Telephone", answer: "076 393 28 87‬"},
-	// 								{question: "Email", answer: "lepage.chindarat@gmail.com"},
-	// 							])
 	
 	useEffect(() => {
 		async function getStore() {
@@ -29,8 +25,8 @@ const About = () => {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 				.then(response => {
-					if(response.data[0]) {
-						setStore(response.data[0])
+					if(response.data) {
+						setStore(response.data)
 					} 	
 				})
 				.catch(error => {
@@ -39,7 +35,7 @@ const About = () => {
 		}
 
 		getStore()
-  }, [user.token]);
+  }, []);
 
 
 	return (
@@ -72,10 +68,8 @@ const About = () => {
 									<tr><td>address:</td><td>{store.address}</td></tr>
 									<tr><td>open:</td><td>{new Date("2022-01-01 " + store.open).toLocaleTimeString([], timeOption)}</td></tr>	
 									<tr><td>close:</td><td>{new Date("2022-01-01 " + store.close).toLocaleTimeString([], timeOption)}</td></tr>
-									<tr><td>email:</td><td>{store.email}</td></tr>	
-									<tr><td>phone:</td><td>{store.phone}</td></tr>	
-								{/* <p style={{fontWeight: "bold"}}>{faq[0].question}</p>
-								<p style={{fontSize: "14px"}}>{faq[0].answer}</p> */}
+									<tr><td>email:</td><td>{store.email}</td></tr>
+									<tr><td>phone:</td><td>{store.phone}</td></tr>
 								</tbody>
 							</table>
 					</div>

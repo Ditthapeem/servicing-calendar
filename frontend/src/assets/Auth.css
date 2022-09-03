@@ -1,4 +1,5 @@
 .auth-sidebar {
+  z-index: 2;
   background-color: var(--green);
   padding: 1% 2% 0 2%;
   flex-grow: 1;
@@ -6,12 +7,12 @@
   text-align: center;
   display: block;
   overflow-y: scroll;
-  max-height: 110%;
+  min-height: 98%;
 }
 
 .auth-poster {
-  background-color: var(--yellow-light);
   width: 75%;
+  animation: fade 5s infinite;
 }
 
 .auth-sidebar button {
