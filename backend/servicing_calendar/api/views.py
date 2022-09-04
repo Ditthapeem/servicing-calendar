@@ -405,12 +405,16 @@ def manager_close_date(request):
     data = request.data
     if request.method == 'POST':
         if admin.is_superuser:
-            close_date_object = ManageReservation.objects.create(
-                owner = admin,
-                close_date = data["close_date"]
-            )
-            serializer = ManageReservationSerializer(close_date_object, many=False)
-            return Response(serializer.data)
+            try:
+                close_date_object = ManageReservation.objects.get(close_date=data["close_date"]).delete()
+                return Response(f"Cancel closing store on{data['close_date']}")
+            except:
+                close_date_object = ManageReservation.objects.create(
+                    owner = admin,
+                    close_date = data["close_date"]
+                )
+                serializer = ManageReservationSerializer(close_date_object, many=False)
+                return Response(serializer.data)
         else:
             return Response("You shall not PASS!!!")
 
@@ -598,15 +602,15 @@ def manager_confirmation(request):
     elif request.method == 'POST':
         if admin.is_superuser:
             try:
-                reservation_object = Reservation.objects.get(id=data["id"])
-                user_object = User.objects.get(username=reservation_object.customer.username)
-                customer_object = Customer.objects.get(username=user_object)
-                reservation_update = Reservation.objects.filter(id=data["id"]).update(confirmation=True)
+                reservation = Reservation.objects.get(id=data["id"])
+                # user = User.objects.get(username=reservation.customer.username)
+                # customer = Customer.objects.get(username=user)
+                reservation_update = Reservation.objects.filter(id=data["id"]).update(confirmation=not reservation.confirmation)
                 # email_confirm(  customer_object, 
                 #                 reservation_object.start.date(), 
                 #                 reservation_object.start.time(), 
                 #                 reservation_object.end.time())
-                return Response("Reservation confirmed.")
+                return Response("Reservation updated.")
             except:
                 return Response("Reservation doesn't exist.")
         else:
