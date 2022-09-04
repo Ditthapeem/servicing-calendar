@@ -1,0 +1,31 @@
+/* .search-input {
+  display: flex;
+  justify-content: space-between;
+} */
+
+.search-input input {
+  background-color: white;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.search-dropdown table {
+  z-index: 10;
+  position: absolute;
+  text-align: left;
+  background-color: white;
+  border-radius: 8px;
+  max-width: 21%;
+  border-collapse: collapse;
+  box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.search-dropdown table td div {
+  font-size: 18px;
+  padding: 0 auto 0;
+}
+
+.search-dropdown table tr:hover {
+  background-color: var(--yellow);
+  cursor: pointer;
+}

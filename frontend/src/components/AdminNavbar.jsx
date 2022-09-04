@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 
@@ -9,7 +9,7 @@ const Navbar = ({ user }) => {
   const navigate = useNavigate();
   const path = window.location.pathname;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
 		if (!user) {
       window.location.replace("/");
     } else if (!user.user.is_staff) {

@@ -13,6 +13,7 @@ class UserSerializer(ModelSerializer):
 
 class CustomerSerializer(ModelSerializer):
     """Serializer of customer model."""
+    username = serializers.StringRelatedField(many=False)
 
     class Meta:
         model = Customer

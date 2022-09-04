@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import configData from "../config";
@@ -11,17 +11,20 @@ const Login = () => {
 	const [inputs, setInputs] = useState({});
 	let user = JSON.parse(sessionStorage.getItem('user'))
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (user) {
 			handleRedirect(user)
 		}
+	}, []);
+
+	useEffect(() => {
 		const interval = setInterval(()=>{
 			let imgT = imgs.shift()
 			imgs.push(imgT)
 			setImag(imgT)
 		}, 5000);
 		return () => clearInterval(interval);
-	}, [user]);
+	}, []);
 
   const handleChange = (event) => {
     const name = event.target.name;

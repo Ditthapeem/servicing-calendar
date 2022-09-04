@@ -34,6 +34,7 @@
     "HISTORY":"http://127.0.0.1:8000/manager/history/customer=",
     "CUSTOMER": "http://127.0.0.1:8000/manager/customer/customer=",
     "STORE": "http://127.0.0.1:8000/my/about/",
-    "CUSTOMER_LIST": "http://127.0.0.1:8000/manager/customer_list"
+    "CUSTOMER_LIST": "http://127.0.0.1:8000/manager/customer_list",
+    "SEARCH_CUSTOMER": "http://127.0.0.1:8000/search="
   }
 }

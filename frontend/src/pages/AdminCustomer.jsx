@@ -4,6 +4,7 @@ import configData from "../config";
 
 import AdminNavbar from '../components/AdminNavbar';
 import PopUp from "../components/PopUp";
+import UserSearch from '../components/UserSearch';
 
 import '../assets/Customer.css';
 
@@ -89,13 +90,13 @@ const AdminCustomer = () => {
 		  })
 	}
 
-	function handleCustomerSearch(event) {
-		event.preventDefault();
-		getCustomerData(inputs.customer)
-		getCustomerReserve(inputs.customer)
+	function handleCustomerSearch(customer) {
+		sessionStorage.setItem('customer', customer.username)
+		getCustomerData(customer.username)
+		getCustomerReserve(customer.username)
 	}
 
-	  async function handleCustomerEditData(event) {
+	async function handleCustomerEditData(event) {
 		event.preventDefault();
 		let data = {
 			name : inputs.name,
@@ -131,56 +132,42 @@ const AdminCustomer = () => {
 			})
 		}
 
-		function handleBooking() {
-			if (inputs.customer) {
-				sessionStorage.setItem('customer', inputs.customer)
-				window.location.assign("/booking")
-			} else {
-				window.alert("Select Customer")
-			}
+	function handleBooking() {
+		if (inputs.customer) {
+			window.location.assign("/booking")
+		} else {
+			window.alert("Select Customer")
 		}
+	}
 
 	return (
 		<div style={{display: "flex", height: "100vh"}}>
 			<AdminNavbar user={user}/>
 			<div className="customer-sidebar">
-				<form onSubmit={handleCustomerSearch} style={{width: "100%"}} className="customer-username-input">
-					<div className="set-label">
-					<input
-						type="text"
-						name="customer"
-						placeholder="Customer username"
-						value={inputs.customer || ""}
-						required
-						onChange={handleChange}
-					/>
-					<div className="customer-button"><button type="submit">Search</button></div></div>
-				</form>
+				<UserSearch user={user} sendData={handleCustomerSearch} />
 				{!reserve?<p>Search customer by username</p>:
 				<div>
 					<p>Reservations</p>
 					<hr />
-					<div className="customer-sidebar-table">
-						<table>
-							<tbody>{reserve.map((reserve, index) => {
-								return (
-									<tr key={index}>
-										<td><div onClick={() => handleSelectReserve(reserve)}
-											className={reserve === selectReserve ? "reserve-select" :
-												reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
-											<div style={{fontSize: "20px", fontWeight: "500"}}>
-												{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }<br/>
-												{reserve.massage_type}<br/>
-												{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
-												{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
-													new Date(reserve.end).toLocaleTimeString([], timeOption)}
-											</div>
-										</div></td>
-									</tr>
-								);
-							})}</tbody>
-						</table>
-					</div>
+					<table>
+						<tbody>{reserve.map((reserve, index) => {
+							return (
+								<tr key={index}>
+									<td><div onClick={() => handleSelectReserve(reserve)}
+										className={reserve === selectReserve ? "reserve-select" :
+											reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
+										<div style={{fontSize: "20px", fontWeight: "500"}}>
+											{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }<br/>
+											{reserve.massage_type}<br/>
+											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
+											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
+												new Date(reserve.end).toLocaleTimeString([], timeOption)}
+										</div>
+									</div></td>
+								</tr>
+							);
+						})}</tbody>
+					</table>
 					<div style={{justifyContent: "space-around", display: "flex"}}>
 						<PopUp msg={{type: "cancel", title: "Delete Reservation", detail: selectReserve}} user={user}/>
 						<PopUp msg={{type: "confirm", title: "Confirm Reservation", detail: selectReserve}} user={user}/>

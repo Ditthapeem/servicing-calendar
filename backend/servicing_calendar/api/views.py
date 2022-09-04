@@ -675,3 +675,33 @@ def manage_massage_type(request):
             return Response(massage_type_serializer.data)
         else:
             return Response("You shall not PASS!!!")
+
+
+@api_view(['GET'])
+@authentication_classes([BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def search_user(request, customer):
+    """
+    search user by username.
+
+    Args:
+        request: The request from web page.
+
+    Returns:
+        GET: All the user that match the username.
+    """
+    user = request.user
+    if request.method == 'GET' and user:
+        user_list = []
+        try:
+            user_object = User.objects.filter(username__contains=customer)
+            for user in user_object:
+                customer_obj = Customer.objects.get(username=user)
+                try:
+                    customer_serializer = CustomerSerializer(customer_obj, many=False)
+                    user_list.append(customer_serializer.data)
+                except:
+                    pass
+            return Response(user_list)
+        except:
+            return Response(user_list)

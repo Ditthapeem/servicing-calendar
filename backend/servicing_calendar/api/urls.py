@@ -19,5 +19,6 @@ urlpatterns = [
     path('manager/confirm', views.manager_confirmation, name="manager_confirmation"),
     path('manager/customer_list', views.customer_list, name="manage_customer_list"),
     path('manager/massage/type', views.manage_massage_type, name="manage_massage_type"),
-    path('register/', views.register, name="register")
+    path('register/', views.register, name="register"),
+    path('search=<str:customer>', views.search_user, name="search_user")
 ]

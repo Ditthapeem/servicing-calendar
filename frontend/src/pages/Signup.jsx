@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import configData from "../config";
@@ -22,10 +22,13 @@ const Signup = () => {
 		"note": "",
 	});
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (user && !user.user.is_staff) {
       window.location.replace("/home");
     }
+	}, []);
+
+	useEffect(() => {
 		const interval = setInterval(()=>{
 			let imgT = imgs.shift()
 			imgs.push(imgT)
