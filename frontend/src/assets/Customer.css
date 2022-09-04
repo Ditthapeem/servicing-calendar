@@ -1,9 +1,14 @@
 .customer-sidebar {
-  background: var(--black);
+  background-color: var(--black);
   padding: 70px 2% 0 2%;
-  flex-grow: 1;
   color: white;
   text-align: center;
+  width: 21%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
   overflow-y: scroll;
 }
 
@@ -12,10 +17,21 @@
   opacity: 80%;
 }
 
-.customer-sidebar table {
+.customer-sidebar-table {
+  overflow-y: scroll;
+  max-height: 68%;
+}
+
+.customer-sidebar-table table {
   color: black;
   font-size: 20px;
+  height: 74%;
   width: 100%;
+}
+
+.customer-sidebar table td {
+  width: 100%;
+  border: none;
 }
 
 .customer-sidebar table div {
@@ -39,11 +55,6 @@
   background: var(--yellow);
 }
 
-.customer-sidebar tr:hover {
-  opacity: 80%;
-  cursor: pointer;
-}
-
 .customer-sidebar button {
   background: var(--green);
   margin-top: 22px;
@@ -54,14 +65,14 @@
 
 .customer-body {
   text-align: center;
-  margin-top: 60px;
+  margin: 90px 25%;
   width: 75%;
 }
 
 .customer-detail {
   font-size: 20px;
   font-weight: 500;
-  margin: 70px auto 20px auto;
+  margin: 30px auto 20px auto;
   background: var(--gray);
   padding: 20px;
   border-radius: 10px;

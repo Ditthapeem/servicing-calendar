@@ -111,9 +111,13 @@ const PopUp = ({ msg, user }) => {
 
   function handleCheck() {
     if (msg.detail === null) {
-      msg.type === "cancel" && window.alert(`Please select your reservation.`)
-      msg.type === "booking" && window.alert(`Please choose your booking time.`)
-      msg.type === "close" && window.alert(`Please select closing date.`)
+      if (msg.type === "cancel" || msg.type === "confirm") {
+        window.alert(`Please select your reservation.`)
+      } else if (msg.type === "booking") {
+        window.alert(`Please choose your booking time.`)
+      } else if (msg.type === "close") {
+        window.alert(`Please select closing date.`)
+      }
     } else {
       setDate(new Date(msg.detail.start).toLocaleDateString("en-GB", dateOption))
       setStartTime(new Date(msg.detail.start).toLocaleTimeString([], timeOption))
@@ -132,7 +136,7 @@ const PopUp = ({ msg, user }) => {
             {msg.type === "close" ? 
               <p>{date}</p> : 
               <>
-                {customer && <p>Customer: {customer}</p>}
+                {customer && <p>Customer: {msg.type === "booking"? customer:msg.detail.title}</p>}
                 <p>{msg.detail.massage_type}<br/>
                   {date}<br/>
                   {startTime + " - " + endTime}

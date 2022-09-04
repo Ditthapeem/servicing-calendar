@@ -17,10 +17,12 @@ const UserSearch = (props) => {
   }, []);
 
   useEffect(() => {
-		const timer = setTimeout(() => {
-			handleSearch(inputs.customer) 	// call search API on user input after 400 ms
-		}, 400);
-		return () => clearTimeout(timer);
+		// const timer = setTimeout(() => {
+		// 	handleSearch(inputs.customer) 	// call search API on user input after 400 ms
+		// }, 400);
+		// return () => clearTimeout(timer);
+
+    handleSearch(inputs.customer)
   }, [inputs.customer]);
 
   const handleChange = (event) => {

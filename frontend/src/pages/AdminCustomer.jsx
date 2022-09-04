@@ -141,39 +141,41 @@ const AdminCustomer = () => {
 	}
 
 	return (
-		<div style={{display: "flex", height: "100vh"}}>
+		<div>
 			<AdminNavbar user={user}/>
 			<div className="customer-sidebar">
 				<UserSearch user={user} sendData={handleCustomerSearch} />
 				{!reserve?<p>Search customer by username</p>:
-				<div>
+				<>
 					<p>Reservations</p>
 					<hr />
-					<table>
-						<tbody>{reserve.map((reserve, index) => {
-							return (
-								<tr key={index}>
-									<td><div onClick={() => handleSelectReserve(reserve)}
-										className={reserve === selectReserve ? "reserve-select" :
-											reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
-										<div style={{fontSize: "20px", fontWeight: "500"}}>
-											{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }<br/>
-											{reserve.massage_type}<br/>
-											{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
-											{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
-												new Date(reserve.end).toLocaleTimeString([], timeOption)}
-										</div>
-									</div></td>
-								</tr>
-							);
-						})}</tbody>
-					</table>
+					<div className="customer-sidebar-table">
+						<table>
+							<tbody>{reserve.map((reserve, index) => {
+								return (
+									<tr key={index}>
+										<td><div onClick={() => handleSelectReserve(reserve)}
+											className={reserve === selectReserve ? "reserve-select" :
+												reserve.confirmation?"reserve-confirm-div":"reserve-not-confirm-div"}>
+											<div style={{fontSize: "20px", fontWeight: "500"}}>
+												{ reserve.confirmation?<>Reservation Confirmed</>:<>Waiting For confirmation</> }<br/>
+												{reserve.massage_type}<br/>
+												{new Date(reserve.start).toLocaleDateString("en-GB", dateOption)}<br/>
+												{new Date(reserve.start).toLocaleTimeString([], timeOption) + " - " +
+													new Date(reserve.end).toLocaleTimeString([], timeOption)}
+											</div>
+										</div></td>
+									</tr>
+								);
+							})}</tbody>
+						</table>
+					</div>
 					<div style={{justifyContent: "space-around", display: "flex"}}>
 						<PopUp msg={{type: "cancel", title: "Delete Reservation", detail: selectReserve}} user={user}/>
 						<PopUp msg={{type: "confirm", title: "Confirm Reservation", detail: selectReserve}} user={user}/>
 					</div>
 						<button onClick={()=>{handleBooking()}} >Booking</button>
-				</div>}
+				</>}
 			</div>
 			<div className="customer-body">	
 				<h1>Customer Management</h1>
