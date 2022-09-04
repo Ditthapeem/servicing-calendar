@@ -5,7 +5,7 @@ import configData from "../config";
 import convertMinutes from '../utils/convertMinutes';
 import '../assets/PopUp.css';
 
-const PopUp = ({ msg, user }) => {
+const PopUp = ({ popup, user }) => {
   const dateOption = configData.DATE_OPTION;
 	const timeOption = configData.TIME_OPTION;
   const [popUp, setPopUp] = useState(false);
@@ -15,14 +15,17 @@ const PopUp = ({ msg, user }) => {
   let customer = sessionStorage.getItem('customer')
 
   function confirm() {
-    if (window.confirm(msg.title + "\n" + msg.detail.massage_type + "\n" + date + "\n" + startTime + " - " + endTime) === true) {
-      if (msg.type === "cancel") {
-        handleCancelReserve()
-      } else if (msg.type === "booking") {
-        handleBooking()
-      } else if (msg.type === "close") {
+    if(popup.type === "close") {
+      if (window.confirm(popup.title + "\n" + date ) === true) {
         handleClose()
-      } else if (msg.type === "confirm") {
+      }
+    }
+    else if (window.confirm(popup.title + "\n" + popup.detail.massage_type + "\n" + date + "\n" + startTime + " - " + endTime) === true) {
+      if (popup.type === "cancel") {
+        handleCancelReserve()
+      } else if (popup.type === "booking") {
+        handleBooking()
+      } else if (popup.type === "confirm") {
         handleConfirmReserve()
       }
     } else {
@@ -31,7 +34,7 @@ const PopUp = ({ msg, user }) => {
   }
 
   async function handleCancelReserve() {
-    let data = {id: String(msg.detail.id)}
+    let data = {id: String(popup.detail.id)}
     await axios.post(configData.API.DELETE_RESERVE, data, {
 			headers:{'Authorization':'Token '+ user.token}
 			})
@@ -49,7 +52,7 @@ const PopUp = ({ msg, user }) => {
   }
 
   async function handleConfirmReserve() {
-    let data = {id: String(msg.detail.id)}
+    let data = {id: String(popup.detail.id)}
     await axios.post(configData.API.CONFIRM_RESERVE, data, {
 			headers:{'Authorization':'Token '+ user.token}
 			})
@@ -64,13 +67,13 @@ const PopUp = ({ msg, user }) => {
 
   async function handleBooking() {
     let data = {
-      start: msg.detail.start.split(' ').join('T'),
-      end: msg.detail.end.split(' ').join('T'),
-      duration: convertMinutes(msg.detail.course),
-      massage_type: msg.detail.massage_type
+      start: popup.detail.start.split(' ').join('T'),
+      end: popup.detail.end.split(' ').join('T'),
+      duration: convertMinutes(popup.detail.course),
+      massage_type: popup.detail.massage_type
     }
-    if(msg.detail.note) {
-      data.note = msg.detail.note
+    if(popup.detail.note) {
+      data.note = popup.detail.note
     } else {
       data.note = ""
     }
@@ -95,7 +98,7 @@ const PopUp = ({ msg, user }) => {
 
   async function handleClose() {
     let data = {
-      close_date: msg.detail.start.toISOString().substr(0, 10)
+      close_date: popup.detail.start.toISOString().substr(0, 10)
     }
     await axios.post(configData.API.CLOSE, data, {
 			headers:{'Authorization':'Token '+ user.token}
@@ -110,34 +113,34 @@ const PopUp = ({ msg, user }) => {
   }
 
   function handleCheck() {
-    if (msg.detail === null) {
-      if (msg.type === "cancel" || msg.type === "confirm") {
+    if (popup.detail === null) {
+      if (popup.type === "cancel" || popup.type === "confirm") {
         window.alert(`Please select your reservation.`)
-      } else if (msg.type === "booking") {
+      } else if (popup.type === "booking") {
         window.alert(`Please choose your booking time.`)
-      } else if (msg.type === "close") {
+      } else if (popup.type === "close") {
         window.alert(`Please select closing date.`)
       }
     } else {
-      setDate(new Date(msg.detail.start).toLocaleDateString("en-GB", dateOption))
-      setStartTime(new Date(msg.detail.start).toLocaleTimeString([], timeOption))
-      setEndTime(new Date(msg.detail.end).toLocaleTimeString([], timeOption))
+      setDate(new Date(popup.detail.start).toLocaleDateString("en-GB", dateOption))
+      setStartTime(new Date(popup.detail.start).toLocaleTimeString([], timeOption))
+      setEndTime(new Date(popup.detail.end).toLocaleTimeString([], timeOption))
       setPopUp(true)
     }
   }
 
   return (
     <div>
-      <button className='popup-button' onClick={e => {handleCheck()}}>{msg.title}</button>
+      <button className='popup-button' onClick={e => {handleCheck()}}>{popup.title}</button>
       {popUp &&
         <div className='popup'>
           <div className='popup-div'>
-            <h2>{msg.title}</h2>
-            {msg.type === "close" ? 
+            <h2>{popup.title}</h2>
+            {popup.type === "close" ? 
               <p>{date}</p> : 
               <>
-                {customer && <p>Customer: {msg.type === "booking"? customer:msg.detail.title}</p>}
-                <p>{msg.detail.massage_type}<br/>
+                {customer && <p>Customer: {popup.type === "booking"? customer:popup.detail.title}</p>}
+                <p>{popup.detail.massage_type}<br/>
                   {date}<br/>
                   {startTime + " - " + endTime}
                 </p>

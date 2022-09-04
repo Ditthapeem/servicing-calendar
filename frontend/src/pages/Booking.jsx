@@ -182,7 +182,7 @@ const Booking = () => {
 					</tbody>
 				</table>
 				{select.hasOwnProperty("massage_type") &&
-				<PopUp msg={{type: "booking", title: "Confirm Booking", detail: select}} user={user}/>}
+				<PopUp popup={{type: "booking", title: "Confirm Booking", detail: select}} user={user}/>}
 			</div>
 		</div>
 	);

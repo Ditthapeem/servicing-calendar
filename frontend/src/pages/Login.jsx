@@ -81,9 +81,9 @@ const Login = () => {
 						onChange={handleChange}
 					/>
 					<div className='auth-sign'>
-						Create you account <Link to={"/signup"}>Sign Up</Link>
+						Create you account <Link to={"/signup"} style={{textDecoration: 'none', color: configData.COLOR.YELLOW}}>Sign Up</Link>
 					</div>
-					<button type="submit" style={{marginBottom:"10%"}}>Login</button>
+					<button type="submit" style={{marginBottom:"5%"}}>Login</button>
 				</form>
 			</div>
 			<img src={img} alt="poster" className="auth-poster"/>

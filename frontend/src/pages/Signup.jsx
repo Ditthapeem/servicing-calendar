@@ -150,9 +150,9 @@ const Signup = () => {
 						onChange={handleChange}
 					/>
 					{!user && <div className='auth-sign'>
-						Already have an account <Link to={"/"}>Login</Link>
+						Already have an account <Link to={"/"} style={{textDecoration: 'none', color: configData.COLOR.YELLOW}}>Login</Link>
 					</div>}
-					<button type="submit" style={{marginBottom:"10%"}}>Signup</button>
+					<button type="submit" style={{marginBottom:"5%"}}>Signup</button>
 					{user && <button type="button" onClick={() => navigate(-1)}
 						style={{marginLeft:"20%", background: configData.COLOR.RED}}>Cancel</button>}
 				</form>

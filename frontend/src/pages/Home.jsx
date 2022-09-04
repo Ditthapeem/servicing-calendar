@@ -120,7 +120,7 @@ const Home = () => {
 						})}</tbody>
 					</table>
 				</div>
-				<PopUp msg={{type: "cancel", title: "Cancel Reservation", detail: selectReserve}} user={user}/>
+				<PopUp popup={{type: "cancel", title: "Cancel Reservation", detail: selectReserve}} user={user}/>
 			</div>
 			{closeDate && <FullCalendar
 				plugins={[ dayGridPlugin, InteractionPlugin ]}

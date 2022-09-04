@@ -171,8 +171,8 @@ const AdminCustomer = () => {
 						</table>
 					</div>
 					<div style={{justifyContent: "space-around", display: "flex"}}>
-						<PopUp msg={{type: "cancel", title: "Delete Reservation", detail: selectReserve}} user={user}/>
-						<PopUp msg={{type: "confirm", title: "Confirm Reservation", detail: selectReserve}} user={user}/>
+						<PopUp popup={{type: "cancel", title: "Delete Reservation", detail: selectReserve}} user={user}/>
+						<PopUp popup={{type: "confirm", title: "Confirm Reservation", detail: selectReserve}} user={user}/>
 					</div>
 						<button onClick={()=>{handleBooking()}} >Booking</button>
 				</>}
