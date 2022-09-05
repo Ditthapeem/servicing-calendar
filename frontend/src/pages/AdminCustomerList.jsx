@@ -47,7 +47,7 @@ const AdminCustomerList = () => {
 	return (
 		<div style={{textAlign: "center"}}>
 			<AdminNavbar user={user}/>
-			<div className="customer-table">
+			<div className="customer-list">
 				<h1>Customer List</h1>
 				{customerList&&<table>
 					<thead>

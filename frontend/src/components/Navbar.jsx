@@ -41,8 +41,8 @@ const Navbar = ({ user }) => {
           className={path === "/about" ? 'nav-select' : 'nav-not-select'}>About</button>
       </div>
       <div>
-        {user && <>{user.user.username}
-        <button className="nav-logout" onClick={logout} >Logout</button></>}
+        {user && <><p>{user.user.username}</p>
+        <input type="image" src={"logout_icon.png"} onClick={logout} /></>}
       </div>
     </div>
 	);

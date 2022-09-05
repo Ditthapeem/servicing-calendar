@@ -1,56 +1,56 @@
-.customer-table {
-    margin: 5% 0 5%;
+.customer-list {
+    margin: 90px 0 5%;
 }
 
-.customer-table button {
+.customer-list button {
     font-size: 18px;
     margin: 40px;
     background: var(--black);
     color: white;
 }
 
-.customer-table table {
+.customer-list table {
     border-collapse: collapse;
     text-align: left;
     margin: auto;
     width: 60%;
 }
 
-.customer-table table thead {
+.customer-list table thead {
     font-weight: bold;
     font-size: 22px;
     text-align: center;
 }
 
-.customer-table table thead td {
+.customer-list table thead td {
     padding: 15px 10px 15px 10px;
     background: var(--green);
     color: white;
     border: 2px var(--gray) solid;
 }
 
-.customer-table table tbody {
+.customer-list table tbody {
     font-size: 20px;
 }
 
-.customer-table table tbody tr:hover {
+.customer-list table tbody tr:hover {
     opacity: 80%;
     cursor: pointer;
 }
 
-.customer-table-select {
+.customer-list-select {
     background: var(--yellow);
 }
 
-.customer-table tr:nth-child(even) {
+.customer-list tr:nth-child(even) {
     background: var(--gray-light);
 }
 
-.customer-table tr:nth-child(odd) {
+.customer-list tr:nth-child(odd) {
     background: var(--gray);
 }
 
-.customer-table table tbody td {
+.customer-list table tbody td {
     padding: 15px 10px 15px 10px;
     border: 2px white solid;
 }

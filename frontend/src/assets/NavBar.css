@@ -6,23 +6,47 @@
   background-color: var(--green);
   width: 100vw;
   z-index: 4;
-  color: var(--yellow);
+}
+
+.nav-bar div{
+  text-align: center;
+  display: flex;
+}
+
+.nav-bar div p{
+  line-height: 0.5;
   font-weight: 500;
   font-size: 22px;
+  color: white;
 }
 
 .nav-bar button {
-  color: white;
   font-size: 20px;
   padding: 10px;
   background: none;
   height: 50px;
+  margin-top: 2px;
+  font-weight: 500;
 }
 
 .nav-bar button:hover {
-  color: var(--black);
+  opacity: 60%;
+}
+
+.nav-bar input {
+  height: 45px;
+  width: 45px;
+  margin: 5px 0 0 0;
+}
+
+.nav-bar input:hover{
+  opacity: 60%;
 }
 
 .nav-select {
-  opacity: 60%;
+  color: var(--yellow);
+}
+
+.nav-not-select {
+  color: white;
 }

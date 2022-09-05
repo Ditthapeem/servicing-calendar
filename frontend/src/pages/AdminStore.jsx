@@ -58,7 +58,7 @@ const AdminCustomer = () => {
 	return (
 		<div style={{textAlign: "center"}}>
 			<AdminNavbar user={user}/>
-			<h1 style={{marginTop: "80px"}}>Store Management</h1>
+			<h1 style={{marginTop: "90px"}}>Store Management</h1>
 			<div className="store">	
 				<form onSubmit={handleUpdateStore}>
 					<div className="store-container">

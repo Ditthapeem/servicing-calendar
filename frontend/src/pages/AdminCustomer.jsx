@@ -12,21 +12,18 @@ const AdminCustomer = () => {
 	let user = JSON.parse(sessionStorage.getItem('user'))
 	const dateOption = configData.DATE_OPTION;
 	const timeOption = configData.TIME_OPTION;
+	let [customer, setCustomer] = useState(sessionStorage.getItem("customer"))
 	let [reserve, setReserve] = useState(null)
 	let [selectReserve, setSelectReserve] = useState(null)
 	const [inputs, setInputs] = useState({});
 	const [historyReserve, setHistoryReserve] = useState(null);
 
 	useEffect(() => {
-		if(sessionStorage.getItem("customer")) {
-			let customer = sessionStorage.getItem("customer")
-			setInputs({customer: customer})
-			getCustomerData(customer)
-			getCustomerReserve(customer)
-		}
+		getCustomerData(customer)
+		getCustomerReserve(customer)
     }, []);
 
-  	function handleSelectReserve(reserve) {
+	function handleSelectReserve(reserve) {
 		if (reserve !== selectReserve) {
 			let data = {
 				id: String(reserve.id),
@@ -76,14 +73,14 @@ const AdminCustomer = () => {
 				headers:{'Authorization':'Token '+ user.token}
 				})
 		  .then(response => {
-			if(typeof(response.data) === "string") {
-				setInputs({})
-			} else {
-				let data = response.data
-				delete data.id
-				delete data.username 
-				setInputs(values => ({...data, "customer":values.customer}))
-			}
+				if(typeof(response.data) === "string") {
+					setInputs({})
+				} else {
+					let data = response.data
+					delete data.id
+					delete data.username
+					setInputs({...data})
+				}
 		  })
 		  .catch(error => {
 			window.alert(error)
@@ -92,6 +89,7 @@ const AdminCustomer = () => {
 
 	function handleCustomerSearch(customer) {
 		sessionStorage.setItem('customer', customer.username)
+		setCustomer(customer.username)
 		getCustomerData(customer.username)
 		getCustomerReserve(customer.username)
 	}
@@ -106,12 +104,12 @@ const AdminCustomer = () => {
 			address : inputs.address,
 			note : inputs.note
 		}
-		await axios.post(configData.API.CUSTOMER + inputs.customer, data, {
+		await axios.post(configData.API.CUSTOMER + customer, data, {
 			headers:{'Authorization':'Token '+ user.token}
 			})
 			.then(response => {
 				window.alert(response.data)
-				getCustomerData(inputs.customer)
+				getCustomerData(customer)
 			})
 			.catch(error => {
 				window.alert(error)
@@ -120,12 +118,12 @@ const AdminCustomer = () => {
 
 	async function handleHistoryEditData(event) {
 		event.preventDefault();
-		await axios.post(configData.API.HISTORY + inputs.customer, historyReserve, {
+		await axios.post(configData.API.HISTORY + customer, historyReserve, {
 			headers:{'Authorization':'Token '+ user.token}
 			})
 			.then(response => {
 				window.alert(response.data)
-				getCustomerReserve(inputs.customer)
+				getCustomerReserve(customer)
 			})
 			.catch(error => {
 				window.alert(error)
@@ -133,7 +131,7 @@ const AdminCustomer = () => {
 		}
 
 	function handleBooking() {
-		if (inputs.customer) {
+		if (sessionStorage.getItem("customer")) {
 			window.location.assign("/booking")
 		} else {
 			window.alert("Select Customer")

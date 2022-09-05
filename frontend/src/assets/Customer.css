@@ -130,3 +130,7 @@
   justify-content: space-around;
   text-align: left;
 }
+
+.set-label div {
+  padding: 0 10px 0 10px;
+}
