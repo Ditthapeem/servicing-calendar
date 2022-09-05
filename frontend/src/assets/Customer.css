@@ -9,7 +9,6 @@
   bottom: 0;
   left: 0;
   z-index: 2;
-  overflow-y: scroll;
 }
 
 .customer-sidebar p {
@@ -25,7 +24,7 @@
 .customer-sidebar-table table {
   color: black;
   font-size: 20px;
-  height: 74%;
+  max-height: 80%;
   width: 100%;
 }
 

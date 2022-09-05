@@ -133,10 +133,10 @@ const AdminReservation = () => {
 					</table>
 				</div>
 				<div style={{justifyContent: "space-around", display: "flex"}}>
-					<PopUp popup={{type: "cancel", title: "Delete Reservation", detail: selectReserve}} user={user}/>
-					<PopUp popup={{type: "confirm", title: "Confirm Reservation", detail: selectReserve}} user={user}/>
-				</div>	
+					<PopUp popup={{type: "cancel", title: "Delete", detail: selectReserve}} user={user}/>
+					<PopUp popup={{type: "confirm", title: "Confirm", detail: selectReserve}} user={user}/>
 					<PopUp popup={{type: "close", title: "Close Store", detail: {start: selectDate}}} user={user}/>
+				</div>
 			</div>
 			{closeDate && <FullCalendar
 				plugins={[ dayGridPlugin, InteractionPlugin ]}
