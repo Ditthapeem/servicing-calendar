@@ -42,7 +42,7 @@ const Navbar = ({ user }) => {
       </div>
       <div>
         {user && <><p>{user.user.username}</p>
-        <input type="image" src={"logout_icon.png"} onClick={logout} /></>}
+        <input type="image" src={"logout_icon.png"} alt="logout" onClick={logout} /></>}
       </div>
     </div>
 	);
