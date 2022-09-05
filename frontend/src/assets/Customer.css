@@ -18,13 +18,13 @@
 
 .customer-sidebar-table {
   overflow-y: scroll;
-  max-height: 68%;
+  max-height: 80%;
 }
 
 .customer-sidebar-table table {
   color: black;
   font-size: 20px;
-  max-height: 80%;
+  height: 74%;
   width: 100%;
 }
 
